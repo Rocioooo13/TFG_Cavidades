@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ModalForm from "./ModalForm";
+import api, { createTable, createUser } from "../api";
 
 export const MenuHorizontal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
