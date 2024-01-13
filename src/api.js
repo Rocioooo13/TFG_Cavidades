@@ -33,8 +33,19 @@ module.exports = {
     });
   },
 
-  getUser(id) {
-    return db.query("SELECT * FROM cuevas WHERE id = ?", [id]);
+  getMap(id) {
+    return new Promise((resolve, reject) => {
+      db.get("SELECT url FROM mapas WHERE id = ?", [id], (error, row) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+
+        console.log(row.url);
+        return resolve(row.url);
+      });
+    });
+    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
 
   createUser() {

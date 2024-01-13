@@ -1,5 +1,6 @@
 import { MenuHorizontal } from "./MenuHorizontal";
 import { Map } from "./Map";
+import { ListMaps } from "./ListMaps";
 
 export const App = () => {
   return (
@@ -15,6 +16,7 @@ export const App = () => {
       </div>
 
       <Map />
+      <ListMaps />
     </div>
   );
 };
