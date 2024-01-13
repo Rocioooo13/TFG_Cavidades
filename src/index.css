@@ -1,0 +1,44 @@
+form{
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+}
+.labelForm{
+  margin-top: 12px;
+  /* display: "block"; */
+}
+
+.inputForm{
+  margin-top: 12px;
+  width: 70%;
+  margin-left: 12px;
+}
+.selectForm{
+  margin-top: 12px;
+  width: 70%;
+  margin-left: 12px;
+}
+.botonForm{
+  margin-left: 8px;
+  background-color: #1C2833 ;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: white;
+}
+
+.botonesForm{
+  text-size-adjust: 10%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 50px;
+}
+.inputContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+

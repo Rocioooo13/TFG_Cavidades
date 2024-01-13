@@ -1,0 +1,47 @@
+{
+  "name": "tfg_cavidades_rocio_duran_cid",
+  "version": "0.1.0",
+  "private": true,
+  "main": "public/electron.js",
+  "homepage": "./",
+  "dependencies": {
+    "@craco/craco": "^7.1.0",
+    "bootstrap": "^5.3.2",
+    "leaflet": "^1.9.4",
+    "react": "17.0.1",
+    "react-bootstrap": "^2.9.2",
+    "react-dom": "17.0.1",
+    "react-leaflet": "3.2.5",
+    "react-modal": "^3.16.1",
+    "react-scripts": "5.0.1",
+    "sqlite3": "^5.1.7-rc.0"
+  },
+  "scripts": {
+    "eject": "react-scripts eject",
+    "build": "craco build",
+    "start": "electron .",
+    "start-web": "react-scripts start"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
