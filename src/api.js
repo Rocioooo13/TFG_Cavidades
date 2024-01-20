@@ -19,9 +19,9 @@ module.exports = {
     const sql = `CREATE TABLE IF NOT EXISTS cuevas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,email TEXT)`;
     return db.run(sql);
   },
-  getUsers() {
+  getMaps() {
     return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM cuevas", (error, rows) => {
+      db.all("SELECT * FROM mapas", (error, rows) => {
         if (error) {
           console.error("DB Error: ", error);
           return reject(error);
@@ -41,7 +41,7 @@ module.exports = {
           return reject(error);
         }
 
-        console.log(row.url);
+        console.log(row);
         return resolve(row.url);
       });
     });
