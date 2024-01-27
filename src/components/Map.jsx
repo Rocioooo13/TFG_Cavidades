@@ -6,6 +6,7 @@ const { BaseLayer, Overlay } = LayersControl;
 export const Map = ({ url }) => {
   console.log("URL en el componente map " + url);
   if (url !== "") {
+    console.log("Tengo info");
     return (
       <div style={{ zIndex: 0, height: "100%", width: "100%" }}>
         <MapContainer
@@ -26,6 +27,7 @@ export const Map = ({ url }) => {
       </div>
     );
   } else {
+    console.log("No tengo info");
     return <div style={{ zIndex: 0, height: "100%", width: "100%" }}></div>;
   }
 };

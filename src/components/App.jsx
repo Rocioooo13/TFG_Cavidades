@@ -6,15 +6,17 @@ import { useEffect, useState } from "react";
 
 export const App = () => {
   //Me devuelve la URL console.log(api.getMap(2)[0]);
-  const [map, setMap] = useState("");
+  const [mapSelected, setMapSelected] = useState("");
   const loadMap = async () => {
     const mapSelect = await api.getMap(2);
-    setMap(mapSelect ?? "");
+    setMapSelected(mapSelect ?? "");
   };
   const handleItemClick = (item) => {
-    setMap(item);
+    console.log("Valor de item.url " + item.url);
+    setMapSelected("");
+    setTimeout(() => setMapSelected(item.url ?? ""), 500);
   };
-  console.log("Mi mapa por defecto es: " + map);
+  //console.log("Mi mapa por defecto es: " + map);
   const [maps, setMaps] = useState([]);
   const loadMaps = async () => {
     const mapsSelect = await api.getMaps();
@@ -33,31 +35,50 @@ export const App = () => {
         height: "100vh",
       }}
     >
-      <div style={{ width: "100%", height: "100%" }}>
+      <div style={{ width: "100%" }}>
         <MenuHorizontal />
       </div>
-      <Map url={map} />
-      <h3 style={{ marginLeft: "10%", color: "green" }}>
-        Lista QuickMapService
-      </h3>
-      <hr style={{ marginLeft: "10%" }} />
-
-      {maps?.map((mapa) => (
-        <ul
-          key={mapa.id}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <div
           style={{
-            marginLeft: "10%",
-            color: "white",
-            backgroundColor: map === mapa ? "#90EE90" : "green",
-            cursor: "pointer",
+            width: "80%",
+            height: "700px",
           }}
-          onClick={() => handleItemClick(mapa)}
         >
-          <p>{mapa.name}</p>
-        </ul>
-      ))}
+          <Map url={mapSelected} />
+        </div>
 
-      {/* <ListMaps /> */}
+        <div
+          style={{
+            width: "18%",
+            height: "700px",
+            marginRight: "20px",
+          }}
+        >
+          <h3 style={{ margin: "10%", color: "green" }}>Lista</h3>
+          <hr style={{ marginLeft: "10%" }} />
+
+          {maps?.map((mapa) => (
+            <ul
+              key={mapa.id}
+              style={{
+                marginLeft: "10%",
+                color: "white",
+                backgroundColor: mapSelected === mapa ? "#90EE90" : "green",
+                cursor: "pointer",
+              }}
+              onClick={() => handleItemClick(mapa)}
+            >
+              <p>{mapa.name}</p>
+            </ul>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
