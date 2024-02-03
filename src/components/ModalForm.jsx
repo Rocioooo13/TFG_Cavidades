@@ -6,11 +6,12 @@ const customStyles = {
     width: "500px",
     height: "560px",
     margin: "auto",
-    zIndex: 2,
   },
 };
 
 const ModalForm = ({ isOpen, onRequestClose }) => {
+  // Override zIndex to display the modal overlayed to the map
+  Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
       isOpen={isOpen}
@@ -99,7 +100,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             <option value="Q">Q</option>
             <option value="R">R</option>
             <option value="S">S</option>
-            <option value="T" selected="true">
+            <option value="T" selected={true}>
               T
             </option>
             <option value="U">U</option>
@@ -116,7 +117,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             defaultChecked="true"
             placeholder="Selecciona el hemisferio al que pertenece la cueva"
           >
-            <option value="Norte" selected="true">
+            <option value="Norte" selected={true}>
               N
             </option>
             <option value="Sur">S</option>

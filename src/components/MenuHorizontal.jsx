@@ -17,7 +17,7 @@ export const MenuHorizontal = () => {
     setModalIsOpen(false);
   };
   return (
-    <div style={{ zIndex: 0, flex: "none" }}>
+    <div style={{ zIndex: 2, flex: "none" }}>
       <Navbar
         collapseOnSelect
         expand="lg"

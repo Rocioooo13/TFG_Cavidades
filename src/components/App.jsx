@@ -3,6 +3,7 @@ import { Map } from "./Map";
 import { ListMaps } from "./ListMaps";
 import api from "../api";
 import { useEffect, useState } from "react";
+import ModalMapas from "./ModalMapas";
 
 export const App = () => {
   //Me devuelve la URL console.log(api.getMap(2)[0]);
@@ -27,6 +28,14 @@ export const App = () => {
     loadMap();
     loadMaps();
   }, []);
+  const [modalMapasIsOpen, setModalMapasIsOpen] = useState(false);
+  const openModalMapas = () => {
+    setModalMapasIsOpen(true);
+  };
+
+  const closeModalMapas = () => {
+    setModalMapasIsOpen(false);
+  };
   return (
     <div
       style={{
@@ -60,7 +69,7 @@ export const App = () => {
             marginRight: "20px",
           }}
         >
-          <h3 style={{ margin: "10%", color: "green" }}>Lista</h3>
+          {/* <h3 style={{ margin: "10%", color: "green" }}>Lista</h3>
           <hr style={{ marginLeft: "10%" }} />
 
           {maps?.map((mapa) => (
@@ -76,9 +85,28 @@ export const App = () => {
             >
               <p>{mapa.name}</p>
             </ul>
-          ))}
+          ))} */}
+          <div style={{ margin: "10%" }} className="listaMapas">
+            <p>Mapas</p>
+            {maps?.map((mapa) => (
+              <div
+                style={{
+                  marginLeft: "10%",
+                  color: "black",
+                  //backgroundColor: mapSelected === mapa ? "#90EE90" : "green",
+                  cursor: "pointer",
+                }}
+                key={mapa.id}
+                onClick={() => handleItemClick(mapa)}
+              >
+                <p>{mapa.name}</p>
+              </div>
+            ))}
+            <p onClick={openModalMapas}>+ Añadir mapa</p>
+          </div>
         </div>
       </div>
+      <ModalMapas isOpen={modalMapasIsOpen} onRequestClose={closeModalMapas} />
     </div>
   );
 };
