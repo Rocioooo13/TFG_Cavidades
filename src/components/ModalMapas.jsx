@@ -4,7 +4,7 @@ import Modal from "react-modal";
 const customStyles = {
   content: {
     width: "500px",
-    height: "560px",
+    height: "270px",
     margin: "auto",
     zIndex: 2,
   },
@@ -21,7 +21,7 @@ const ModalMapas = ({ isOpen, onRequestClose }) => {
       style={customStyles}
       ariaHideApp={false}
     >
-      <h3>Crear cueva</h3>
+      <h3>Añadir mapa</h3>
       <br />
       <form className="form">
         <div className="inputContainer">
