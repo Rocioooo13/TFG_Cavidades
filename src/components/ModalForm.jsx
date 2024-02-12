@@ -30,9 +30,10 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
 
     //Cambiar porque tengo que ver como obtener el valor de un input
     const yDelForm = document.getElementById("y").value;
-    const hemisferioIndez =
+    const hemisferioIndex =
       document.getElementById("hemisferio1").selectedIndex;
-    const hemisferio = document.getElementById("hemisferio1")[0].label;
+    const hemisferio =
+      document.getElementById("hemisferio1")[hemisferioIndex].label;
     const xDelForm = document.getElementById("x").value;
     const huso = document.getElementById("huso").value;
 
@@ -50,7 +51,6 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const a = (xDelForm - 500000) / ni;
     const A1 = Math.sin(2 * fi);
     const A2 = A1 * Math.pow(Math.cos(fi), 2);
-    console.log("A2: ", A2);
     const J2 = fi + A1 / 2;
     const J4 = (3 * A1 + J2) / 4;
     const J6 = (5 * J4 + A2 * Math.pow(Math.cos(fi), 2)) / 3;
@@ -93,7 +93,6 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
 
     //Obtengo latitud y longitud de la cueva
     var latlong = formulaLatitudLongitud();
-    console.log(latlong[0]);
 
     //Inserto la cueva en la tabla creada
     const denom = document.getElementById("denominacion").value;
@@ -103,10 +102,12 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const elip = document.getElementById("elipsoide").value;
     const huso = document.getElementById("huso").value;
     const zonautmIndex = document.getElementById("zona").selectedIndex;
-    const zonautm = document.getElementById("zona")[0].label;
+    const zonautm = document.getElementById("zona")[zonautmIndex].label;
+    console.log(zonautm);
     const hemisferioIndex =
       document.getElementById("hemisferio1").selectedIndex;
-    const hemisferio = document.getElementById("hemisferio1")[0].label;
+    const hemisferio =
+      document.getElementById("hemisferio1")[hemisferioIndex].label;
 
     api.createCueva(
       denom,
@@ -122,7 +123,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       latlong[1]
     );
     //Cierro la ventana modal
-    // onRequestClose();
+    onRequestClose();
   };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
