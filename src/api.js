@@ -9,14 +9,14 @@ db.run(sqlMapa, function (err) {
 });*/
 
 module.exports = {
-  createTable() {
+  createTable(concejo) {
     // const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
     // db.run(sqlMapa, function (err) {
     //   if (err) {
     //     console.log("Ha habido un error"); //err.message
     //   }
     // });
-    const sql = `CREATE TABLE IF NOT EXISTS cuevas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,email TEXT)`;
+    const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
     return db.run(sql);
   },
   getMaps() {
@@ -48,7 +48,19 @@ module.exports = {
     // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
 
-  createUser() {
+  createCueva(
+    denominacion,
+    X,
+    Y,
+    Z,
+    elipsoide,
+    huso,
+    zonaUTM,
+    hermisferio,
+    concejo,
+    latitud,
+    longitud
+  ) {
     // db.run(
     //   `INSERT INTO mapas (name, url) VALUES (?, ?)`,
     //   ["Google Maps", "https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"],
@@ -83,9 +95,19 @@ module.exports = {
     //   }
     // );
 
+    //FUNCIONAAAAAAAAAA
+    // return db.run(
+    //   `INSERT INTO cuevas (name, email) VALUES (?, ?)`,
+    //   ["John Doe", "johndoe@example.com"],
+    //   function (err) {
+    //     if (err) {
+    //       return console.log(err.message);
+    //     }
+    //   }
+    // );
     return db.run(
-      `INSERT INTO cuevas (name, email) VALUES (?, ?)`,
-      ["John Doe", "johndoe@example.com"],
+      `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud],
       function (err) {
         if (err) {
           return console.log(err.message);

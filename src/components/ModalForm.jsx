@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import api, { createTable } from "../api";
 
 const customStyles = {
   content: {
@@ -81,7 +82,47 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const latitud = +(radianes / Math.PI) * 180;
 
     console.log("Longitud: ", longitud, " Latitud: ", latitud);
-    //return [longitud, latitud];
+    return [longitud, latitud];
+  };
+  const addCueva = () => {
+    //Obtengo el valor del concejo para crear la tabla
+    const conc = new String(document.getElementById("concejo").value)
+      .split(" ")
+      .join("");
+    createTable(conc);
+
+    //Obtengo latitud y longitud de la cueva
+    var latlong = formulaLatitudLongitud();
+    console.log(latlong[0]);
+
+    //Inserto la cueva en la tabla creada
+    const denom = document.getElementById("denominacion").value;
+    const yDelForm = document.getElementById("y").value;
+    const xDelForm = document.getElementById("x").value;
+    const zDelForm = document.getElementById("z").value;
+    const elip = document.getElementById("elipsoide").value;
+    const huso = document.getElementById("huso").value;
+    const zonautmIndex = document.getElementById("zona").selectedIndex;
+    const zonautm = document.getElementById("zona")[0].label;
+    const hemisferioIndex =
+      document.getElementById("hemisferio1").selectedIndex;
+    const hemisferio = document.getElementById("hemisferio1")[0].label;
+
+    api.createCueva(
+      denom,
+      yDelForm,
+      xDelForm,
+      zDelForm,
+      elip,
+      huso,
+      zonautm,
+      hemisferio,
+      conc,
+      latlong[0],
+      latlong[1]
+    );
+    //Cierro la ventana modal
+    // onRequestClose();
   };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -131,6 +172,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             className="inputForm"
             type="text"
             placeholder="Escribe la coordenada Z de la cueva en m"
+            id="z"
           />
         </div>
 
@@ -141,6 +183,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             defaultValue={"WGS84"}
             type="text"
             placeholder="Escribe el elipsoide de la cueva"
+            id="elipsoide"
           />
         </div>
 
@@ -160,6 +203,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             className="selectForm"
             defaultChecked="true"
             placeholder="Selecciona el hemisferio al que pertenece la cueva"
+            id="zona"
           >
             <option value="C">C</option>
             <option value="D">D</option>
@@ -207,6 +251,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             className="inputForm"
             type="text"
             placeholder="Escribe el concejo al que pertenece la cueva"
+            id="concejo"
           />
         </div>
 
@@ -214,14 +259,15 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
           <button
             className="botonForm"
             type="button"
-            onClick={formulaLatitudLongitud}
+            // onClick={formulaLatitudLongitud}
+            onClick={addCueva}
           >
             boton prueba
           </button>
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>
-          <button className="botonForm" type="submit">
+          <button className="botonForm" type="submit" onClick={addCueva}>
             Crear
           </button>
         </div>
