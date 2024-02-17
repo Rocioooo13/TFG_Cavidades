@@ -61,6 +61,7 @@ module.exports = {
     latitud,
     longitud
   ) {
+    // PARA MAPAS
     // db.run(
     //   `INSERT INTO mapas (name, url) VALUES (?, ?)`,
     //   ["Google Maps", "https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"],
@@ -105,12 +106,68 @@ module.exports = {
     //     }
     //   }
     // );
-    return db.run(
-      `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud],
-      function (err) {
+    // return db.run(
+    //   `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE NOT EXISTS (SELECT 1 FROM ${concejo} WHERE denominacion = ?)`,
+    //   [
+    //     denominacion,
+    //     X,
+    //     Y,
+    //     Z,
+    //     elipsoide,
+    //     huso,
+    //     zonaUTM,
+    //     hermisferio,
+    //     concejo,
+    //     latitud,
+    //     longitud,
+    //   ],
+    //   function (err) {
+    //     if (err) {
+    //       return console.log(err.message);
+    //     }
+    //   }
+    // );
+    // Primero, verifica si ya existe un registro con la misma denominacion
+    db.get(
+      `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
+      [denominacion],
+      (err, row) => {
         if (err) {
-          return console.log(err.message);
+          return console.error("Error al ejecutar la consulta:", err.message);
+        }
+
+        // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+        if (!row) {
+          // Ejecuta la inserción
+          db.run(
+            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              denominacion,
+              X,
+              Y,
+              Z,
+              elipsoide,
+              huso,
+              zonaUTM,
+              hermisferio,
+              concejo,
+              latitud,
+              longitud,
+            ],
+            function (err) {
+              if (err) {
+                return console.error(
+                  "Error al insertar el registro:",
+                  err.message
+                );
+              }
+              console.log("Registro insertado correctamente.");
+            }
+          );
+        } else {
+          // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+          console.error("Ya existe un registro con la misma denominación.");
         }
       }
     );

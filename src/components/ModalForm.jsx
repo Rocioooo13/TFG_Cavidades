@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import api, { createTable } from "../api";
+import api, { createTable, createCueva } from "../api";
 
 const customStyles = {
   content: {
@@ -109,7 +109,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const hemisferio =
       document.getElementById("hemisferio1")[hemisferioIndex].label;
 
-    api.createCueva(
+    createCueva(
       denom,
       yDelForm,
       xDelForm,
@@ -122,8 +122,8 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       latlong[0],
       latlong[1]
     );
-    //Cierro la ventana modal
-    onRequestClose();
+    //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
+    //onRequestClose();
   };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
