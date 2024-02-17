@@ -172,7 +172,22 @@ module.exports = {
       }
     );
   },
+  getCuevas() {
+    return new Promise((resolve, reject) => {
+      db.all(
+        "SELECT denominacion, longitud, latitud FROM cangasdeOnís",
+        (error, rows) => {
+          if (error) {
+            console.error("DB Error: ", error);
+            return reject(error);
+          }
 
+          console.log(rows);
+          return resolve(rows);
+        }
+      );
+    });
+  },
   updateUser(id, user) {
     return db.run("UPDATE  cuevas SET name = ?, email = ? WHERE id = ?", [
       user.name,
