@@ -41,45 +41,91 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     // COMRPOBAR DE OTRA MANERA PORQUE NO FUNCIONA
     var yAlSurEcuador = 0;
     if (hemisferio === "S") {
-      yAlSurEcuador = yDelForm - 10000000;
+      yAlSurEcuador = Number(yDelForm - 10000000);
     } else {
-      yAlSurEcuador = yDelForm;
+      yAlSurEcuador = Number(yDelForm);
     }
-    const fi = yAlSurEcuador / (6366197.724 * 0.9996);
-    const ni =
-      (c / Math.pow(1 + e12 * Math.pow(Math.cos(fi), 2), 1 / 2)) * 0.9996;
-    const a = (xDelForm - 500000) / ni;
-    const A1 = Math.sin(2 * fi);
-    const A2 = A1 * Math.pow(Math.cos(fi), 2);
-    const J2 = fi + A1 / 2;
-    const J4 = (3 * A1 + J2) / 4;
-    const J6 = (5 * J4 + A2 * Math.pow(Math.cos(fi), 2)) / 3;
-    const alfa = (3 / 4) * e12;
-    const beta = (5 / 3) * Math.pow(alfa, 2);
-    const gamma = (85 / 27) * Math.pow(alfa, 3);
-    const bfi = 0.9996 * c * fi - alfa * J2 + beta * J4 - gamma * J6;
-    const b = (yAlSurEcuador - bfi) / ni;
-    const zeta = ((e12 * a) / 2) * Math.pow(Math.cos(fi), 2);
-    const xi = a * (1 - zeta / 3);
-    const eta = b * (1 - zeta) + fi;
-    const senhxi = (Math.pow(Math.E, xi) - Math.pow(Math.E, -xi)) / 2;
-    const deltaLambda = Math.atan(senhxi / Math.cos(eta));
-    const tan = Math.atan(Math.cos(deltaLambda) * Math.tan(eta));
+    console.log("yAlSurDelEcuador ", yAlSurEcuador);
+    const fi = Number((yAlSurEcuador / (6366197.724 * 0.9996)).toFixed(9)); // 9 o 8
+    console.log("fi ", fi);
+    const ni = Number(
+      (
+        (c / Math.pow(1 + e12 * Math.pow(Math.cos(fi), 2), 1 / 2)) *
+        0.9996
+      ).toFixed(3)
+    ); //3
+    console.log("ni ", ni);
+    const a = Number(((xDelForm - 500000) / ni).toFixed(9)); //9 o 8
+    console.log("a ", a);
+    const A1 = Number(Math.sin(2 * fi).toFixed(9)); //9 o 7
+    console.log("A1 ", A1);
+    const A2 = Number((A1 * Math.pow(Math.cos(fi), 2)).toFixed(9)); //9 o 8
+    console.log("A2 ", A2);
+    const J2 = Number((fi + A1 / 2).toFixed(9)); // 9 o 8 //FALLAAAAAAAAAAAAAAAAAAAA AQUI
+    console.log("J2 ", J2);
+    const J4 = Number(((3 * J2 + A2) / 4).toFixed(9)); //9
+    console.log("J4 ", J4);
+    const J6 = Number(
+      ((5 * J4 + A2 * Math.pow(Math.cos(fi), 2)) / 3).toFixed(9)
+    ); //9 o 8
+    console.log("J6 ", J6);
+    const alfa = Number(((3 / 4) * e12).toFixed(9)); //9
+    console.log("alfa ", alfa);
+    const beta1 = ((5 / 3) * Math.pow(alfa, 2)).toExponential(4);
+    const beta = Number(beta1); // 4,2582E-05 parseFloat(numero).toExponential(4)
+    console.log("beta ", beta);
+    const gamma1 = ((35 / 27) * Math.pow(alfa, 3)).toExponential(5);
+    const gamma = Number(gamma1); // 1.67406E-07
+    console.log("gamma ", gamma);
+    const bfi = Number(
+      (0.9996 * c * (fi - alfa * J2 + beta * J4 - gamma * J6)).toFixed(3)
+    ); // 3
+    console.log("bfi ", bfi);
+    const b = Number(((yAlSurEcuador - bfi) / ni).toFixed(9)); // 9 o 8
+    console.log("b ", b);
+    const zeta1 = (
+      ((e12 * Math.pow(a, 2)) / 2) *
+      Math.pow(Math.cos(fi), 2)
+    ).toExponential(5);
+    const zeta = Number(zeta1); // 1.20996E-06
+    console.log("zeta ", zeta);
+    const xi = Number((a * (1 - zeta / 3)).toFixed(9)); //9 o 8
+    console.log("xi ", xi);
+    const eta = Number((b * (1 - zeta) + fi).toFixed(9)); // 9 o 8
+    console.log("eta ", eta);
+    const senhxi = Number(
+      ((Math.pow(Math.E, xi) - Math.pow(Math.E, -xi)) / 2).toFixed(9)
+    ); //9 o 8
+    console.log("senhxi ", senhxi);
+    const deltaLambda = Number(Math.atan(senhxi / Math.cos(eta)).toFixed(9)); //9 o 8
+    console.log("deltaLambda ", deltaLambda);
+    const tan = Number(
+      Math.atan(Math.cos(deltaLambda) * Math.tan(eta)).toFixed(9)
+    ); //9 o 8
+    console.log("tan ", tan);
     const meridianoCentral1 = 6 * huso - 183;
-    const radianes =
-      fi +
-      (1 +
-        e12 * Math.pow(Math.cos(fi), 2) -
-        (3 / 2) * e12 * Math.sin(fi) * Math.cos(fi) * (tan - fi)) *
-        (tan - fi);
-    const longitud1 = +(deltaLambda / Math.PI) * 180 + meridianoCentral1;
+    console.log("meridianoCentral1 ", meridianoCentral1);
+    const radianes = Number(
+      (
+        fi +
+        (1 +
+          e12 * Math.pow(Math.cos(fi), 2) -
+          (3 / 2) * e12 * Math.sin(fi) * Math.cos(fi) * (tan - fi)) *
+          (tan - fi)
+      ).toFixed(9)
+    ); //9 o 8
+    console.log("redianes ", radianes);
+    const longitud1 = Number(
+      +(deltaLambda / Math.PI) * 180 + meridianoCentral1
+    );
+    console.log("ni ", ni);
     var longitud = 0;
     if (meridianoCentral1 === -183) {
       longitud = 0;
     } else {
-      longitud = longitud1;
+      longitud = Number(longitud1.toFixed(7)); // 7
     }
-    const latitud = +(radianes / Math.PI) * 180;
+    const latitud = Number((+(radianes / Math.PI) * 180).toFixed(7)); // 7
 
     console.log("Longitud: ", longitud, " Latitud: ", latitud);
     return [longitud, latitud];
@@ -109,19 +155,19 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const hemisferio =
       document.getElementById("hemisferio1")[hemisferioIndex].label;
 
-    createCueva(
-      denom,
-      yDelForm,
-      xDelForm,
-      zDelForm,
-      elip,
-      huso,
-      zonautm,
-      hemisferio,
-      conc,
-      latlong[0],
-      latlong[1]
-    );
+    // createCueva(
+    //   denom,
+    //   yDelForm,
+    //   xDelForm,
+    //   zDelForm,
+    //   elip,
+    //   huso,
+    //   zonautm,
+    //   hemisferio,
+    //   conc,
+    //   latlong[0],
+    //   latlong[1]
+    // );
     //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
     //onRequestClose();
   };
