@@ -10,7 +10,8 @@ const customStyles = {
   },
 };
 
-const ModalForm = ({ isOpen, onRequestClose }) => {
+const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
+  console.log(cuevaSelected);
   // Override zIndex to display the modal overlayed to the map
   const pruebaObtenerValor = () => {
     // Obtener el valor del label
@@ -37,8 +38,6 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const xDelForm = document.getElementById("x").value;
     const huso = document.getElementById("huso").value;
 
-    //Cambiar el nombre de las variable de los input
-    // COMRPOBAR DE OTRA MANERA PORQUE NO FUNCIONA
     var yAlSurEcuador = 0;
     if (hemisferio === "S") {
       yAlSurEcuador = Number(yDelForm - 10000000);
@@ -158,8 +157,8 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       () =>
         createCueva(
           denom,
-          xDelForm,
           yDelForm,
+          xDelForm,
           zDelForm,
           elip,
           huso,
@@ -183,7 +182,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       style={customStyles}
       ariaHideApp={false}
     >
-      <h3>Crear cueva</h3>
+      <h3>Detalles cueva</h3>
       <br />
       <form className="form">
         <div className="inputContainer">
@@ -193,6 +192,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             type="text"
             placeholder="Escribe el nombre de la cueva"
             id="denominacion"
+            defaultValue={cuevaSelected.denominacion}
           />
         </div>
 
@@ -203,6 +203,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             type="text"
             placeholder="Escribe la coordenada X de la cueva"
             id="x"
+            defaultValue={cuevaSelected.X}
           />
         </div>
 
@@ -213,6 +214,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             type="text"
             placeholder="Escribe la coordenada Y de la cueva"
             id="y"
+            defaultValue={cuevaSelected.Y}
           />
         </div>
 
@@ -223,6 +225,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             type="text"
             placeholder="Escribe la coordenada Z de la cueva en m"
             id="z"
+            defaultValue={cuevaSelected.Z}
           />
         </div>
 
@@ -244,6 +247,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             type="text"
             placeholder="Escribe el huso de la cueva"
             id="huso"
+            defaultValue={cuevaSelected.huso}
           />
         </div>
 
@@ -302,23 +306,24 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             type="text"
             placeholder="Escribe el concejo al que pertenece la cueva"
             id="concejo"
+            defaultValue={cuevaSelected.concejo}
           />
         </div>
 
         <div className="botonesForm">
-          <button
+          {/* <button
             className="botonForm"
             type="button"
             // onClick={formulaLatitudLongitud}
             onClick={addCueva}
           >
             boton prueba
-          </button>
+          </button> */}
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>
           <button className="botonForm" type="submit" onClick={addCueva}>
-            Crear
+            Actualizar
           </button>
         </div>
       </form>
@@ -326,4 +331,4 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
   );
 };
 
-export default ModalForm;
+export default ModalFormUpdate;

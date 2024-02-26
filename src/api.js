@@ -9,6 +9,22 @@ db.run(sqlMapa, function (err) {
 });*/
 
 module.exports = {
+  obtenertablas() {
+    return new Promise((resolve, reject) => {
+      db.all(
+        "SELECT name FROM cavidades.sqlite3 WHERE type='table'",
+        (error, rows) => {
+          if (error) {
+            console.error("DB Error: ", error);
+            return reject(error);
+          }
+
+          console.log(rows);
+          return resolve(rows);
+        }
+      );
+    });
+  },
   createTable(concejo) {
     // const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
     // db.run(sqlMapa, function (err) {
@@ -174,18 +190,15 @@ module.exports = {
   },
   getCuevas() {
     return new Promise((resolve, reject) => {
-      db.all(
-        "SELECT denominacion, longitud, latitud FROM cangasdeOnís",
-        (error, rows) => {
-          if (error) {
-            console.error("DB Error: ", error);
-            return reject(error);
-          }
-
-          console.log(rows);
-          return resolve(rows);
+      db.all("SELECT * FROM cangasdeOnís", (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
         }
-      );
+
+        console.log(rows);
+        return resolve(rows);
+      });
     });
   },
   updateUser(id, user) {

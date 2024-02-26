@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ModalForm from "./ModalForm";
-import api, { createTable, createUser } from "../api";
+import api, { createTable, createUser, obtenertablas } from "../api";
 
 export const MenuHorizontal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -16,6 +16,17 @@ export const MenuHorizontal = () => {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
+  // const [tablas, setTablas] = useState([]);
+  // const loadTablas = async () => {
+  //   const tablaSelected = await api.obtenertablas();
+  //   setTablas(tablaSelected ?? []);
+  // };
+
+  // useEffect(() => {
+  //   loadTablas();
+  // }, []);
+
   return (
     <div style={{ zIndex: 2, flex: "none" }}>
       <Navbar

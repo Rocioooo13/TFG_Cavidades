@@ -11,15 +11,25 @@ import {
 import { useEffect, useState } from "react";
 import api from "../api";
 import L from "leaflet";
+import ModalFormUpdate from "./ModalFormUpdate";
 // import "leaflet/dist/leaflet.css";
 
 const { BaseLayer, Overlay } = LayersControl;
 
-export const Map = ({ url }) => {
+export const Map = ({ url, cuevaIni }) => {
   const [cuevas, setCuevas] = useState([]);
   const loadCuevas = async () => {
     const cuevas = await api.getCuevas();
     setCuevas(cuevas ?? []);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
+  const [waypoints, setWaypoints] = useState([]);
+
+  const handleMarkerClick = (cueva) => {
+    setCuevaSelected(cueva);
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -81,7 +91,7 @@ export const Map = ({ url }) => {
                             color: "white",
                             backgroundColor: "green",
                           }}
-                          //onClick={() => handleMarkerClick(waypoint)}
+                          onClick={() => handleMarkerClick(cueva)}
                         >
                           Detalles
                         </button>
@@ -94,10 +104,39 @@ export const Map = ({ url }) => {
             </Overlay>
           </LayersControl>
         </MapContainer>
+        <div
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+        >
+          <ModalFormUpdate
+            isOpen={isModalOpen}
+            onRequestClose={() => setIsModalOpen(false)}
+            cuevaSelected={cuevaSelected}
+          />
+        </div>
       </div>
     );
   } else {
     console.log("No tengo info");
     return <div style={{ zIndex: 0, height: "100%", width: "100%" }}></div>;
   }
+};
+Map.defaultProps = {
+  cuevaIni: {
+    denominacion: "No tiene nombre",
+    X: 0,
+    Y: 0,
+    Z: 0,
+    elipsoide: "WGS84",
+    huso: 30,
+    zonaUTM: "T",
+    hermisferio: "N",
+    concejo: "No tiene nombre",
+    latitud: 0,
+    longitud: 0,
+  },
 };
