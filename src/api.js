@@ -11,18 +11,15 @@ db.run(sqlMapa, function (err) {
 module.exports = {
   obtenertablas() {
     return new Promise((resolve, reject) => {
-      db.all(
-        "SELECT name FROM cavidades.sqlite3 WHERE type='table'",
-        (error, rows) => {
-          if (error) {
-            console.error("DB Error: ", error);
-            return reject(error);
-          }
-
-          console.log(rows);
-          return resolve(rows);
+      db.all(" SELECT nombre FROM listaCapas", (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
         }
-      );
+
+        console.log(rows);
+        return resolve(rows);
+      });
     });
   },
   createTable(concejo) {
@@ -35,6 +32,39 @@ module.exports = {
     const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
     return db.run(sql);
   },
+  createListaCapas() {
+    const sql = `CREATE TABLE IF NOT EXISTS listaCapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,nombre TEXT)`;
+    return db.run(sql);
+  },
+  añadirCapaListaCapas(conc2) {
+    db.get(`SELECT 1 FROM listaCapas WHERE nombre = ?`, [conc2], (err, row) => {
+      if (err) {
+        return console.error("Error al ejecutar la consulta:", err.message);
+      }
+      // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+      if (!row) {
+        // Ejecuta la inserción
+        db.run(
+          `INSERT INTO listaCapas (nombre) 
+    VALUES (?)`,
+          [conc2],
+          function (err) {
+            if (err) {
+              return console.error(
+                "Error al insertar el registro:",
+                err.message
+              );
+            }
+            console.log("Registro insertado correctamente.");
+          }
+        );
+      } else {
+        // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+        console.error("Ya existe un registro con el mismo nombre.");
+      }
+    });
+  },
+
   getMaps() {
     return new Promise((resolve, reject) => {
       db.all("SELECT * FROM mapas", (error, rows) => {
@@ -201,10 +231,10 @@ module.exports = {
       });
     });
   },
-  updateUser(id, user) {
-    return db.run("UPDATE  cuevas SET name = ?, email = ? WHERE id = ?", [
-      user.name,
-      user.email,
+  updateCueva(id, cueva) {
+    return db.run("UPDATE  cangasdeOnís SET name = ?, email = ? WHERE id = ?", [
+      cueva.denominacion,
+      cueva.X,
       id,
     ]);
   },

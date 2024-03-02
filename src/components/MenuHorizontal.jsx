@@ -17,15 +17,16 @@ export const MenuHorizontal = () => {
     setModalIsOpen(false);
   };
 
-  // const [tablas, setTablas] = useState([]);
-  // const loadTablas = async () => {
-  //   const tablaSelected = await api.obtenertablas();
-  //   setTablas(tablaSelected ?? []);
-  // };
+  const [tablas, setTablas] = useState([]);
+  const loadTablas = async () => {
+    const tablaSelected = await api.obtenertablas();
+    setTablas(tablaSelected ?? []);
+    // console.log(tablaSelected);
+  };
 
-  // useEffect(() => {
-  //   loadTablas();
-  // }, []);
+  useEffect(() => {
+    loadTablas();
+  }, []);
 
   return (
     <div style={{ zIndex: 2, flex: "none" }}>
@@ -56,11 +57,16 @@ export const MenuHorizontal = () => {
                 <NavDropdown.Item href="#form/3.1">
                   <input type="search" placeholder="Busca una capa..."></input>
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#form/3.1">Capa 1</NavDropdown.Item>
+                {tablas.map((tabla) => (
+                  <NavDropdown.Item href="#form/3.1">
+                    {tabla.nombre}
+                  </NavDropdown.Item>
+                ))}
+                {/*<NavDropdown.Item href="#form/3.1">Capa 1</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="#csv/3.2">Capa 2</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#csv/3.2">...</NavDropdown.Item>
+                <NavDropdown.Item href="#csv/3.2">...</NavDropdown.Item> */}
               </NavDropdown>
               <NavDropdown title="Exportar" id="collapsible-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">

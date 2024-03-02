@@ -1,6 +1,11 @@
 import React from "react";
 import Modal from "react-modal";
-import api, { createTable, createCueva } from "../api";
+import api, {
+  createTable,
+  createCueva,
+  createListaCapas,
+  añadirCapaListaCapas,
+} from "../api";
 
 const customStyles = {
   content: {
@@ -136,6 +141,13 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       .split(" ")
       .join("");
     createTable(conc);
+
+    //Añado el concejo a la tabla lista capas
+    const conc2 = document.getElementById("concejo").value;
+    //createListaCapas();
+    añadirCapaListaCapas(conc2);
+    console.log("nombre concejo: ", conc2);
+
     //Obtengo latitud y longitud de la cueva
     var latlong = formulaLatitudLongitud();
 
