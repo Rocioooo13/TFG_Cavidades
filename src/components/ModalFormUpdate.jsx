@@ -5,7 +5,7 @@ import api, { createTable, createCueva } from "../api";
 const customStyles = {
   content: {
     width: "500px",
-    height: "560px",
+    height: "600px",
     margin: "auto",
   },
 };
@@ -307,6 +307,16 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
             placeholder="Escribe el concejo al que pertenece la cueva"
             id="concejo"
             defaultValue={cuevaSelected.concejo}
+          />
+        </div>
+        <div className="inputContainer">
+          <label className="labelForm">Archivo</label>
+          <input
+            className="inputForm"
+            type="file"
+            placeholder="Seleccione un archivo"
+            id="archivo"
+            defaultValue={cuevaSelected.archivo}
           />
         </div>
 

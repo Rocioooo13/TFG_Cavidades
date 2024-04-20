@@ -11,7 +11,7 @@ db.run(sqlMapa, function (err) {
 module.exports = {
   obtenertablas() {
     return new Promise((resolve, reject) => {
-      db.all(" SELECT nombre FROM listaCapas", (error, rows) => {
+      db.all(" SELECT * FROM listaCapas", (error, rows) => {
         if (error) {
           console.error("DB Error: ", error);
           return reject(error);
@@ -29,7 +29,7 @@ module.exports = {
     //     console.log("Ha habido un error"); //err.message
     //   }
     // });
-    const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
+    const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo archivo BLOB NOT NULL)`;
     return db.run(sql);
   },
   createListaCapas() {
@@ -105,7 +105,8 @@ module.exports = {
     hermisferio,
     concejo,
     latitud,
-    longitud
+    longitud,
+    archivo
   ) {
     // PARA MAPAS
     // db.run(
@@ -186,8 +187,8 @@ module.exports = {
         if (!row) {
           // Ejecuta la inserción
           db.run(
-            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud, archivo) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`,
             [
               denominacion,
               X,
@@ -200,6 +201,7 @@ module.exports = {
               concejo,
               latitud,
               longitud,
+              archivo,
             ],
             function (err) {
               if (err) {
@@ -225,12 +227,25 @@ module.exports = {
           console.error("DB Error: ", error);
           return reject(error);
         }
-
         console.log(rows);
         return resolve(rows);
       });
     });
   },
+  /*getCueva(denominacion) {
+    return new Promise((resolve, reject) => {
+      db.get("SELECT * FROM mapas WHERE denominacion = ?", [denominacion], (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+
+        console.log(rows);
+        return resolve(rows);
+      });
+    });
+    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
+  },*/
   updateCueva(id, cueva) {
     return db.run("UPDATE  cangasdeOnís SET name = ?, email = ? WHERE id = ?", [
       cueva.denominacion,
