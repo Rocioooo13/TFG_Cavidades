@@ -246,13 +246,22 @@ module.exports = {
     });
     // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },*/
-  updateCueva(id, cueva) {
-    return db.run("UPDATE  cangasdeOnís SET name = ?, email = ? WHERE id = ?", [
-      cueva.denominacion,
-      cueva.X,
-      id,
-    ]);
+  updateCueva(denominacion, id, denominacionAnterior) {
+    console.log("Entro en updateCueva");
+    //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']
+    return db.run(
+      "UPDATE cangasdeOnís SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
+      [denominacion, id, denominacionAnterior]
+    );
   },
+  // updateCueva(id, cueva) {
+  //   //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']
+  //   return db.run("UPDATE  cangasdeOnís SET name = ?, email = ? WHERE id = ?", [
+  //     cueva.denominacion,
+  //     cueva.X,
+  //     id,
+  //   ]);
+  // },
 
   deleteUser(id) {
     return db.run("DELETE FROM  cuevas WHERE id = ?", [id]);

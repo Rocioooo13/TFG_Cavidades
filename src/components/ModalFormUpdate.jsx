@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
-import api, { createTable, createCueva } from "../api";
+import api, { createTable, createCueva, updateCueva } from "../api";
 
 const customStyles = {
   content: {
@@ -29,7 +29,7 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     const e12 = 0.006739497;
     const c = 6399593.626;
 
-    //Cambiar porque tengo que ver como obtener el valor de un input
+    //Cambiar porque tengo que ver como obtener el valor de un input --> HECHO
     const yDelForm = document.getElementById("y").value;
     const hemisferioIndex =
       document.getElementById("hemisferio1").selectedIndex;
@@ -170,6 +170,38 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
         ),
       500
     );
+    //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
+    //onRequestClose();
+  };
+  const clicUpdateCueva = () => {
+    //Obtengo el valor del concejo para crear la tabla
+    // const conc = new String(document.getElementById("concejo").value)
+    //   .split(" ")
+    //   .join("");
+    // createTable(conc);
+    // //Obtengo latitud y longitud de la cueva
+    // var latlong = formulaLatitudLongitud();
+
+    //Inserto la cueva en la tabla creada
+    const denom = document.getElementById("denominacion").value;
+    // const yDelForm = document.getElementById("y").value;
+    // const xDelForm = document.getElementById("x").value;
+    // const zDelForm = document.getElementById("z").value;
+    // const elip = document.getElementById("elipsoide").value;
+    // const huso = document.getElementById("huso").value;
+    // const zonautmIndex = document.getElementById("zona").selectedIndex;
+    // const zonautm = document.getElementById("zona")[zonautmIndex].label;
+    // console.log(zonautm);
+    // const hemisferioIndex =
+    //   document.getElementById("hemisferio1").selectedIndex;
+    // const hemisferio =
+    //   document.getElementById("hemisferio1")[hemisferioIndex].label;
+
+    // setTimeout(
+    //   () => updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion),
+    //   500
+    // );
+    updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion);
     //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
     //onRequestClose();
   };
@@ -332,7 +364,7 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>
-          <button className="botonForm" type="submit" onClick={addCueva}>
+          <button className="botonForm" type="submit" onClick={clicUpdateCueva}>
             Actualizar
           </button>
         </div>
