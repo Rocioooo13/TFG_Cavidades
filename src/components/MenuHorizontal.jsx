@@ -106,6 +106,14 @@ export const MenuHorizontal = () => {
     // link.click();
     // document.body.removeChild(link);
   };
+
+  //Para buscar una capa
+  const [searchText, setSearchText] = useState("");
+  const filteredConcejos = tablas.filter((tabla) => {
+    const regex = new RegExp(searchText.toLowerCase(), "g");
+    return regex.test(tabla.nombre.toLowerCase());
+  });
+
   return (
     <div style={{ zIndex: 2, flex: "none" }}>
       <Navbar
@@ -142,7 +150,7 @@ export const MenuHorizontal = () => {
                 id="collapsible-nav-dropdown"
                 aria-expanded={menuIsExpanded}
               >
-                <NavDropdown.Item href="#form/3.1">
+                {/* <NavDropdown.Item href="#form/3.1">
                   <input
                     type="search"
                     placeholder="Busca una capa..."
@@ -150,6 +158,24 @@ export const MenuHorizontal = () => {
                   ></input>
                 </NavDropdown.Item>
                 {tablas.map((tabla) => (
+                  <NavDropdown.Item
+                    onClick={closeNav}
+                    href="#form/3.1"
+                    id="listaConcejos"
+                  >
+                    {tabla.nombre}
+                  </NavDropdown.Item>
+                ))} */}
+
+                <NavDropdown.Item>
+                  <input
+                    type="search"
+                    placeholder="Busca una capa..."
+                    list="listaConcejos"
+                    onChange={(e) => setSearchText(e.target.value)} // Actualiza el texto de búsqueda
+                  ></input>
+                </NavDropdown.Item>
+                {filteredConcejos.map((tabla) => (
                   <NavDropdown.Item
                     onClick={closeNav}
                     href="#form/3.1"
