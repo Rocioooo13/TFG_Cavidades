@@ -30,11 +30,20 @@ form{
   color: white;
 }
 
+.botonFormEliminar{
+  margin-left: 8px;
+  background-color: #ff0000 ;
+  border: 2px solid rgb(255, 0, 0);
+  border-radius: 4px;
+  color: white;
+}
+
 .botonesForm{
   text-size-adjust: 10%;
   display: flex;
   justify-content: flex-end;
   margin-top: 50px;
+  gap: 10px
 }
 .inputContainer{
   display: flex;

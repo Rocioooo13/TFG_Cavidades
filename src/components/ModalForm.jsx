@@ -145,11 +145,14 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     //Añado el concejo a la tabla lista capas
     const conc2 = document.getElementById("concejo").value;
     //createListaCapas();
+    console.log("Aqui fallo 1");
     añadirCapaListaCapas(conc2);
+    console.log("Aqui fallo 2");
     console.log("nombre concejo: ", conc2);
 
     //Obtengo latitud y longitud de la cueva
     var latlong = formulaLatitudLongitud();
+    console.log("Aqui fallo 3");
 
     //Inserto la cueva en la tabla creada
     const denom = document.getElementById("denominacion").value;
@@ -165,7 +168,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       document.getElementById("hemisferio1").selectedIndex;
     const hemisferio =
       document.getElementById("hemisferio1")[hemisferioIndex].label;
-
+    console.log("Aqui fallo 4");
     setTimeout(
       () =>
         createCueva(
@@ -179,13 +182,16 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
           hemisferio,
           conc,
           latlong[0],
-          latlong[1],
-          document.getElementById("archivo").value
+          latlong[1]
+          //document.getElementById("archivo").value
         ),
       500
     );
+    console.log("Aqui fallo 5");
     //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
     //onRequestClose();
+    //onRequestClose(Map.setIsModalOpen(true));
+    //console.log("Aqui fallo 6");
   };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -318,7 +324,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
           />
         </div>
 
-        <div className="inputContainer">
+        {/* <div className="inputContainer">
           <label className="labelForm">Archivo</label>
           <input
             className="inputForm"
@@ -326,7 +332,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
             placeholder="Seleccione un archivo"
             id="archivo"
           />
-        </div>
+        </div> */}
 
         <div className="botonesForm">
           <button

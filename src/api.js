@@ -29,7 +29,9 @@ module.exports = {
     //     console.log("Ha habido un error"); //err.message
     //   }
     // });
-    const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo archivo BLOB NOT NULL)`;
+    //const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo archivo BLOB NOT NULL)`;
+
+    const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
     return db.run(sql);
   },
   createListaCapas() {
@@ -105,8 +107,8 @@ module.exports = {
     hermisferio,
     concejo,
     latitud,
-    longitud,
-    archivo
+    longitud
+    //archivo
   ) {
     // PARA MAPAS
     // db.run(
@@ -187,8 +189,10 @@ module.exports = {
         if (!row) {
           // Ejecuta la inserción
           db.run(
-            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud, archivo) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`,
+            //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud, archivo)
+            // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
+            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
               denominacion,
               X,
@@ -201,7 +205,7 @@ module.exports = {
               concejo,
               latitud,
               longitud,
-              archivo,
+              //archivo,
             ],
             function (err) {
               if (err) {
@@ -222,7 +226,7 @@ module.exports = {
   },
   getCuevas() {
     return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM cangasdeOnís", (error, rows) => {
+      db.all("SELECT * FROM concejodePrueba", (error, rows) => {
         if (error) {
           console.error("DB Error: ", error);
           return reject(error);
@@ -263,7 +267,16 @@ module.exports = {
   //   ]);
   // },
 
-  deleteUser(id) {
-    return db.run("DELETE FROM  cuevas WHERE id = ?", [id]);
+  deleteCueva(nombreConcejo, id) {
+    return db.run(
+      `DELETE FROM  ${nombreConcejo} WHERE id = ?`,
+      [id],
+      function (err) {
+        if (err) {
+          return console.error("Error al eliminar el registro:", err.message);
+        }
+        console.log("Registro eliminado correctamente.");
+      }
+    );
   },
 };

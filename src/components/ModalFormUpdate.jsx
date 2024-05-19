@@ -1,6 +1,12 @@
 import React from "react";
 import Modal from "react-modal";
-import api, { createTable, createCueva, updateCueva } from "../api";
+import { Map } from "./Map";
+import api, {
+  createTable,
+  createCueva,
+  updateCueva,
+  deleteCueva,
+} from "../api";
 
 const customStyles = {
   content: {
@@ -172,8 +178,11 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     );
     //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
     //onRequestClose();
+    //Map.setIsModalOpen(true);
   };
-  const clicUpdateCueva = () => {
+
+  //FALTA POR PERFECCIONAR PARA QUE LO HAGA CON CUALQUIER CAMPO!!!
+  const handleUpdateCueva = () => {
     //Obtengo el valor del concejo para crear la tabla
     // const conc = new String(document.getElementById("concejo").value)
     //   .split(" ")
@@ -205,6 +214,12 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
     //onRequestClose();
   };
+  const handleDeleteCueva = () => {
+    const concejo = document.getElementById("concejo").value;
+    console.log("Nombre concejo: ", concejo);
+    console.log("Id cueva: ", cuevaSelected.id);
+    deleteCueva(concejo, cuevaSelected.id);
+  };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
@@ -215,6 +230,7 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
       ariaHideApp={false}
     >
       <h3>Detalles cueva</h3>
+
       <br />
       <form className="form">
         <div className="inputContainer">
@@ -341,7 +357,7 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
             defaultValue={cuevaSelected.concejo}
           />
         </div>
-        <div className="inputContainer">
+        {/* <div className="inputContainer">
           <label className="labelForm">Archivo</label>
           <input
             className="inputForm"
@@ -350,8 +366,12 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
             id="archivo"
             defaultValue={cuevaSelected.archivo}
           />
-        </div>
+        </div> */}
 
+        {/* <img
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA6klEQVR4nK3TzwoBURgF8LNQrNmwkJXlxIJnkD+vQMlDkD1bnoLiESYWPIKUPIKU7FhMo1umdBvu951x6tSd23z3V3caQJYpgCeA8KPmeYI/xhyYtfZyAB7MYR6AYUxD5b7nQnzrWrT1XYhJLyHSlVxZI2awLFhHNfPOVGMGIVhHrUiQQkIkL0FSAAISCd7zolxJ5AJFjiRy0CBbEtlokCWJLDTInERmGmRMIiMNMiCRvgbpkEhLg9RJpKZBSiRS1CAZEklDmbsSuYHIWYmcGGRv/cmhY71jkLV1366uGKRtfZdfNe81v530AgRFEd52yqZoAAAAAElFTkSuQmCC"
+            style={customDelete}
+          /> */}
         <div className="botonesForm">
           {/* <button
             className="botonForm"
@@ -361,10 +381,21 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
           >
             boton prueba
           </button> */}
+          <button
+            className="botonFormEliminar"
+            type="button"
+            onClick={handleDeleteCueva}
+          >
+            Eliminar
+          </button>
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>
-          <button className="botonForm" type="submit" onClick={clicUpdateCueva}>
+          <button
+            className="botonForm"
+            type="submit"
+            onClick={handleUpdateCueva}
+          >
             Actualizar
           </button>
         </div>
