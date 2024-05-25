@@ -104,7 +104,7 @@ module.exports = {
     elipsoide,
     huso,
     zonaUTM,
-    hermisferio,
+    hemisferio,
     concejo,
     latitud,
     longitud
@@ -191,7 +191,7 @@ module.exports = {
           db.run(
             //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud, archivo)
             // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
-            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) 
+            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud) 
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
               denominacion,
@@ -201,7 +201,7 @@ module.exports = {
               elipsoide,
               huso,
               zonaUTM,
-              hermisferio,
+              hemisferio,
               concejo,
               latitud,
               longitud,
@@ -236,6 +236,25 @@ module.exports = {
       });
     });
   },
+
+  getCuevas2(concejo) {
+    return new Promise((resolve, reject) => {
+      if (!concejo) {
+        return reject();
+      }
+
+      const sql = `SELECT * FROM ${concejo}`;
+      db.all(sql, (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+        //console.log(rows);
+        return resolve(rows);
+      });
+    });
+  },
+
   /*getCueva(denominacion) {
     return new Promise((resolve, reject) => {
       db.get("SELECT * FROM mapas WHERE denominacion = ?", [denominacion], (error, rows) => {

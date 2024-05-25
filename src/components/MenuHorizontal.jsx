@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ModalForm from "./ModalForm";
+import ModalTablaCapas from "./ModalTablaCapas";
 //import { ExportCSV } from "./ExportCSV";
 import api, { createTable, createUser, obtenertablas } from "../api";
 import { Form } from "react-bootstrap";
@@ -14,6 +15,7 @@ import { CSVLink } from "react-csv";
 export const MenuHorizontal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
+  const [tablaCapasIsOpen, setTablaCapasIsOpen] = useState(false);
 
   const toggle = (expanded) => {
     setMenuIsExpanded(expanded);
@@ -33,6 +35,14 @@ export const MenuHorizontal = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+  const openTablaCapas = () => {
+    setTablaCapasIsOpen(true);
+    closeNav();
+  };
+
+  const closeTablaCapas = () => {
+    setTablaCapasIsOpen(false);
   };
 
   const [tablas, setTablas] = useState([]);
@@ -166,7 +176,13 @@ export const MenuHorizontal = () => {
                     {tabla.nombre}
                   </NavDropdown.Item>
                 ))} */}
-
+                <NavDropdown.Item
+                  onClick={openTablaCapas}
+                  /*{closeNav}*/ href="#action/3.1"
+                >
+                  Todas las capas
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
                 <NavDropdown.Item>
                   <input
                     type="search"
@@ -223,6 +239,10 @@ export const MenuHorizontal = () => {
       </Navbar>
       {/* Agrega el componente ModalForm con las props adecuadas */}
       <ModalForm isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <ModalTablaCapas
+        isOpen={tablaCapasIsOpen}
+        onRequestClose={closeTablaCapas}
+      />
     </div>
   );
 };
