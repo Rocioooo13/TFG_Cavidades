@@ -23,16 +23,33 @@ module.exports = {
     });
   },
   createTable(concejo) {
+    return new Promise((resolve, reject) => {
+      const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
+      // db.run(sql, (result, error) => {
+      //   if (error) {
+      //     console.error("DB Error: ", error);
+      //     return reject(error);
+      //   }
+
+      //   console.log(result);
+      //   return resolve(result);
+      // });
+      db.run(sql, function (err) {
+        if (err) {
+          console.log("DB error: "); //err.message
+          return reject(err);
+        } else {
+          return resolve();
+        }
+      });
+    });
     // const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
     // db.run(sqlMapa, function (err) {
     //   if (err) {
     //     console.log("Ha habido un error"); //err.message
     //   }
     // });
-    //const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo archivo BLOB NOT NULL)`;
-
-    const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hermisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
-    return db.run(sql);
+    //const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo archivo BLOB NOT NULL)`;
   },
   createListaCapas() {
     const sql = `CREATE TABLE IF NOT EXISTS listaCapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,nombre TEXT)`;
@@ -156,7 +173,7 @@ module.exports = {
     //   }
     // );
     // return db.run(
-    //   `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE NOT EXISTS (SELECT 1 FROM ${concejo} WHERE denominacion = ?)`,
+    //   `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE NOT EXISTS (SELECT 1 FROM ${concejo} WHERE denominacion = ?)`,
     //   [
     //     denominacion,
     //     X,
@@ -165,7 +182,7 @@ module.exports = {
     //     elipsoide,
     //     huso,
     //     zonaUTM,
-    //     hermisferio,
+    //     hemisferio,
     //     concejo,
     //     latitud,
     //     longitud,
@@ -177,52 +194,57 @@ module.exports = {
     //   }
     // );
     // Primero, verifica si ya existe un registro con la misma denominacion
-    db.get(
-      `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
-      [denominacion],
-      (err, row) => {
-        if (err) {
-          return console.error("Error al ejecutar la consulta:", err.message);
-        }
+    return new Promise((resolve, reject) => {
+      db.get(
+        `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
+        [denominacion],
+        (err, row) => {
+          if (err) {
+            console.error("Error al ejecutar la consulta:", err.message);
+            reject(err);
+          }
 
-        // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
-        if (!row) {
-          // Ejecuta la inserción
-          db.run(
-            //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hermisferio, concejo, latitud, longitud, archivo)
-            // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
-            `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-              denominacion,
-              X,
-              Y,
-              Z,
-              elipsoide,
-              huso,
-              zonaUTM,
-              hemisferio,
-              concejo,
-              latitud,
-              longitud,
-              //archivo,
-            ],
-            function (err) {
-              if (err) {
-                return console.error(
-                  "Error al insertar el registro:",
-                  err.message
-                );
+          // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+          if (!row) {
+            // Ejecuta la inserción
+            db.run(
+              //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo)
+              // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
+              `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              [
+                denominacion,
+                X,
+                Y,
+                Z,
+                elipsoide,
+                huso,
+                zonaUTM,
+                hemisferio,
+                concejo,
+                latitud,
+                longitud,
+                //archivo,
+              ],
+              function (err) {
+                if (err) {
+                  return console.error(
+                    "Error al insertar el registro:",
+                    err.message
+                  );
+                }
+                console.log("Registro insertado correctamente.");
               }
-              console.log("Registro insertado correctamente.");
-            }
-          );
-        } else {
-          // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
-          console.error("Ya existe un registro con la misma denominación.");
+            );
+            resolve();
+          } else {
+            // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+            console.error("Ya existe un registro con la misma denominación.");
+            resolve();
+          }
         }
-      }
-    );
+      );
+    });
   },
   getCuevas() {
     return new Promise((resolve, reject) => {
@@ -270,12 +292,15 @@ module.exports = {
     // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },*/
   updateCueva(denominacion, id, denominacionAnterior) {
-    console.log("Entro en updateCueva");
-    //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']
-    return db.run(
-      "UPDATE cangasdeOnís SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
-      [denominacion, id, denominacionAnterior]
-    );
+    return new Promise((resolve, _) => {
+      console.log("Entro en updateCueva");
+      //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']
+      db.run(
+        "UPDATE concejodePrueba SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
+        [denominacion, id, denominacionAnterior]
+      );
+      resolve();
+    });
   },
   // updateCueva(id, cueva) {
   //   //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']

@@ -140,58 +140,60 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     const conc = new String(document.getElementById("concejo").value)
       .split(" ")
       .join("");
-    createTable(conc);
 
-    //Añado el concejo a la tabla lista capas
-    const conc2 = document.getElementById("concejo").value;
-    //createListaCapas();
-    console.log("Aqui fallo 1");
-    añadirCapaListaCapas(conc2);
-    console.log("Aqui fallo 2");
-    console.log("nombre concejo: ", conc2);
+    createTable(conc).then((_) => {
+      //Añado el concejo a la tabla lista capas
+      const conc2 = document.getElementById("concejo").value;
+      //createListaCapas();
+      console.log("Aqui fallo 1");
+      añadirCapaListaCapas(conc2);
+      console.log("Aqui fallo 2");
+      console.log("nombre concejo: ", conc2);
 
-    //Obtengo latitud y longitud de la cueva
-    var latlong = formulaLatitudLongitud();
-    console.log("Aqui fallo 3");
+      //Obtengo latitud y longitud de la cueva
+      var latlong = formulaLatitudLongitud();
+      console.log("Aqui fallo 3");
 
-    //Inserto la cueva en la tabla creada
-    const denom = document.getElementById("denominacion").value;
-    const yDelForm = document.getElementById("y").value;
-    const xDelForm = document.getElementById("x").value;
-    const zDelForm = document.getElementById("z").value;
-    const elip = document.getElementById("elipsoide").value;
-    const huso = document.getElementById("huso").value;
-    const zonautmIndex = document.getElementById("zona").selectedIndex;
-    const zonautm = document.getElementById("zona")[zonautmIndex].label;
-    console.log(zonautm);
-    const hemisferioIndex =
-      document.getElementById("hemisferio1").selectedIndex;
-    const hemisferio =
-      document.getElementById("hemisferio1")[hemisferioIndex].label;
-    console.log("Aqui fallo 4");
-    setTimeout(
-      () =>
-        createCueva(
-          denom,
-          xDelForm,
-          yDelForm,
-          zDelForm,
-          elip,
-          huso,
-          zonautm,
-          hemisferio,
-          conc,
-          latlong[0],
-          latlong[1]
-          //document.getElementById("archivo").value
-        ),
-      500
-    );
-    console.log("Aqui fallo 5");
-    //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
-    //onRequestClose();
-    //onRequestClose(Map.setIsModalOpen(true));
-    //console.log("Aqui fallo 6");
+      //Inserto la cueva en la tabla creada
+      const denom = document.getElementById("denominacion").value;
+      const yDelForm = document.getElementById("y").value;
+      const xDelForm = document.getElementById("x").value;
+      const zDelForm = document.getElementById("z").value;
+      const elip = document.getElementById("elipsoide").value;
+      const huso = document.getElementById("huso").value;
+      const zonautmIndex = document.getElementById("zona").selectedIndex;
+      const zonautm = document.getElementById("zona")[zonautmIndex].label;
+      console.log(zonautm);
+      const hemisferioIndex =
+        document.getElementById("hemisferio1").selectedIndex;
+      const hemisferio =
+        document.getElementById("hemisferio1")[hemisferioIndex].label;
+      console.log("Aqui fallo 4");
+      createCueva(
+        denom,
+        xDelForm,
+        yDelForm,
+        zDelForm,
+        elip,
+        huso,
+        zonautm,
+        hemisferio,
+        conc,
+        latlong[0],
+        latlong[1]
+        //document.getElementById("archivo").value
+      )
+        .then((_) => {
+          // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
+          console.log("Aqui fallo 5");
+        })
+        .finally(() => {
+          onRequestClose();
+        });
+      //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
+      //onRequestClose(Map.setIsModalOpen(true));
+      //console.log("Aqui fallo 6");
+    });
   };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -346,7 +348,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>
-          <button className="botonForm" type="submit" onClick={addCueva}>
+          <button className="botonForm" type="button" onClick={addCueva}>
             Crear
           </button>
         </div>

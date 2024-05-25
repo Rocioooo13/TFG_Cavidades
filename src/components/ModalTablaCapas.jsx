@@ -162,7 +162,7 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
                   {item.zonaUTM}
                 </td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.hermisferio}
+                  {item.hemisferio}
                 </td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>
                   {item.concejo}

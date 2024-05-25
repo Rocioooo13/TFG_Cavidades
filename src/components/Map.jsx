@@ -136,7 +136,7 @@ Map.defaultProps = {
     elipsoide: "WGS84",
     huso: 30,
     zonaUTM: "T",
-    hermisferio: "N",
+    hemisferio: "N",
     concejo: "No tiene nombre",
     latitud: 0,
     longitud: 0,

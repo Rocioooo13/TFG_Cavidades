@@ -210,7 +210,11 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     //   () => updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion),
     //   500
     // );
-    updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion);
+    updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion).then(
+      (_) => {
+        onRequestClose();
+      }
+    );
     //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
     //onRequestClose();
   };
@@ -393,7 +397,7 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
           </button>
           <button
             className="botonForm"
-            type="submit"
+            type="button"
             onClick={handleUpdateCueva}
           >
             Actualizar
