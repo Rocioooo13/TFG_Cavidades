@@ -222,7 +222,9 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     const concejo = document.getElementById("concejo").value;
     console.log("Nombre concejo: ", concejo);
     console.log("Id cueva: ", cuevaSelected.id);
-    deleteCueva(concejo, cuevaSelected.id);
+    deleteCueva(concejo, cuevaSelected.id).then((_) => {
+      onRequestClose();
+    });
   };
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (

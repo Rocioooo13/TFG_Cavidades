@@ -337,14 +337,14 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
         </div> */}
 
         <div className="botonesForm">
-          <button
+          {/* <button
             className="botonForm"
             type="button"
             // onClick={formulaLatitudLongitud}
             onClick={addCueva}
           >
             boton prueba
-          </button>
+          </button> */}
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>

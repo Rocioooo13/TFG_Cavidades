@@ -25,15 +25,6 @@ module.exports = {
   createTable(concejo) {
     return new Promise((resolve, reject) => {
       const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
-      // db.run(sql, (result, error) => {
-      //   if (error) {
-      //     console.error("DB Error: ", error);
-      //     return reject(error);
-      //   }
-
-      //   console.log(result);
-      //   return resolve(result);
-      // });
       db.run(sql, function (err) {
         if (err) {
           console.log("DB error: "); //err.message
@@ -43,13 +34,6 @@ module.exports = {
         }
       });
     });
-    // const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
-    // db.run(sqlMapa, function (err) {
-    //   if (err) {
-    //     console.log("Ha habido un error"); //err.message
-    //   }
-    // });
-    //const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo archivo BLOB NOT NULL)`;
   },
   createListaCapas() {
     const sql = `CREATE TABLE IF NOT EXISTS listaCapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,nombre TEXT)`;
@@ -79,7 +63,7 @@ module.exports = {
         );
       } else {
         // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
-        console.error("Ya existe un registro con el mismo nombre.");
+        console.error("Ya existe esta tabla en la lista de tablas.");
       }
     });
   },
@@ -161,39 +145,6 @@ module.exports = {
     //     }
     //   }
     // );
-
-    //FUNCIONAAAAAAAAAA
-    // return db.run(
-    //   `INSERT INTO cuevas (name, email) VALUES (?, ?)`,
-    //   ["John Doe", "johndoe@example.com"],
-    //   function (err) {
-    //     if (err) {
-    //       return console.log(err.message);
-    //     }
-    //   }
-    // );
-    // return db.run(
-    //   `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE NOT EXISTS (SELECT 1 FROM ${concejo} WHERE denominacion = ?)`,
-    //   [
-    //     denominacion,
-    //     X,
-    //     Y,
-    //     Z,
-    //     elipsoide,
-    //     huso,
-    //     zonaUTM,
-    //     hemisferio,
-    //     concejo,
-    //     latitud,
-    //     longitud,
-    //   ],
-    //   function (err) {
-    //     if (err) {
-    //       return console.log(err.message);
-    //     }
-    //   }
-    // );
-    // Primero, verifica si ya existe un registro con la misma denominacion
     return new Promise((resolve, reject) => {
       db.get(
         `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
@@ -271,7 +222,6 @@ module.exports = {
           console.error("DB Error: ", error);
           return reject(error);
         }
-        //console.log(rows);
         return resolve(rows);
       });
     });
@@ -294,7 +244,6 @@ module.exports = {
   updateCueva(denominacion, id, denominacionAnterior) {
     return new Promise((resolve, _) => {
       console.log("Entro en updateCueva");
-      //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']
       db.run(
         "UPDATE concejodePrueba SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
         [denominacion, id, denominacionAnterior]
@@ -302,25 +251,57 @@ module.exports = {
       resolve();
     });
   },
-  // updateCueva(id, cueva) {
-  //   //UPDATE cangasdeOnís SET name = ? WHERE rowid IS ? AND name IS ?`,['Actualizac…', 1, 'John Doe']
-  //   return db.run("UPDATE  cangasdeOnís SET name = ?, email = ? WHERE id = ?", [
-  //     cueva.denominacion,
-  //     cueva.X,
-  //     id,
-  //   ]);
-  // },
 
+  //Elimina una cueva
   deleteCueva(nombreConcejo, id) {
-    return db.run(
-      `DELETE FROM  ${nombreConcejo} WHERE id = ?`,
-      [id],
-      function (err) {
-        if (err) {
-          return console.error("Error al eliminar el registro:", err.message);
+    return new Promise((resolve, reject) => {
+      db.run(
+        `DELETE FROM  ${nombreConcejo} WHERE id = ?`,
+        [id],
+        function (err) {
+          if (err) {
+            console.error("Error al eliminar el registro:", err.message);
+            reject(err);
+          } else {
+            console.log("Registro eliminado correctamente.");
+            resolve();
+          }
         }
-        console.log("Registro eliminado correctamente.");
-      }
-    );
+      );
+    });
+  },
+
+  //Elimina una capa entera
+  deleteCapa(nombreConcejo) {
+    return new Promise((resolve, reject) => {
+      db.run(`DROP TABLE ${nombreConcejo}`, function (err) {
+        if (err) {
+          console.error("Error al eliminar la capa:", err.message);
+          reject(err);
+        } else {
+          console.log("Capa eliminada correctamente.");
+          resolve();
+        }
+      });
+    });
+  },
+
+  //Elimina una cueva de la lista de capas
+  deleteCuevaListaCapas(nombreConcejo) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `DELETE FROM  listaCapas WHERE nombre = ?`,
+        [nombreConcejo],
+        function (err) {
+          if (err) {
+            console.error("Error al eliminar el registro:", err.message);
+            reject(err);
+          } else {
+            console.log("Capa eliminada correctamente de la lista de capas.");
+            resolve();
+          }
+        }
+      );
+    });
   },
 };
