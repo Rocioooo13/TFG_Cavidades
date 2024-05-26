@@ -9,7 +9,6 @@ import { App } from "./components/App";
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <UsersList /> */}
     <App />
   </React.StrictMode>,
   document.getElementById("root")

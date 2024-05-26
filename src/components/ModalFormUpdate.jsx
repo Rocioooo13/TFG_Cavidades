@@ -1,12 +1,8 @@
 import React from "react";
 import Modal from "react-modal";
 import { Map } from "./Map";
-import api, {
-  createTable,
-  createCueva,
-  updateCueva,
-  deleteCueva,
-} from "../api";
+import { useEffect, useState } from "react";
+import api, { updateCueva, deleteCueva } from "../api";
 
 const customStyles = {
   content: {
@@ -16,7 +12,12 @@ const customStyles = {
   },
 };
 
-const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
+const ModalFormUpdate = ({
+  isOpen,
+  onRequestClose,
+  cuevaSelected,
+  setCuevaActualizada,
+}) => {
   console.log(cuevaSelected);
   // Override zIndex to display the modal overlayed to the map
   const pruebaObtenerValor = () => {
@@ -135,51 +136,6 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     console.log("Longitud: ", longitud, " Latitud: ", latitud);
     return [longitud, latitud];
   };
-  const addCueva = () => {
-    //Obtengo el valor del concejo para crear la tabla
-    const conc = new String(document.getElementById("concejo").value)
-      .split(" ")
-      .join("");
-    createTable(conc);
-    //Obtengo latitud y longitud de la cueva
-    var latlong = formulaLatitudLongitud();
-
-    //Inserto la cueva en la tabla creada
-    const denom = document.getElementById("denominacion").value;
-    const yDelForm = document.getElementById("y").value;
-    const xDelForm = document.getElementById("x").value;
-    const zDelForm = document.getElementById("z").value;
-    const elip = document.getElementById("elipsoide").value;
-    const huso = document.getElementById("huso").value;
-    const zonautmIndex = document.getElementById("zona").selectedIndex;
-    const zonautm = document.getElementById("zona")[zonautmIndex].label;
-    console.log(zonautm);
-    const hemisferioIndex =
-      document.getElementById("hemisferio1").selectedIndex;
-    const hemisferio =
-      document.getElementById("hemisferio1")[hemisferioIndex].label;
-
-    setTimeout(
-      () =>
-        createCueva(
-          denom,
-          yDelForm,
-          xDelForm,
-          zDelForm,
-          elip,
-          huso,
-          zonautm,
-          hemisferio,
-          conc,
-          latlong[0],
-          latlong[1]
-        ),
-      500
-    );
-    //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
-    //onRequestClose();
-    //Map.setIsModalOpen(true);
-  };
 
   //FALTA POR PERFECCIONAR PARA QUE LO HAGA CON CUALQUIER CAMPO!!!
   const handleUpdateCueva = () => {
@@ -212,20 +168,19 @@ const ModalFormUpdate = ({ isOpen, onRequestClose, cuevaSelected }) => {
     // );
     updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion).then(
       (_) => {
+        setCuevaActualizada(true);
         onRequestClose();
       }
     );
-    //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
-    //onRequestClose();
   };
   const handleDeleteCueva = () => {
     const concejo = document.getElementById("concejo").value;
-    console.log("Nombre concejo: ", concejo);
-    console.log("Id cueva: ", cuevaSelected.id);
     deleteCueva(concejo, cuevaSelected.id).then((_) => {
+      setCuevaActualizada(true);
       onRequestClose();
     });
   };
+
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal

@@ -11,6 +11,7 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
       padding: "20px",
     },
   };
+
   //La opcion que selecciono del desplegable
   const [selectedOption, setSelectedOption] = useState("");
   const [nombreCapa, setNombreCapa] = useState("");
@@ -39,15 +40,6 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
     }
   };
 
-  useEffect(() => {
-    loadTablas();
-    loadCapa();
-  }, []);
-
-  useEffect(() => {
-    loadCapa();
-  }, [nombreCapa]);
-
   const selectedOptionData = capa.filter(
     (item) => item.concejo === nombreCapa.split(" ").join("")
   );
@@ -55,14 +47,32 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
   const handleClicButton = () => {
     onRequestClose();
   };
+  const [idSeleccionado, setidSeleccionado] = useState("");
   const handleClicBin = (id) => {
+    setidSeleccionado(id);
     deleteCueva(nombreCapa.split(" ").join(""), id).then((_) => {});
   };
+
   const handleClicEliminarCapa = (id) => {
     deleteCapa(nombreCapa.split(" ").join("")).then((_) => {
       deleteCuevaListaCapas(nombreCapa).then((_) => {});
     });
   };
+
+  useEffect(() => {
+    loadTablas();
+    loadCapa();
+  }, []);
+
+  //Si hay un cambio en nombreCapa se recarga la lista de Cuevas
+  useEffect(() => {
+    loadCapa();
+  }, [nombreCapa]);
+
+  //Si hay un cambio en idSeleccionado se recarga la lista de Cuevas
+  useEffect(() => {
+    loadCapa();
+  }, [idSeleccionado]);
 
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -211,6 +221,7 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
           )}
         </tbody>
       </table>
+
       <div className="botonesForm">
         <button
           className="botonFormEliminar"

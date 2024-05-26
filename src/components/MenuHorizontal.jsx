@@ -137,13 +137,13 @@ export const MenuHorizontal = () => {
         <Container>
           <Navbar.Brand href="#home">Catálogo cavidades</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
+          <Navbar.Collapse className="responsive-navbar-nav">
             <Nav>
               {/* <Nav.Link href="#features">Cuevas</Nav.Link> */}
               <NavDropdown
                 autoClose="true"
                 title="Cuevas"
-                id="collapsible-nav-dropdown"
+                className="collapsible-nav-dropdown"
               >
                 <NavDropdown.Item onClick={openModal} href="#form/3.1">
                   Crear por formulario
@@ -157,7 +157,7 @@ export const MenuHorizontal = () => {
               <NavDropdown
                 autoClose="outside"
                 title="Capas"
-                id="collapsible-nav-dropdown"
+                className="collapsible-nav-dropdown"
                 aria-expanded={menuIsExpanded}
               >
                 {/* <NavDropdown.Item href="#form/3.1">
@@ -215,7 +215,7 @@ export const MenuHorizontal = () => {
               <NavDropdown
                 autoClose="true"
                 title="Exportar"
-                id="collapsible-nav-dropdown"
+                className="collapsible-nav-dropdown"
               >
                 <NavDropdown.Item onClick={closeNav} href="#action/3.1">
                   Exportar proyecto a...

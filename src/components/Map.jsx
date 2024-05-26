@@ -26,15 +26,21 @@ export const Map = ({ url, cuevaIni }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
   const [waypoints, setWaypoints] = useState([]);
+  const[cuevaActualizada, setCuevaActualizada] = useState(false);
 
   const handleMarkerClick = (cueva) => {
     setCuevaSelected(cueva);
     setIsModalOpen(true);
+    setCuevaActualizada(false);
   };
 
   useEffect(() => {
     loadCuevas();
   }, []);
+
+  useEffect(() => {
+    loadCuevas();
+  }, [cuevaActualizada]);
   //Personaliza los waypoints
   const customIcon = new L.DivIcon({
     className: "custom-icon", // Clase CSS para estilos personalizados
@@ -67,7 +73,7 @@ export const Map = ({ url, cuevaIni }) => {
               <LayerGroup name="Cuevas de prueba">
                 {cuevas.map((cueva, index) => (
                   <Marker
-                    key={index}
+                    key={cueva.id}
                     position={[cueva.longitud, cueva.latitud]}
                     icon={customIcon}
                     //onClick={() => handleMarkerClick(waypoint)}
@@ -118,6 +124,7 @@ export const Map = ({ url, cuevaIni }) => {
             isOpen={isModalOpen}
             onRequestClose={() => setIsModalOpen(false)}
             cuevaSelected={cuevaSelected}
+            setCuevaActualizada={setCuevaActualizada}
           />
         </div>
       </div>
