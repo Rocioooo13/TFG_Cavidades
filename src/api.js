@@ -199,7 +199,7 @@ module.exports = {
   },
   getCuevas() {
     return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM concejodePrueba", (error, rows) => {
+      db.all("SELECT * FROM pruebadeImportacion", (error, rows) => {
         if (error) {
           console.error("DB Error: ", error);
           return reject(error);

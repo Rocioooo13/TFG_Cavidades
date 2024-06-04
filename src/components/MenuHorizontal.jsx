@@ -11,11 +11,13 @@ import { Form } from "react-bootstrap";
 
 //Para exportar
 import { CSVLink } from "react-csv";
+import ImportCSV from "./ImportCSV";
 
 export const MenuHorizontal = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [tablaCapasIsOpen, setTablaCapasIsOpen] = useState(false);
+  const [importCsvIsOpen, setImportCsvIsOpen] = useState(false);
 
   const toggle = (expanded) => {
     setMenuIsExpanded(expanded);
@@ -40,6 +42,19 @@ export const MenuHorizontal = () => {
     setTablaCapasIsOpen(true);
     closeNav();
   };
+
+  const openImportCsvModal = () => {
+    setImportCsvIsOpen(true);
+    closeNav();
+  };
+
+  const closeImportCsvModal = () => {
+    setImportCsvIsOpen(false);
+  };
+
+  // const handleCsvImport = (data) => {
+  //   window.electron.send("import-csv", data);
+  // };
 
   const closeTablaCapas = () => {
     setTablaCapasIsOpen(false);
@@ -149,7 +164,7 @@ export const MenuHorizontal = () => {
                   Crear por formulario
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={closeNav} href="#csv/3.2">
+                <NavDropdown.Item onClick={openImportCsvModal} href="#csv/3.2">
                   Importar excel (.csv)
                 </NavDropdown.Item>
               </NavDropdown>
@@ -242,6 +257,11 @@ export const MenuHorizontal = () => {
       <ModalTablaCapas
         isOpen={tablaCapasIsOpen}
         onRequestClose={closeTablaCapas}
+      />
+      <ImportCSV
+        isOpen={importCsvIsOpen}
+        onRequestClose={closeImportCsvModal}
+        // onCsvImport={handleCsvImport}
       />
     </div>
   );

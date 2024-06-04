@@ -49,13 +49,19 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
   };
   const [idSeleccionado, setidSeleccionado] = useState("");
   const handleClicBin = (id) => {
-    setidSeleccionado(id);
-    deleteCueva(nombreCapa.split(" ").join(""), id).then((_) => {});
+    deleteCueva(nombreCapa.split(" ").join(""), id).then((_) => {
+      setidSeleccionado(id);
+    });
   };
 
+  const [capaEliminada, setcapaEliminada] = useState(false);
   const handleClicEliminarCapa = (id) => {
+    setcapaEliminada(false);
     deleteCapa(nombreCapa.split(" ").join("")).then((_) => {
-      deleteCuevaListaCapas(nombreCapa).then((_) => {});
+      deleteCuevaListaCapas(nombreCapa).then((_) => {
+        setcapaEliminada(true);
+        //selectedOptionData = [];
+      });
     });
   };
 
@@ -68,6 +74,11 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
   useEffect(() => {
     loadCapa();
   }, [nombreCapa]);
+
+  useEffect(() => {
+    loadTablas();
+    //loadCapa();
+  }, [capaEliminada]);
 
   //Si hay un cambio en idSeleccionado se recarga la lista de Cuevas
   useEffect(() => {
