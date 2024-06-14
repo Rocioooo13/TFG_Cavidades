@@ -16,7 +16,7 @@ const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
     if (file && tableName) {
       Papa.parse(file, {
         complete: (result) => {
-          console.log(result);
+          // console.log(result);
           setMatriz(result.data); // Asegúrate de que estás estableciendo los datos correctamente
           //onCsvImport({ tableName, data: result.data });
           onRequestClose();
@@ -32,18 +32,30 @@ const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
 
   const handleImportInTheBD = (matriz, tableName) => {
     const conc = new String(tableName).split(" ").join("");
-    console.log("Llega aqui 1 ", tableName);
+    // console.log("Llega aqui 1 ", tableName);
 
     createTable(conc).then((_) => {
-      console.log("Llega aqui 2");
+      // console.log("Llega aqui 2");
 
       añadirCapaListaCapas(tableName);
-      console.log("Llega aqui 3");
+      // console.log("Llega aqui 3");
 
       matriz.map((item) => {
         const lat = new String(item.latitud).replace(",", ".");
         const lon = new String(item.longitud).replace(",", ".");
-        if (item.X != null) {
+        if (
+          item.denominacion != null ||
+          item.X != null ||
+          item.Y != null ||
+          item.Z != null ||
+          item.elipsoide != null ||
+          item.huso != null ||
+          item.zonaUTM != null ||
+          item.hemisferio != null ||
+          conc != null ||
+          lat != null ||
+          lon != null
+        ) {
           createCueva(
             item.denominacion,
             item.X,
@@ -60,7 +72,7 @@ const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
           )
             .then((_) => {
               // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
-              console.log("Llega aqui 4");
+              // console.log("Llega aqui 4");
             })
             .finally(() => {
               onRequestClose();

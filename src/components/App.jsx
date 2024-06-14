@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ModalMapas from "./ModalMapas";
 
 export const App = () => {
+  const [capasSeleccionadas, setCapasSeleccionadas] = useState([]);
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const [mapSelected, setMapSelected] = useState("");
   const loadMap = async () => {
@@ -13,7 +14,7 @@ export const App = () => {
     setMapSelected(mapSelect ?? "");
   };
   const handleItemClick = (item) => {
-    console.log("Valor de item.url " + item.url);
+    // console.log("Valor de item.url " + item.url);
     setMapSelected("");
     setTimeout(() => setMapSelected(item.url ?? ""), 500);
   };
@@ -45,7 +46,10 @@ export const App = () => {
       }}
     >
       <div style={{ width: "100%" }}>
-        <MenuHorizontal />
+        <MenuHorizontal
+          capasSeleccionadas={capasSeleccionadas}
+          setCapasSeleccionadas={setCapasSeleccionadas}
+        />
       </div>
       <div
         style={{
@@ -55,18 +59,23 @@ export const App = () => {
       >
         <div
           style={{
-            width: "80%",
+            width: "90%",
             height: "700px",
           }}
         >
-          <Map url={mapSelected} />
+          <Map
+            url={mapSelected}
+            capasSeleccionadas={capasSeleccionadas}
+            setCapasSeleccionadas={setCapasSeleccionadas}
+          />
         </div>
 
         <div
           style={{
-            width: "18%",
-            height: "700px",
-            marginRight: "20px",
+            width: "20vh",
+            height: "92.5vh",
+            marginRight: "0px",
+            backgroundColor: "#2B3035",
           }}
         >
           {/* <h3 style={{ margin: "10%", color: "green" }}>Lista</h3>
@@ -87,12 +96,12 @@ export const App = () => {
             </ul>
           ))} */}
           <div style={{ margin: "10%" }} className="listaMapas">
-            <p>Mapas</p>
+            <p style={{ color: "white" }}>Mapas</p>
             {maps?.map((mapa) => (
               <div
                 style={{
                   marginLeft: "10%",
-                  color: "black",
+                  color: "white",
                   //backgroundColor: mapSelected === mapa ? "#90EE90" : "green",
                   cursor: "pointer",
                 }}
@@ -102,7 +111,9 @@ export const App = () => {
                 <p>{mapa.name}</p>
               </div>
             ))}
-            <p onClick={openModalMapas}>+ Añadir mapa</p>
+            <p style={{ color: "white" }} onClick={openModalMapas}>
+              + Añadir mapa
+            </p>
           </div>
         </div>
       </div>

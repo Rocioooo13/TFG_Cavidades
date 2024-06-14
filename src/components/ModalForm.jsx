@@ -145,14 +145,14 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       //Añado el concejo a la tabla lista capas
       const conc2 = document.getElementById("concejo").value;
       //createListaCapas();
-      console.log("Aqui fallo 1");
+      //console.log("Aqui fallo 1");
       añadirCapaListaCapas(conc2);
-      console.log("Aqui fallo 2");
-      console.log("nombre concejo: ", conc2);
+      //console.log("Aqui fallo 2");
+      //console.log("nombre concejo: ", conc2);
 
       //Obtengo latitud y longitud de la cueva
       var latlong = formulaLatitudLongitud();
-      console.log("Aqui fallo 3");
+      //console.log("Aqui fallo 3");
 
       //Inserto la cueva en la tabla creada
       const denom = document.getElementById("denominacion").value;
@@ -163,12 +163,12 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       const huso = document.getElementById("huso").value;
       const zonautmIndex = document.getElementById("zona").selectedIndex;
       const zonautm = document.getElementById("zona")[zonautmIndex].label;
-      console.log(zonautm);
+      //console.log(zonautm);
       const hemisferioIndex =
         document.getElementById("hemisferio1").selectedIndex;
       const hemisferio =
         document.getElementById("hemisferio1")[hemisferioIndex].label;
-      console.log("Aqui fallo 4");
+      //console.log("Aqui fallo 4");
       createCueva(
         denom,
         xDelForm,
@@ -185,7 +185,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
       )
         .then((_) => {
           // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
-          console.log("Aqui fallo 5");
+          //console.log("Aqui fallo 5");
         })
         .finally(() => {
           onRequestClose();

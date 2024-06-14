@@ -13,7 +13,10 @@ import { Form } from "react-bootstrap";
 import { CSVLink } from "react-csv";
 import ImportCSV from "./ImportCSV";
 
-export const MenuHorizontal = () => {
+export const MenuHorizontal = ({
+  capasSeleccionadas,
+  setCapasSeleccionadas,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [tablaCapasIsOpen, setTablaCapasIsOpen] = useState(false);
@@ -60,6 +63,25 @@ export const MenuHorizontal = () => {
     setTablaCapasIsOpen(false);
   };
 
+  const [tablaSeleccionada, setTablaSeleccionada] = useState("");
+
+  const handleSeleccionarTabla = (nombreTabla) => {
+    setTablaSeleccionada(nombreTabla);
+    if (!capasSeleccionadas.includes(nombreTabla)) {
+      setCapasSeleccionadas((prevCapas) => [...prevCapas, nombreTabla]);
+    } else {
+      //console.log("La capa ya está seleccionada");
+    }
+    closeNav();
+  };
+  // const imprimirNombreTabla = () => {
+  //   console.log("Nombre tabla :", capasSeleccionadas);
+  // };
+
+  // useEffect(() => {
+  //   imprimirNombreTabla();
+  // }, [tablaSeleccionada]);
+
   const [tablas, setTablas] = useState([]);
   const loadTablas = async () => {
     const tablaSelected = await api.obtenertablas();
@@ -93,7 +115,7 @@ export const MenuHorizontal = () => {
   const loadCuevas = async () => {
     const cuevasArray = await api.getCuevas();
     setCuevas(cuevasArray ?? []);
-    console.log("Cuevas array: ", cuevasArray);
+    // console.log("Cuevas array: ", cuevasArray);
   };
 
   //en CsvReport creo tres variables a las que le doy los valores de cuevas, las cabeceras y el nombre del archivo
@@ -104,24 +126,24 @@ export const MenuHorizontal = () => {
   };
   //Rellena el archivo y hace la descarga
   const clicDownload = () => {
-    console.log(cuevas);
-    console.log("Empieza la descarga");
+    //console.log(cuevas);
+    //console.log("Empieza la descarga");
     const csvData = csvReport.data
       .map(
         (item) =>
           `${item.denominacion},${item.X},${item.Y},${item.Z},${item.elipsoide},${item.huso},${item.zonaUTM},${item.hemisferio},${item.concejo},${item.latitud},${item.longitud}`
       )
       .join("\n");
-    console.log("Hace el map");
-    console.log(csvData);
+    //console.log("Hace el map");
+    //console.log(csvData);
     const csvContent = `${csvReport.headers
       .map((header) => header.label)
       .join(",")}\n${csvData}`;
-    console.log("Hace el map");
-    console.log(csvContent);
+    // console.log("Hace el map");
+    // console.log(csvContent);
     const blob = new Blob([csvContent], { type: "text/csv" });
-    console.log("Hace el Blob");
-    console.log(blob);
+    // console.log("Hace el Blob");
+    // console.log(blob);
     const url = window.URL.createObjectURL(blob);
     window.location.href = url;
     // const link = document.createElement('a');
@@ -208,7 +230,8 @@ export const MenuHorizontal = () => {
                 </NavDropdown.Item>
                 {filteredConcejos.map((tabla) => (
                   <NavDropdown.Item
-                    onClick={closeNav}
+                    key={tabla.nombre}
+                    onClick={() => handleSeleccionarTabla(tabla.nombre)}
                     href="#form/3.1"
                     id="listaConcejos"
                   >

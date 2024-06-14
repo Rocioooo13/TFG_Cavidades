@@ -18,7 +18,7 @@ const ModalFormUpdate = ({
   cuevaSelected,
   setCuevaActualizada,
 }) => {
-  console.log(cuevaSelected);
+  // console.log(cuevaSelected);
   // Override zIndex to display the modal overlayed to the map
   const pruebaObtenerValor = () => {
     // Obtener el valor del label

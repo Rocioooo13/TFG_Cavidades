@@ -17,7 +17,7 @@ module.exports = {
           return reject(error);
         }
 
-        console.log(rows);
+        // console.log(rows);
         return resolve(rows);
       });
     });
@@ -76,7 +76,7 @@ module.exports = {
           return reject(error);
         }
 
-        console.log(rows);
+        // console.log(rows);
         return resolve(rows);
       });
     });
@@ -90,7 +90,7 @@ module.exports = {
           return reject(error);
         }
 
-        console.log(row);
+        // console.log(row);
         return resolve(row.url);
       });
     });
@@ -197,20 +197,66 @@ module.exports = {
       );
     });
   },
+  // getCuevas(concejo) {
+  //   return new Promise((resolve, reject) => {
+  //     db.all(`SELECT * FROM ${concejo}`, (error, rows) => {
+  //       if (error) {
+  //         console.error("DB Error: ", error);
+  //         return reject(error);
+  //       }
+  //       console.log(rows);
+  //       return resolve(rows);
+  //     });
+  //   });
+  // },
   getCuevas() {
     return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM pruebadeImportacion", (error, rows) => {
+      db.all(`SELECT * FROM pruebadeImportacion`, (error, rows) => {
         if (error) {
           console.error("DB Error: ", error);
           return reject(error);
         }
-        console.log(rows);
+        // console.log(rows);
         return resolve(rows);
       });
     });
   },
 
   getCuevas2(concejo) {
+    return new Promise((resolve, reject) => {
+      if (!concejo) {
+        return reject("El concejo no esta definido");
+      }
+
+      const sql = `SELECT * FROM ${concejo}`;
+      db.all(sql, (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+        return resolve(rows);
+      });
+    });
+  },
+
+  getLayers(concejo) {
+    return new Promise((resolve, reject) => {
+      if (!concejo) {
+        return reject("El concejo no esta definido");
+      }
+
+      const sql = `SELECT * FROM ${concejo}`;
+      db.all(sql, (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+        return resolve(rows);
+      });
+    });
+  },
+
+  getCuevas3(concejo) {
     return new Promise((resolve, reject) => {
       if (!concejo) {
         return reject();
@@ -243,7 +289,7 @@ module.exports = {
   },*/
   updateCueva(denominacion, id, denominacionAnterior) {
     return new Promise((resolve, _) => {
-      console.log("Entro en updateCueva");
+      // console.log("Entro en updateCueva");
       db.run(
         "UPDATE concejodePrueba SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
         [denominacion, id, denominacionAnterior]
