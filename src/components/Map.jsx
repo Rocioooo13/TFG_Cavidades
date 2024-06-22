@@ -6,6 +6,8 @@ import {
   Popup,
   LayerGroup,
   Tooltip,
+  Polygon,
+  useMapEvents,
 } from "react-leaflet";
 import { useEffect, useState } from "react";
 import api from "../api";
@@ -74,6 +76,8 @@ export const Map = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
   const [cuevaActualizada, setCuevaActualizada] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState([0, 0]);
+  const [coordsPolygon, setCoordsPolygon] = useState([]);
 
   const handleMarkerClick = (cueva) => {
     setCuevaSelected(cueva);
@@ -95,6 +99,35 @@ export const Map = ({
     iconSize: [25, 25],
   });
 
+  const customIconClickCoords = new L.DivIcon({
+    className: "custom-icon",
+    html: '<svg fill="red" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><title>point</title><path d="M16 4.686l-11.314 11.314 11.314 11.314 11.314-11.314-11.314-11.314zM10.343 16l5.657-5.657 5.657 5.657-5.657 5.657-5.657-5.657z"></path></svg>',
+    iconSize: [25, 25],
+  });
+
+  // Added markers when clicking the map
+  const Markers = () => {
+    useMapEvents({
+      click(e) {
+        setSelectedPosition([e.latlng.lat, e.latlng.lng]);
+        // console.log("Coordinates on click: ", [e.latlng.lat, e.latlng.lng]);
+        if (selectedPosition[0] !== 0 && selectedPosition[1] !== 0) {
+          setCoordsPolygon((coords) => [...coords, selectedPosition]);
+          console.log(coordsPolygon);
+        }
+      },
+    });
+
+    return selectedPosition ? (
+      <Marker
+        key={selectedPosition[0]}
+        position={selectedPosition}
+        interactive={false}
+        icon={customIconClickCoords}
+      />
+    ) : null;
+  };
+
   //console.log("URL en el componente map " + url);
   if (url !== "") {
     //console.log("Tengo info");
@@ -105,6 +138,7 @@ export const Map = ({
           zoom={8}
           style={{ height: "92.5vh", width: "100wh" }}
         >
+          <Markers />
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url={url}
@@ -148,6 +182,14 @@ export const Map = ({
                 </LayerGroup>
               </Overlay>
             ))}
+            {/* <Overlay name="Contorno">
+              <Polygon
+                positions={polygonPoints}
+                color="black"
+                fill={false}
+                weight={1}
+              ></Polygon>
+            </Overlay> */}
           </LayersControl>
         </MapContainer>
         <div

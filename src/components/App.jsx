@@ -72,7 +72,7 @@ export const App = () => {
 
         <div
           style={{
-            width: "20vh",
+            width: "30vh",
             height: "92.5vh",
             marginRight: "0px",
             backgroundColor: "#2B3035",
@@ -111,8 +111,11 @@ export const App = () => {
                 <p>{mapa.name}</p>
               </div>
             ))}
-            <p style={{ color: "white" }} onClick={openModalMapas}>
-              + Añadir mapa
+            <p
+              style={{ color: "white", fontSize: "12" }}
+              onClick={openModalMapas}
+            >
+              <u>+ Añadir mapa</u>
             </p>
           </div>
         </div>

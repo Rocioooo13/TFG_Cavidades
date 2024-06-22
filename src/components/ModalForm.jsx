@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import api, {
   createTable,
@@ -6,6 +6,7 @@ import api, {
   createListaCapas,
   añadirCapaListaCapas,
 } from "../api";
+import SuccessMessage from "./SuccessMessage";
 
 const customStyles = {
   content: {
@@ -135,6 +136,7 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     console.log("Longitud: ", longitud, " Latitud: ", latitud);
     return [longitud, latitud];
   };
+  const [showSuccess, setShowSuccess] = useState(false);
   const addCueva = () => {
     //Obtengo el valor del concejo para crear la tabla
     const conc = new String(document.getElementById("concejo").value)
