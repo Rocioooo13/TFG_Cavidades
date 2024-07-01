@@ -16,11 +16,17 @@ import ImportCSV from "./ImportCSV";
 export const MenuHorizontal = ({
   capasSeleccionadas,
   setCapasSeleccionadas,
+  crearContorno,
+  setCrearContorno,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [tablaCapasIsOpen, setTablaCapasIsOpen] = useState(false);
   const [importCsvIsOpen, setImportCsvIsOpen] = useState(false);
+  const [tablaSeleccionada, setTablaSeleccionada] = useState("");
+  const [tablas, setTablas] = useState([]);
+  const [cuevas, setCuevas] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const toggle = (expanded) => {
     setMenuIsExpanded(expanded);
@@ -63,8 +69,6 @@ export const MenuHorizontal = ({
     setTablaCapasIsOpen(false);
   };
 
-  const [tablaSeleccionada, setTablaSeleccionada] = useState("");
-
   const handleSeleccionarTabla = (nombreTabla) => {
     setTablaSeleccionada(nombreTabla);
     if (!capasSeleccionadas.includes(nombreTabla)) {
@@ -82,7 +86,6 @@ export const MenuHorizontal = ({
   //   imprimirNombreTabla();
   // }, [tablaSeleccionada]);
 
-  const [tablas, setTablas] = useState([]);
   const loadTablas = async () => {
     const tablaSelected = await api.obtenertablas();
     setTablas(tablaSelected ?? []);
@@ -111,7 +114,6 @@ export const MenuHorizontal = ({
   ];
 
   //Obtengo las cuevas y las guardo en la variable cuevas
-  const [cuevas, setCuevas] = useState([]);
   const loadCuevas = async () => {
     const cuevasArray = await api.getCuevas();
     setCuevas(cuevasArray ?? []);
@@ -155,12 +157,16 @@ export const MenuHorizontal = ({
   };
 
   //Para buscar una capa
-  const [searchText, setSearchText] = useState("");
   const filteredConcejos = tablas.filter((tabla) => {
     const regex = new RegExp(searchText.toLowerCase(), "g");
     return regex.test(tabla.nombre.toLowerCase());
   });
 
+  const handleClickActivarContorno = () => {
+    console.log("Entro para cambiar el contorno");
+    setCrearContorno(true);
+    console.log("Pongo el contorno a: ", crearContorno);
+  };
   return (
     <div style={{ zIndex: 2, flex: "none" }}>
       <Navbar
@@ -197,22 +203,6 @@ export const MenuHorizontal = ({
                 className="collapsible-nav-dropdown"
                 aria-expanded={menuIsExpanded}
               >
-                {/* <NavDropdown.Item href="#form/3.1">
-                  <input
-                    type="search"
-                    placeholder="Busca una capa..."
-                    list="listaConcejos"
-                  ></input>
-                </NavDropdown.Item>
-                {tablas.map((tabla) => (
-                  <NavDropdown.Item
-                    onClick={closeNav}
-                    href="#form/3.1"
-                    id="listaConcejos"
-                  >
-                    {tabla.nombre}
-                  </NavDropdown.Item>
-                ))} */}
                 <NavDropdown.Item
                   onClick={openTablaCapas}
                   /*{closeNav}*/ href="#action/3.1"
@@ -238,17 +228,48 @@ export const MenuHorizontal = ({
                     {tabla.nombre}
                   </NavDropdown.Item>
                 ))}
-                {/* <datalist id="listaConcejos">
-                  {tablas.map((tabla) => (
-                    <option
-                      onClick={closeNav}
-                      href="#form/3.1"
-                      id="listaConcejos"
-                    >
-                      {tabla.nombre}
-                    </option>
-                  ))}
-                </datalist> */}
+              </NavDropdown>
+              <NavDropdown
+                autoClose="true"
+                title="Contornos"
+                className="collapsible-nav-dropdown"
+              >
+                <NavDropdown.Item
+                  onClick={openTablaCapas}
+                  /*{closeNav}*/ href="#action/3.1"
+                >
+                  Todas los contornos
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item
+                  onClick={handleClickActivarContorno}
+                  href="#form/3.1"
+                >
+                  Crear contorno
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={openImportCsvModal} href="#csv/3.2">
+                  Importar excel (.csv)
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item>
+                  <input
+                    type="search"
+                    placeholder="Busca una capa..."
+                    list="listaConcejos"
+                    onChange={(e) => setSearchText(e.target.value)} // Actualiza el texto de búsqueda
+                  ></input>
+                </NavDropdown.Item>
+                {filteredConcejos.map((tabla) => (
+                  <NavDropdown.Item
+                    key={tabla.nombre}
+                    onClick={() => handleSeleccionarTabla(tabla.nombre)}
+                    href="#form/3.1"
+                    id="listaConcejos"
+                  >
+                    {tabla.nombre}
+                  </NavDropdown.Item>
+                ))}
               </NavDropdown>
               <NavDropdown
                 autoClose="true"

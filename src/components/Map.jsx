@@ -22,14 +22,32 @@ export const Map = ({
   cuevaIni,
   capasSeleccionadas,
   setCapasSeleccionadas,
+  crearContorno,
+  setCrearContorno,
 }) => {
   const [cuevas, setCuevas] = useState([]);
   const [index, setIndex] = useState(0);
   //Aqui meteré todas las cuevas de cada concejo
   const [todasCuevas, setTodasCuevas] = useState([]);
-
   //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
   const [capasVisibles, setCapasVisibles] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
+  const [cuevaActualizada, setCuevaActualizada] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState([0, 0]);
+  const [coordsPolygon, setCoordsPolygon] = useState([]);
+  // const [mostrarNuevoContorno, setMostrarNuevoContorno] = useState(false);
+
+  const customIcon = new L.DivIcon({
+    className: "custom-icon",
+    html: '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAACBUlEQVR4nK2UMW/TQBTHTywshZEFiQGYGPA56Z3o2Y7lM0O/BCPqSqouwCfgAzAgFRYQSAgxsiC6MrQiqRSTNmnsNCmqqrao6jk2hTaHEgSyzz47cflLb/3/3vvfvQdAjnoGXNrSYXNTgycOUTij2PcpbjKKnjELU1BUXkWxWjr83iAKj5ZvY6HQp9CevT6VuWuoC46mDEXzdMC49gMbzU1k/k0r61+JcpZm3pADuE/R4ZFVvpELSIvFe7jI++t17rku52HAT2trPHy8mBbXSqb5tll6IJr3373hruv+q6h+vnqRgBxbqCIFdDTVETt3I+YiYKTEJBQ/lQI2NOVHrPv1ei7g9MuqGJMjBTgExn5O1/NyAcPBQJzgSApoEMinB/gxALNRKAU0ifIrFlG9NnVEzEaeFNDSlN34I1fzH/lRVQDg91KAV1GXxW/ae/s645s+T+6Che9JAT165+rooCUXrcp36rXxmwyDYByL2Pm4e4oH+4RcAllq62pLdiYaWafiT/7LIE/beqnsFAAwG4XB3fI1MIk6Rmm1AOAJmFS7c7evbBB4MimAUdzZM80ZMI36Zul+WlQp5mfHFBugiLqG+iF3AgsvgaLiAFxo67CbAXgJzqs989ZMW4MHSQBa4fM3L54bMNJoATcJZH8BjKLPB/P48n8xj0JaOjz0Kf6Yu60R/QbJDWobI0huvAAAAABJRU5ErkJggg==">',
+    iconSize: [25, 25],
+  });
+  const customIconClickCoords = new L.DivIcon({
+    className: "custom-icon",
+    html: '<svg fill="red" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><title>point</title><path d="M16 4.686l-11.314 11.314 11.314 11.314 11.314-11.314-11.314-11.314zM10.343 16l5.657-5.657 5.657 5.657-5.657 5.657-5.657-5.657z"></path></svg>',
+    iconSize: [25, 25],
+  });
 
   const loadCuevas = async () => {
     if (capasSeleccionadas.length > 0) {
@@ -65,20 +83,6 @@ export const Map = ({
     }
   };
 
-  //Actualizamos el estado de capasVisibles cuando se selecciona o deselecciona una capa.
-  // const handleLayerVisibility = (capa, checked) => {
-  //   setCapasVisibles((prev) => ({
-  //     ...prev,
-  //     [capa]: checked,
-  //   }));
-  // };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
-  const [cuevaActualizada, setCuevaActualizada] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState([0, 0]);
-  const [coordsPolygon, setCoordsPolygon] = useState([]);
-
   const handleMarkerClick = (cueva) => {
     setCuevaSelected(cueva);
     setIsModalOpen(true);
@@ -92,18 +96,6 @@ export const Map = ({
   useEffect(() => {
     loadCuevas();
   }, [cuevaActualizada, capasSeleccionadas]);
-
-  const customIcon = new L.DivIcon({
-    className: "custom-icon",
-    html: '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAACBUlEQVR4nK2UMW/TQBTHTywshZEFiQGYGPA56Z3o2Y7lM0O/BCPqSqouwCfgAzAgFRYQSAgxsiC6MrQiqRSTNmnsNCmqqrao6jk2hTaHEgSyzz47cflLb/3/3vvfvQdAjnoGXNrSYXNTgycOUTij2PcpbjKKnjELU1BUXkWxWjr83iAKj5ZvY6HQp9CevT6VuWuoC46mDEXzdMC49gMbzU1k/k0r61+JcpZm3pADuE/R4ZFVvpELSIvFe7jI++t17rku52HAT2trPHy8mBbXSqb5tll6IJr3373hruv+q6h+vnqRgBxbqCIFdDTVETt3I+YiYKTEJBQ/lQI2NOVHrPv1ei7g9MuqGJMjBTgExn5O1/NyAcPBQJzgSApoEMinB/gxALNRKAU0ifIrFlG9NnVEzEaeFNDSlN34I1fzH/lRVQDg91KAV1GXxW/ae/s645s+T+6Che9JAT165+rooCUXrcp36rXxmwyDYByL2Pm4e4oH+4RcAllq62pLdiYaWafiT/7LIE/beqnsFAAwG4XB3fI1MIk6Rmm1AOAJmFS7c7evbBB4MimAUdzZM80ZMI36Zul+WlQp5mfHFBugiLqG+iF3AgsvgaLiAFxo67CbAXgJzqs989ZMW4MHSQBa4fM3L54bMNJoATcJZH8BjKLPB/P48n8xj0JaOjz0Kf6Yu60R/QbJDWobI0huvAAAAABJRU5ErkJggg==">',
-    iconSize: [25, 25],
-  });
-
-  const customIconClickCoords = new L.DivIcon({
-    className: "custom-icon",
-    html: '<svg fill="red" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><title>point</title><path d="M16 4.686l-11.314 11.314 11.314 11.314 11.314-11.314-11.314-11.314zM10.343 16l5.657-5.657 5.657 5.657-5.657 5.657-5.657-5.657z"></path></svg>',
-    iconSize: [25, 25],
-  });
 
   // Added markers when clicking the map
   const Markers = () => {
@@ -127,6 +119,10 @@ export const Map = ({
       />
     ) : null;
   };
+  // Función para alternar el estado de mostrarNuevoContorno
+  // const toggleMostrarNuevoContorno = () => {
+  //   setMostrarNuevoContorno(!mostrarNuevoContorno);
+  // };
 
   //console.log("URL en el componente map " + url);
   if (url !== "") {
@@ -138,7 +134,9 @@ export const Map = ({
           zoom={8}
           style={{ height: "92.5vh", width: "100wh" }}
         >
-          <Markers />
+          {/* {crearContorno ? <Markers /> : null} */}
+          {crearContorno /*&& mostrarNuevoContorno*/ ? <Markers /> : null}
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url={url}
@@ -182,14 +180,16 @@ export const Map = ({
                 </LayerGroup>
               </Overlay>
             ))}
-            {/* <Overlay name="Contorno">
-              <Polygon
-                positions={polygonPoints}
-                color="black"
-                fill={false}
-                weight={1}
-              ></Polygon>
-            </Overlay> */}
+            {crearContorno /*&& mostrarNuevoContorno*/ ? (
+              <Overlay name="Contorno" checked={true}>
+                <Polygon
+                  positions={coordsPolygon}
+                  color="black"
+                  fill={false}
+                  weight={1}
+                />
+              </Overlay>
+            ) : null}
           </LayersControl>
         </MapContainer>
         <div

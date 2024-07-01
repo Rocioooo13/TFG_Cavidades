@@ -7,11 +7,16 @@ import ModalMapas from "./ModalMapas";
 
 export const App = () => {
   const [capasSeleccionadas, setCapasSeleccionadas] = useState([]);
-  //Me devuelve la URL console.log(api.getMap(2)[0]);
   const [mapSelected, setMapSelected] = useState("");
+  const [maps, setMaps] = useState([]);
+  const [modalMapasIsOpen, setModalMapasIsOpen] = useState(false);
+  const [crearContorno, setCrearContorno] = useState(false);
+
+  //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
     const mapSelect = await api.getMap(2);
     setMapSelected(mapSelect ?? "");
+    console.log("Pongo incialmente el contorno a: ", crearContorno);
   };
   const handleItemClick = (item) => {
     // console.log("Valor de item.url " + item.url);
@@ -19,7 +24,6 @@ export const App = () => {
     setTimeout(() => setMapSelected(item.url ?? ""), 500);
   };
   //console.log("Mi mapa por defecto es: " + map);
-  const [maps, setMaps] = useState([]);
   const loadMaps = async () => {
     const mapsSelect = await api.getMaps();
     setMaps(mapsSelect ?? []);
@@ -29,7 +33,6 @@ export const App = () => {
     loadMap();
     loadMaps();
   }, []);
-  const [modalMapasIsOpen, setModalMapasIsOpen] = useState(false);
   const openModalMapas = () => {
     setModalMapasIsOpen(true);
   };
@@ -49,6 +52,8 @@ export const App = () => {
         <MenuHorizontal
           capasSeleccionadas={capasSeleccionadas}
           setCapasSeleccionadas={setCapasSeleccionadas}
+          crearContorno={crearContorno}
+          setCrearContorno={setCrearContorno}
         />
       </div>
       <div
@@ -67,6 +72,8 @@ export const App = () => {
             url={mapSelected}
             capasSeleccionadas={capasSeleccionadas}
             setCapasSeleccionadas={setCapasSeleccionadas}
+            crearContorno={crearContorno}
+            setCrearContorno={setCrearContorno}
           />
         </div>
 
@@ -116,6 +123,7 @@ export const App = () => {
               onClick={openModalMapas}
             >
               <u>+ Añadir mapa</u>
+              {/* {(crearContorno = true ? <u> Finalizar contorno</u> : null)} */}
             </p>
           </div>
         </div>
