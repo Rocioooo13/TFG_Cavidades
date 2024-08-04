@@ -60,4 +60,20 @@ form{
   margin: 10px 0;
   display: inline-block;
 }
-
+.colorPickerContainer {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+.colorDisplay {
+  margin-left: 20px;
+}
+.botonGuardarContorno{
+  /* margin-top: "220%";
+  margin-left: "25px"; */
+  position: sticky;
+  background-color: white ;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: #1C2833;
+}

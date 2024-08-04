@@ -12,17 +12,23 @@ import { Form } from "react-bootstrap";
 //Para exportar
 import { CSVLink } from "react-csv";
 import ImportCSV from "./ImportCSV";
+import ModalCreateContour from "./ModalCreateContour";
 
 export const MenuHorizontal = ({
   capasSeleccionadas,
   setCapasSeleccionadas,
   crearContorno,
   setCrearContorno,
+  setColor,
+  color,
+  coordsPolygon,
+  setCoordsPolygon,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [tablaCapasIsOpen, setTablaCapasIsOpen] = useState(false);
   const [importCsvIsOpen, setImportCsvIsOpen] = useState(false);
+  const [openModalCreateContour, setOpenModalCreateContour] = useState(false);
   const [tablaSeleccionada, setTablaSeleccionada] = useState("");
   const [tablas, setTablas] = useState([]);
   const [cuevas, setCuevas] = useState([]);
@@ -67,6 +73,31 @@ export const MenuHorizontal = ({
 
   const closeTablaCapas = () => {
     setTablaCapasIsOpen(false);
+  };
+
+  // const openCreateContour = () => {
+  //   const openCreateContour = () => {
+  //     if (crearContorno) {
+  //       // Verifica el estado de crearContorno
+  //       setOpenModalCreateContour(true);
+  //       closeNav();
+  //     } else {
+  //       // No hacer nada si crearContorno es falso
+  //     }
+  //   };
+  // };
+  const handleClickActivarContorno = () => {
+    // console.log("Entro para cambiar el contorno");
+    setCoordsPolygon([]);
+    setCrearContorno(true);
+    setOpenModalCreateContour(true);
+    closeNav();
+    // console.log("Pongo el contorno a: ", crearContorno);
+  };
+
+  const closeCreateContour = () => {
+    setCrearContorno(false);
+    setOpenModalCreateContour(false);
   };
 
   const handleSeleccionarTabla = (nombreTabla) => {
@@ -162,11 +193,6 @@ export const MenuHorizontal = ({
     return regex.test(tabla.nombre.toLowerCase());
   });
 
-  const handleClickActivarContorno = () => {
-    console.log("Entro para cambiar el contorno");
-    setCrearContorno(true);
-    console.log("Pongo el contorno a: ", crearContorno);
-  };
   return (
     <div style={{ zIndex: 2, flex: "none" }}>
       <Navbar
@@ -255,8 +281,8 @@ export const MenuHorizontal = ({
                 <NavDropdown.Item>
                   <input
                     type="search"
-                    placeholder="Busca una capa..."
-                    list="listaConcejos"
+                    placeholder="Busca un contorno..."
+                    list="listaContornos"
                     onChange={(e) => setSearchText(e.target.value)} // Actualiza el texto de búsqueda
                   ></input>
                 </NavDropdown.Item>
@@ -265,7 +291,7 @@ export const MenuHorizontal = ({
                     key={tabla.nombre}
                     onClick={() => handleSeleccionarTabla(tabla.nombre)}
                     href="#form/3.1"
-                    id="listaConcejos"
+                    id="listaContornos"
                   >
                     {tabla.nombre}
                   </NavDropdown.Item>
@@ -285,14 +311,14 @@ export const MenuHorizontal = ({
                 </NavDropdown.Item>
               </NavDropdown>
             </Nav>
-            <Nav>
+            {/* <Nav>
               <Nav.Link onClick={closeNav} href="#deets">
                 More deets
               </Nav.Link>
               <Nav.Link onClick={closeNav} href="#memes">
                 Dank memes
               </Nav.Link>
-            </Nav>
+            </Nav> */}
           </Navbar.Collapse>
         </Container>
       </Navbar>
@@ -301,6 +327,14 @@ export const MenuHorizontal = ({
       <ModalTablaCapas
         isOpen={tablaCapasIsOpen}
         onRequestClose={closeTablaCapas}
+      />
+      <ModalCreateContour
+        isOpen={/*crearContorno*/ openModalCreateContour}
+        onRequestClose={closeCreateContour}
+        crearContorno={crearContorno}
+        setCrearContorno={setCrearContorno}
+        setColor={setColor}
+        color={color}
       />
       <ImportCSV
         isOpen={importCsvIsOpen}

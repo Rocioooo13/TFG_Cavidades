@@ -11,6 +11,8 @@ export const App = () => {
   const [maps, setMaps] = useState([]);
   const [modalMapasIsOpen, setModalMapasIsOpen] = useState(false);
   const [crearContorno, setCrearContorno] = useState(false);
+  const [coordsPolygon, setCoordsPolygon] = useState([]);
+  const [color, setColor] = useState("#fff"); // Estado para mantener el color seleccionado
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -40,6 +42,21 @@ export const App = () => {
   const closeModalMapas = () => {
     setModalMapasIsOpen(false);
   };
+
+  const submitContour = () => {
+    api
+      .createContourTable("pruebaContorno")
+      .then((_) => {})
+      .finally(() => {
+        setCrearContorno(false);
+        api
+            .addContour("pruebaContorno", coordsPolygon)
+            .then((_) => {})
+            .finally(() => {});
+        
+        //console.log(" ", color);
+      });
+  };
   return (
     <div
       style={{
@@ -54,6 +71,10 @@ export const App = () => {
           setCapasSeleccionadas={setCapasSeleccionadas}
           crearContorno={crearContorno}
           setCrearContorno={setCrearContorno}
+          setColor={setColor}
+          color={color}
+          coordsPolygon={coordsPolygon}
+          setCoordsPolygon={setCoordsPolygon}
         />
       </div>
       <div
@@ -74,6 +95,9 @@ export const App = () => {
             setCapasSeleccionadas={setCapasSeleccionadas}
             crearContorno={crearContorno}
             setCrearContorno={setCrearContorno}
+            coordsPolygon={coordsPolygon}
+            setCoordsPolygon={setCoordsPolygon}
+            color={color}
           />
         </div>
 
@@ -126,6 +150,19 @@ export const App = () => {
               {/* {(crearContorno = true ? <u> Finalizar contorno</u> : null)} */}
             </p>
           </div>
+          {crearContorno ? (
+            <button
+              className="botonGuardarContorno"
+              style={{
+                top: "95%",
+                marginLeft: "25px",
+                zIndex: 1000,
+              }}
+              onClick={submitContour}
+            >
+              Guardar contorno
+            </button>
+          ) : null}
         </div>
       </div>
       <ModalMapas isOpen={modalMapasIsOpen} onRequestClose={closeModalMapas} />

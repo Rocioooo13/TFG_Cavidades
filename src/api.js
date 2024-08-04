@@ -350,4 +350,99 @@ module.exports = {
       );
     });
   },
+
+  // CREAR CONTORNOS
+  createContourPropsTable() {
+    return new Promise((resolve, reject) => {
+      const sql = `CREATE TABLE IF NOT EXISTS listContoursProps (id  INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, color TEXT)`;
+      db.run(sql, function (err) {
+        if (err) {
+          console.log("DB error: "); //err.message
+          return reject(err);
+        } else {
+          return resolve();
+        }
+      });
+    });
+  },
+  addContourProps(nombre, color) {
+    db.get(
+      `SELECT 1 FROM listContoursProps WHERE nombre = ?`,
+      [nombre],
+      (err, row) => {
+        if (err) {
+          return console.error("Error al ejecutar la consulta:", err.message);
+        }
+        // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+        if (!row) {
+          // Ejecuta la inserción
+          db.run(
+            `INSERT INTO listContoursProps (nombre, color) 
+    VALUES (?,?)`,
+            [nombre, color],
+            function (err) {
+              if (err) {
+                return console.error(
+                  "Error al insertar el registro:",
+                  err.message
+                );
+              }
+              console.log("Registro insertado correctamente.");
+            }
+          );
+        } else {
+          // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+          console.error(
+            "Ya existe este contorno en la lista de propiedades de contornos."
+          );
+        }
+      }
+    );
+  },
+  createContourTable(nombre) {
+    return new Promise((resolve, reject) => {
+      const sql = `CREATE TABLE IF NOT EXISTS ${nombre} (id  INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, latitud TEXT, longitud TEXT)`;
+      db.run(sql, function (err) {
+        if (err) {
+          console.log("DB error: "); //err.message
+          return reject(err);
+        } else {
+          return resolve();
+        }
+      });
+    });
+  },
+
+  //No se si para crear la tabla del contorno deberia añadir una columna identificativa como nombre????????
+  addContour(nombre, coordenadas) {
+    /*db.get(`SELECT 1 FROM ${nombre} WHERE nombre = ?`, [nombre], (err, row) => {
+      if (err) {
+        return console.error("Error al ejecutar la consulta:", err.message);
+      }
+      // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+      if (!row) {
+        // Ejecuta la inserción
+        */
+    for (const coordenada of coordenadas) {
+      db.run(
+        `INSERT INTO ${nombre} (nombre, latitud, longitud) 
+    VALUES (?,?,?)`,
+        [nombre, coordenada[0], coordenada[1]],
+        function (err) {
+          if (err) {
+            return console.error("Error al insertar el registro:", err.message);
+          }
+          console.log("Registro insertado correctamente.");
+        }
+      );
+    }
+
+    /*} else {
+        // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+        console.error(
+          "Ya existe este contorno en la lista de propiedades de contornos."
+        );
+      }
+    });*/
+  },
 };

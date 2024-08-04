@@ -24,6 +24,9 @@ export const Map = ({
   setCapasSeleccionadas,
   crearContorno,
   setCrearContorno,
+  coordsPolygon,
+  setCoordsPolygon,
+  color,
 }) => {
   const [cuevas, setCuevas] = useState([]);
   const [index, setIndex] = useState(0);
@@ -35,8 +38,7 @@ export const Map = ({
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
   const [cuevaActualizada, setCuevaActualizada] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState([0, 0]);
-  const [coordsPolygon, setCoordsPolygon] = useState([]);
-  // const [mostrarNuevoContorno, setMostrarNuevoContorno] = useState(false);
+  // const [coordsPolygon, setCoordsPolygon] = useState([]);
 
   const customIcon = new L.DivIcon({
     className: "custom-icon",
@@ -184,7 +186,7 @@ export const Map = ({
               <Overlay name="Contorno" checked={true}>
                 <Polygon
                   positions={coordsPolygon}
-                  color="black"
+                  color={color}
                   fill={false}
                   weight={1}
                 />
