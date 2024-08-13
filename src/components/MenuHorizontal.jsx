@@ -23,6 +23,12 @@ export const MenuHorizontal = ({
   color,
   coordsPolygon,
   setCoordsPolygon,
+  nombreDelContorno,
+  setNombreDelContorno,
+  getContornos,
+  setGetContornos,
+  contornosSeleccionados,
+  setContornosSeleccionados,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
@@ -30,9 +36,11 @@ export const MenuHorizontal = ({
   const [importCsvIsOpen, setImportCsvIsOpen] = useState(false);
   const [openModalCreateContour, setOpenModalCreateContour] = useState(false);
   const [tablaSeleccionada, setTablaSeleccionada] = useState("");
+  const [tablaSeleccionada2, setTablaSeleccionada2] = useState("");
   const [tablas, setTablas] = useState([]);
   const [cuevas, setCuevas] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [searchContorno, setSearchContorno] = useState("");
 
   const toggle = (expanded) => {
     setMenuIsExpanded(expanded);
@@ -127,6 +135,42 @@ export const MenuHorizontal = ({
     loadTablas();
     loadCuevas();
   }, []);
+
+  const loadContornos = async () => {
+    const contornoSelected = await api.obtenerContornos();
+    setGetContornos(contornoSelected ?? []);
+    // console.log(tablaSelected);
+  };
+
+  useEffect(() => {
+    loadContornos();
+  }, [coordsPolygon]);
+
+  //Para buscar una capa
+  const filteredContornos = getContornos.filter((contorno) => {
+    const regexContorno = new RegExp(searchContorno.toLowerCase(), "g");
+    return regexContorno.test(contorno.nombre.toLowerCase());
+  });
+
+  const handleSeleccionarContorno = (nombreTablaContorno) => {
+    setTablaSeleccionada2(nombreTablaContorno);
+    if (!contornosSeleccionados.includes(nombreTablaContorno)) {
+      setContornosSeleccionados((prevCapas) => [
+        ...prevCapas,
+        nombreTablaContorno,
+      ]);
+    } else {
+      //console.log("La capa ya está seleccionada");
+    }
+    closeNav();
+  };
+  const imprimirNombreContorno = () => {
+    console.log("Nombre tabla :", contornosSeleccionados);
+  };
+
+  useEffect(() => {
+    imprimirNombreContorno();
+  }, [tablaSeleccionada2]);
 
   //Para exportar
   //Me creo las cabeceras del excel.
@@ -256,7 +300,7 @@ export const MenuHorizontal = ({
                 ))}
               </NavDropdown>
               <NavDropdown
-                autoClose="true"
+                autoClose="inside"
                 title="Contornos"
                 className="collapsible-nav-dropdown"
               >
@@ -283,17 +327,18 @@ export const MenuHorizontal = ({
                     type="search"
                     placeholder="Busca un contorno..."
                     list="listaContornos"
-                    onChange={(e) => setSearchText(e.target.value)} // Actualiza el texto de búsqueda
+                    onClick={(e) => e.stopPropagation()}
+                    onChange={(e) => setSearchContorno(e.target.value)} // Actualiza el texto de búsqueda
                   ></input>
                 </NavDropdown.Item>
-                {filteredConcejos.map((tabla) => (
+                {filteredContornos.map((contorno) => (
                   <NavDropdown.Item
-                    key={tabla.nombre}
-                    onClick={() => handleSeleccionarTabla(tabla.nombre)}
+                    key={contorno.nombre}
+                    onClick={() => handleSeleccionarContorno(contorno.nombre)}
                     href="#form/3.1"
                     id="listaContornos"
                   >
-                    {tabla.nombre}
+                    {contorno.nombre}
                   </NavDropdown.Item>
                 ))}
               </NavDropdown>
@@ -335,6 +380,8 @@ export const MenuHorizontal = ({
         setCrearContorno={setCrearContorno}
         setColor={setColor}
         color={color}
+        nombreDelContorno={nombreDelContorno}
+        setNombreDelContorno={setNombreDelContorno}
       />
       <ImportCSV
         isOpen={importCsvIsOpen}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { SketchPicker } from "react-color";
 import { createContourPropsTable, addContourProps } from "../api";
@@ -18,6 +18,8 @@ export const ModalCreateContour = ({
   setCrearContorno,
   setColor,
   color,
+  nombreDelContorno,
+  setNombreDelContorno,
 }) => {
   //const [colorSeleccionado, setColorSeleccionado] = useState("#ffff");
 
@@ -29,25 +31,38 @@ export const ModalCreateContour = ({
   //   setNombreContorno(newName);
   // };
 
-  const handleClicCrearContorno = () => {
-    const nombre = document.getElementById("nombreContorno").value;
+  const handleClicCrearContorno = async () => {
     const colorElegido = document.getElementById("color").value;
-    // createContourPropsTable()
-    //   .then((_) => {})
-    //   .finally(() => {
-    //     onRequestClose();
-    //     setCrearContorno(true);
-    //   });
-    // addContourProps(nombre, colorElegido)
-    //   .then((_) => {})
-    //   .finally(() => {
-    //     onRequestClose();
-    //     setCrearContorno(true);
-    //   });
-    console.log(color);
+    setColor(colorElegido);
+
+    await createContourPropsTable();
+    const addContour = await addContourProps(nombreDelContorno, color);
     onRequestClose();
     setCrearContorno(true);
+
+    // createContourPropsTable()
+    //   .then((_) => {
+    //     addContourProps(nombreDelContorno, color)
+    //       .then((_) => {})
+    //       .finally(() => {
+    //         onRequestClose();
+    //         setCrearContorno(true);
+    //       });
+    //   }) 
+    //   .finally(() => {
+    //     onRequestClose();
+    //     setCrearContorno(true);
+    //   });
+
+    // onRequestClose();
+    // setCrearContorno(true);
   };
+
+  // useEffect(() => {
+  //   // Esta parte se ejecutará cada vez que 'color' cambie
+
+  //   console.log("Color cambiado:", color);
+  // }, [color]);
 
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -67,6 +82,8 @@ export const ModalCreateContour = ({
           type="text"
           placeholder="Escribe el nombre del contorno"
           id="nombreContorno"
+          value={nombreDelContorno} // Vincula el valor del input con el estado
+          onChange={(e) => setNombreDelContorno(e.target.value)} // Actualiza el estado al cambiar el input
         />
       </div>
       <div className="inputContainer">
@@ -92,7 +109,7 @@ export const ModalCreateContour = ({
             marginTop: "20px",
             width: "100px",
             height: "100px",
-            backgroundColor: color, // Mostrar el color seleccionado en un div
+            backgroundColor: { color }, // Mostrar el color seleccionado en un div
           }}
         />
       </div>

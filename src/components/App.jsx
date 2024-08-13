@@ -12,7 +12,10 @@ export const App = () => {
   const [modalMapasIsOpen, setModalMapasIsOpen] = useState(false);
   const [crearContorno, setCrearContorno] = useState(false);
   const [coordsPolygon, setCoordsPolygon] = useState([]);
-  const [color, setColor] = useState("#fff"); // Estado para mantener el color seleccionado
+  const [color, setColor] = useState("#000"); // Estado para mantener el color seleccionado
+  const [nombreDelContorno, setNombreDelContorno] = useState("");
+  const [getContornos, setGetContornos] = useState([]);
+  const [contornosSeleccionados, setContornosSeleccionados] = useState([]);
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -44,16 +47,25 @@ export const App = () => {
   };
 
   const submitContour = () => {
+    // console.log(nombreDelContorno.split(" ").join(""));
+    const nombreContornoSinEspacios = nombreDelContorno.split(" ").join("");
     api
-      .createContourTable("pruebaContorno")
-      .then((_) => {})
+      .createContourTable(nombreContornoSinEspacios)
+      .then((_) => {
+        coordsPolygon.forEach(async (coord) => {
+          await api.addContour(nombreContornoSinEspacios, coord);
+        });
+        // api
+        //   .addContour(nombreDelContorno.split(" ").join(""), coordsPolygon)
+        //   .then((_) => {});
+      })
       .finally(() => {
         setCrearContorno(false);
-        api
-            .addContour("pruebaContorno", coordsPolygon)
-            .then((_) => {})
-            .finally(() => {});
-        
+
+        setColor("#000");
+        setNombreDelContorno("");
+        setCoordsPolygon([]);
+
         //console.log(" ", color);
       });
   };
@@ -75,6 +87,12 @@ export const App = () => {
           color={color}
           coordsPolygon={coordsPolygon}
           setCoordsPolygon={setCoordsPolygon}
+          nombreDelContorno={nombreDelContorno}
+          setNombreDelContorno={setNombreDelContorno}
+          getContornos={getContornos}
+          setGetContornos={setGetContornos}
+          contornosSeleccionados={contornosSeleccionados}
+          setContornosSeleccionados={setContornosSeleccionados}
         />
       </div>
       <div
@@ -98,6 +116,10 @@ export const App = () => {
             coordsPolygon={coordsPolygon}
             setCoordsPolygon={setCoordsPolygon}
             color={color}
+            nombreDelContorno={nombreDelContorno}
+            setNombreDelContorno={setNombreDelContorno}
+            contornosSeleccionados={contornosSeleccionados}
+            setContornosSeleccionados={setContornosSeleccionados}
           />
         </div>
 

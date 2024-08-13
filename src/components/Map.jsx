@@ -27,6 +27,10 @@ export const Map = ({
   coordsPolygon,
   setCoordsPolygon,
   color,
+  nombreDelContorno,
+  setNombreDelContorno,
+  contornosSeleccionados,
+  setContornosSeleccionados,
 }) => {
   const [cuevas, setCuevas] = useState([]);
   const [index, setIndex] = useState(0);
@@ -38,6 +42,25 @@ export const Map = ({
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
   const [cuevaActualizada, setCuevaActualizada] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState([0, 0]);
+  const [waypoints, setWaypoints] = useState([]);
+  const [contornosVisibles, setContornosVisibles] = useState({});
+  const [index2, setIndex2] = useState(0);
+  const [todosContornos, setTodosContornos] = useState([]);
+  const [colorContorno, setColorContorno] = useState([]);
+  //¿?
+  // const [colorSeleccionado, setcolorSeleccionado] = useState("#000");
+  // const [nombreElegido, setNombreElegido] = useState("");
+
+  // const handleMChangeValues = () => {
+  //   setcolorSeleccionado(color);
+  //   setNombreElegido(nombreDelContorno);
+  // };
+
+  // useEffect(() => {
+  //   handleMChangeValues();
+  //   console.log("He cambiado el nombre del contorno a ", nombreElegido);
+  //   console.log("He cambiado el color del contorno a ", colorSeleccionado);
+  // }, [color, nombreDelContorno]);
   // const [coordsPolygon, setCoordsPolygon] = useState([]);
 
   const customIcon = new L.DivIcon({
@@ -99,14 +122,66 @@ export const Map = ({
     loadCuevas();
   }, [cuevaActualizada, capasSeleccionadas]);
 
+  const loadContornos = async () => {
+    if (contornosSeleccionados.length > 0) {
+      if (contornosSeleccionados.length >= index2) {
+        const colorDelContorno = await api.getColor(
+          contornosSeleccionados[index2]
+        );
+        setColorContorno([colorDelContorno]);
+
+        const cont = contornosSeleccionados[index2].split(" ").join("");
+        try {
+          const contorno = await api.getPolygons(cont);
+          let objects = [];
+          console.log("Valor de la variable contorno: ", contorno);
+          contorno.map((x) => {
+            console.log(x.nombre);
+            objects.push([x.latitud, x.longitud] ?? []);
+            // setWaypoints([x.longitud, x.latitud] ?? []);
+          });
+          setWaypoints(objects);
+
+          // console.log("Valor de la variable waypoint: ", waypoints);
+
+          // setTodosContornos((prevContornos) => {
+          //   const contornos = [...prevContornos, contorno ?? []];
+          //   // console.log(
+          //   //   "Index: ",
+          //   //   index,
+          //   //   "Cuevas añadidas a todasCuevas",
+          //   //   nuevasCapas
+          //   // );
+          //   return contornos;
+          // });
+
+          //   setContornosVisibles((prev) => ({
+          //     ...prev,
+          //     [contornosSeleccionados[index2]]: true,
+          //   }));
+
+          //   setIndex2(index2 + 1);
+          //   console.log("Contorno seleccionado", contornosVisibles);
+        } catch (error) {
+          console.error("Error cargando contornos:", error);
+        }
+        //console.log("Capa visible", capasVisibles);
+      }
+    }
+  };
+  useEffect(() => {
+    loadContornos();
+  }, [contornosSeleccionados]);
+
   // Added markers when clicking the map
   const Markers = () => {
     useMapEvents({
       click(e) {
-        setSelectedPosition([e.latlng.lat, e.latlng.lng]);
-        // console.log("Coordinates on click: ", [e.latlng.lat, e.latlng.lng]);
-        if (selectedPosition[0] !== 0 && selectedPosition[1] !== 0) {
-          setCoordsPolygon((coords) => [...coords, selectedPosition]);
+        const latlng = [e.latlng.lat, e.latlng.lng];
+        setSelectedPosition(latlng);
+        console.log("Coordinates on click: ", latlng);
+        if (latlng[0] !== 0 && latlng[1] !== 0) {
+          setCoordsPolygon([...coordsPolygon, latlng]);
           console.log(coordsPolygon);
         }
       },
@@ -121,6 +196,9 @@ export const Map = ({
       />
     ) : null;
   };
+
+  // console.log("Nombre del contorno: ", nombreDelContorno);
+  // console.log("Color del contorno: ", color);
   // Función para alternar el estado de mostrarNuevoContorno
   // const toggleMostrarNuevoContorno = () => {
   //   setMostrarNuevoContorno(!mostrarNuevoContorno);
@@ -137,7 +215,7 @@ export const Map = ({
           style={{ height: "92.5vh", width: "100wh" }}
         >
           {/* {crearContorno ? <Markers /> : null} */}
-          {crearContorno /*&& mostrarNuevoContorno*/ ? <Markers /> : null}
+          {crearContorno ? <Markers /> : null}
 
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -182,8 +260,18 @@ export const Map = ({
                 </LayerGroup>
               </Overlay>
             ))}
-            {crearContorno /*&& mostrarNuevoContorno*/ ? (
-              <Overlay name="Contorno" checked={true}>
+            {waypoints.length <= 0 ? null : (
+              <Overlay name={contornosSeleccionados} checked={true}>
+                <Polygon
+                  positions={waypoints}
+                  color={colorContorno[0]}
+                  fill={false}
+                  weight={2}
+                />
+              </Overlay>
+            )}
+            {crearContorno && (color != "#000") & (nombreDelContorno != "") ? (
+              <Overlay name={nombreDelContorno} checked={true}>
                 <Polygon
                   positions={coordsPolygon}
                   color={color}

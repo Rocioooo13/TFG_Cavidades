@@ -366,38 +366,55 @@ module.exports = {
     });
   },
   addContourProps(nombre, color) {
-    db.get(
-      `SELECT 1 FROM listContoursProps WHERE nombre = ?`,
-      [nombre],
-      (err, row) => {
-        if (err) {
-          return console.error("Error al ejecutar la consulta:", err.message);
-        }
-        // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
-        if (!row) {
-          // Ejecuta la inserción
-          db.run(
-            `INSERT INTO listContoursProps (nombre, color) 
+    return new Promise((resolve, reject) => {
+      db.get(
+        `SELECT 1 FROM listContoursProps WHERE nombre = ?`,
+        [nombre],
+        (err, row) => {
+          if (err) {
+            console.error("Error al ejecutar la consulta:", err.message);
+            return reject(err);
+          }
+          // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+          if (!row) {
+            // Ejecuta la inserción
+            db.run(
+              `INSERT INTO listContoursProps (nombre, color) 
     VALUES (?,?)`,
-            [nombre, color],
-            function (err) {
-              if (err) {
-                return console.error(
-                  "Error al insertar el registro:",
-                  err.message
-                );
+              [nombre, color],
+              function (err) {
+                if (err) {
+                  console.error("Error al insertar el registro:", err.message);
+                  return reject(err);
+                }
+                console.log("Registro insertado correctamente.");
+                return resolve();
               }
-              console.log("Registro insertado correctamente.");
-            }
-          );
-        } else {
-          // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
-          console.error(
-            "Ya existe este contorno en la lista de propiedades de contornos."
-          );
+            );
+          } else {
+            // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+            console.error(
+              "Ya existe este contorno en la lista de propiedades de contornos."
+            );
+            return reject();
+          }
         }
-      }
-    );
+      );
+    });
+  },
+  //Obtener contornos
+  obtenerContornos() {
+    return new Promise((resolve, reject) => {
+      db.all(" SELECT * FROM listContoursProps", (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+
+        // console.log(rows);
+        return resolve(rows);
+      });
+    });
   },
   createContourTable(nombre) {
     return new Promise((resolve, reject) => {
@@ -414,35 +431,73 @@ module.exports = {
   },
 
   //No se si para crear la tabla del contorno deberia añadir una columna identificativa como nombre????????
-  addContour(nombre, coordenadas) {
-    /*db.get(`SELECT 1 FROM ${nombre} WHERE nombre = ?`, [nombre], (err, row) => {
-      if (err) {
-        return console.error("Error al ejecutar la consulta:", err.message);
-      }
-      // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
-      if (!row) {
-        // Ejecuta la inserción
-        */
-    for (const coordenada of coordenadas) {
+  // addContour(nombre, coordenadas) {
+  //   return new Promise((resolve, reject) => {
+  //     for (const coordenada of coordenadas) {
+  //       db.run(
+  //         `INSERT INTO ${nombre} (nombre, latitud, longitud)
+  //   VALUES (?,?,?)`,
+  //         [nombre, coordenada[0], coordenada[1]],
+  //         function (err) {
+  //           if (err) {
+  //             console.error("Error al insertar el registro:", err.message);
+  //             return reject(err);
+  //           }
+  //           console.log("Registro insertado correctamente.");
+  //           return resolve();
+  //         }
+  //       );
+  //     }
+  //   });
+  // },
+  addContour(nombre, coordenada) {
+    return new Promise((resolve, reject) => {
       db.run(
         `INSERT INTO ${nombre} (nombre, latitud, longitud) 
     VALUES (?,?,?)`,
         [nombre, coordenada[0], coordenada[1]],
         function (err) {
           if (err) {
-            return console.error("Error al insertar el registro:", err.message);
+            console.error("Error al insertar el registro:", err.message);
+            return reject(err);
           }
           console.log("Registro insertado correctamente.");
+          return resolve();
         }
       );
-    }
+    });
+  },
 
-    /*} else {
-        // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
-        console.error(
-          "Ya existe este contorno en la lista de propiedades de contornos."
-        );
+  getPolygons(nombre) {
+    return new Promise((resolve, reject) => {
+      if (!nombre) {
+        return reject("El contorno no esta definido");
       }
-    });*/
+
+      const sql = `SELECT * FROM ${nombre}`;
+      db.all(sql, (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+        return resolve(rows);
+      });
+    });
+  },
+  getColor(nombre) {
+    return new Promise((resolve, reject) => {
+      db.get(
+        "SELECT * FROM listContoursProps WHERE nombre = ?",
+        [nombre],
+        (error, row) => {
+          if (error) {
+            console.error("DB Error: ", error);
+            return reject(error);
+          }
+          return resolve(row.color);
+        }
+      );
+    });
+    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
 };
