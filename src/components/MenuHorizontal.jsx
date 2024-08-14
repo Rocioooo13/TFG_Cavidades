@@ -5,6 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import ModalForm from "./ModalForm";
 import ModalTablaCapas from "./ModalTablaCapas";
+import ModalTablaContornos from "./ModalTablaContornos";
 //import { ExportCSV } from "./ExportCSV";
 import api, { createTable, createUser, obtenertablas } from "../api";
 import { Form } from "react-bootstrap";
@@ -33,6 +34,8 @@ export const MenuHorizontal = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
   const [tablaCapasIsOpen, setTablaCapasIsOpen] = useState(false);
+
+  const [tablaContornosIsOpen, setTablaContornosIsOpen] = useState(false);
   const [importCsvIsOpen, setImportCsvIsOpen] = useState(false);
   const [openModalCreateContour, setOpenModalCreateContour] = useState(false);
   const [tablaSeleccionada, setTablaSeleccionada] = useState("");
@@ -66,6 +69,10 @@ export const MenuHorizontal = ({
     closeNav();
   };
 
+  const openTablaContornos = () => {
+    setTablaContornosIsOpen(true);
+    closeNav();
+  };
   const openImportCsvModal = () => {
     setImportCsvIsOpen(true);
     closeNav();
@@ -82,7 +89,9 @@ export const MenuHorizontal = ({
   const closeTablaCapas = () => {
     setTablaCapasIsOpen(false);
   };
-
+  const closeTablaContornos = () => {
+    setTablaContornosIsOpen(false);
+  };
   // const openCreateContour = () => {
   //   const openCreateContour = () => {
   //     if (crearContorno) {
@@ -305,10 +314,10 @@ export const MenuHorizontal = ({
                 className="collapsible-nav-dropdown"
               >
                 <NavDropdown.Item
-                  onClick={openTablaCapas}
+                  onClick={openTablaContornos}
                   /*{closeNav}*/ href="#action/3.1"
                 >
-                  Todas los contornos
+                  Todos los contornos
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item
@@ -373,6 +382,10 @@ export const MenuHorizontal = ({
         isOpen={tablaCapasIsOpen}
         onRequestClose={closeTablaCapas}
       />
+      <ModalTablaContornos
+        isOpen={tablaContornosIsOpen}
+        onRequestClose={closeTablaContornos}
+      ></ModalTablaContornos>
       <ModalCreateContour
         isOpen={/*crearContorno*/ openModalCreateContour}
         onRequestClose={closeCreateContour}

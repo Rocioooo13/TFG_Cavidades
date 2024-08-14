@@ -500,4 +500,37 @@ module.exports = {
     });
     // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
+  deleteContorno(nombre) {
+    return new Promise((resolve, reject) => {
+      db.run(`DROP TABLE ${nombre}`, function (err) {
+        if (err) {
+          console.error("Error al eliminar el contorno:", err.message);
+          reject(err);
+        } else {
+          console.log("Contorno eliminado correctamente.");
+          resolve();
+        }
+      });
+    });
+  },
+  //Elimina una cueva de la lista de capas
+  deleteCuevaListaContornos(nombre) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `DELETE FROM listContoursProps WHERE nombre = ?`,
+        [nombre],
+        function (err) {
+          if (err) {
+            console.error("Error al eliminar el registro:", err.message);
+            reject(err);
+          } else {
+            console.log(
+              "Contorno eliminado correctamente de la lista de contornos."
+            );
+            resolve();
+          }
+        }
+      );
+    });
+  },
 };
