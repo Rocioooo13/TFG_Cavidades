@@ -51,13 +51,11 @@ export const App = () => {
     const nombreContornoSinEspacios = nombreDelContorno.split(" ").join("");
     api
       .createContourTable(nombreContornoSinEspacios)
-      .then((_) => {
-        coordsPolygon.forEach(async (coord) => {
+      .then(async (_) => {
+        for (let index = 0; index < coordsPolygon.length; index++) {
+          const coord = coordsPolygon[index];
           await api.addContour(nombreContornoSinEspacios, coord);
-        });
-        // api
-        //   .addContour(nombreDelContorno.split(" ").join(""), coordsPolygon)
-        //   .then((_) => {});
+        }
       })
       .finally(() => {
         setCrearContorno(false);

@@ -214,7 +214,6 @@ export const Map = ({
           zoom={8}
           style={{ height: "92.5vh", width: "100wh" }}
         >
-          {/* {crearContorno ? <Markers /> : null} */}
           {crearContorno ? <Markers /> : null}
 
           <TileLayer
@@ -276,7 +275,7 @@ export const Map = ({
                   positions={coordsPolygon}
                   color={color}
                   fill={false}
-                  weight={1}
+                  weight={2}
                 />
               </Overlay>
             ) : null}
