@@ -60,7 +60,7 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
     deleteCapa(nombreCapa.split(" ").join("")).then((_) => {
       deleteCuevaListaCapas(nombreCapa).then((_) => {
         setcapaEliminada(true);
-        //selectedOptionData = [];
+        setNombreCapa("");
       });
     });
   };

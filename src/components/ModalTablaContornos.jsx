@@ -67,6 +67,7 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
     deleteContorno(nombreContorno.split(" ").join("")).then((_) => {
       deleteCuevaListaContornos(nombreContorno).then((_) => {
         setContornoEliminado(true);
+        setNombreContorno("");
         //selectedOptionData = [];
       });
     });
@@ -124,28 +125,12 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
             <th style={{ border: "1px solid black", padding: "8px" }}>
               Nombre
             </th>
-            {/* <th style={{ border: "1px solid black", padding: "8px" }}>X</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Y</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Z</th>*/}
-            <th style={{ border: "1px solid black", padding: "8px" }}>
-              Latitud
-            </th>
-            {/* <th style={{ border: "1px solid black", padding: "8px" }}>Huso</th> */}
-            <th style={{ border: "1px solid black", padding: "8px" }}>
-              Longitud
-            </th>
-            {/* <th style={{ border: "1px solid black", padding: "8px" }}>
-              Hemisferio
-            </th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>
-              Concejo
-            </th>
             <th style={{ border: "1px solid black", padding: "8px" }}>
               Latitud
             </th>
             <th style={{ border: "1px solid black", padding: "8px" }}>
               Longitud
-            </th> */}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -167,33 +152,6 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
                 <td style={{ border: "1px solid black", padding: "8px" }}>
                   {item.latitud}
                 </td>
-                {/* <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.Z}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.elipsoide}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.huso}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.zonaUTM}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.hemisferio}
-                </td>
-                <td
-                  id="concejo"
-                  style={{ border: "1px solid black", padding: "8px" }}
-                >
-                  {item.concejo}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.latitud}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.longitud}
-                </td> */}
               </tr>
             ))
           ) : (
