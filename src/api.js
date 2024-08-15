@@ -455,6 +455,23 @@ module.exports = {
       db.run(
         `INSERT INTO ${nombre} (nombre, latitud, longitud) 
     VALUES (?,?,?)`,
+        [nombre, coordenada[1], coordenada[0]],
+        function (err) {
+          if (err) {
+            console.error("Error al insertar el registro:", err.message);
+            return reject(err);
+          }
+          console.log("Registro insertado correctamente.");
+          return resolve();
+        }
+      );
+    });
+  },
+  addContourImport(nombre, coordenada) {
+    return new Promise((resolve, reject) => {
+      db.run(
+        `INSERT INTO ${nombre} (nombre, latitud, longitud) 
+    VALUES (?,?,?)`,
         [nombre, coordenada[0], coordenada[1]],
         function (err) {
           if (err) {

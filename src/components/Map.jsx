@@ -137,7 +137,7 @@ export const Map = ({
           console.log("Valor de la variable contorno: ", contorno);
           contorno.map((x) => {
             console.log(x.nombre);
-            objects.push([x.latitud, x.longitud] ?? []);
+            objects.push([x.longitud, x.latitud] ?? []);
             // setWaypoints([x.longitud, x.latitud] ?? []);
           });
           setWaypoints(objects);

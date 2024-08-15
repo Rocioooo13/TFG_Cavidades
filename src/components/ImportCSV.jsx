@@ -44,16 +44,16 @@ const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
         const lat = new String(item.latitud).replace(",", ".");
         const lon = new String(item.longitud).replace(",", ".");
         if (
-          item.denominacion != null ||
-          item.X != null ||
-          item.Y != null ||
-          item.Z != null ||
-          item.elipsoide != null ||
-          item.huso != null ||
-          item.zonaUTM != null ||
-          item.hemisferio != null ||
-          conc != null ||
-          lat != null ||
+          item.denominacion != null &&
+          item.X != null &&
+          item.Y != null &&
+          item.Z != null &&
+          item.elipsoide != null &&
+          item.huso != null &&
+          item.zonaUTM != null &&
+          item.hemisferio != null &&
+          conc != null &&
+          lat != null &&
           lon != null
         ) {
           createCueva(

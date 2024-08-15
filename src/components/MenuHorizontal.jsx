@@ -13,6 +13,7 @@ import { Form } from "react-bootstrap";
 //Para exportar
 import { CSVLink } from "react-csv";
 import ImportCSV from "./ImportCSV";
+import ImportCSVContour from "./ImportCSVContour";
 import ModalCreateContour from "./ModalCreateContour";
 
 export const MenuHorizontal = ({
@@ -37,6 +38,8 @@ export const MenuHorizontal = ({
 
   const [tablaContornosIsOpen, setTablaContornosIsOpen] = useState(false);
   const [importCsvIsOpen, setImportCsvIsOpen] = useState(false);
+
+  const [importCsvIsOpenContour, setImportCsvIsOpenContour] = useState(false);
   const [openModalCreateContour, setOpenModalCreateContour] = useState(false);
   const [tablaSeleccionada, setTablaSeleccionada] = useState("");
   const [tablaSeleccionada2, setTablaSeleccionada2] = useState("");
@@ -80,6 +83,15 @@ export const MenuHorizontal = ({
 
   const closeImportCsvModal = () => {
     setImportCsvIsOpen(false);
+  };
+
+  const openImportCsvModalContour = () => {
+    setImportCsvIsOpenContour(true);
+    closeNav();
+  };
+
+  const closeImportCsvModalContour = () => {
+    setImportCsvIsOpenContour(false);
   };
 
   // const handleCsvImport = (data) => {
@@ -327,7 +339,10 @@ export const MenuHorizontal = ({
                   Crear contorno
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={openImportCsvModal} href="#csv/3.2">
+                <NavDropdown.Item
+                  onClick={openImportCsvModalContour}
+                  href="#csv/3.2"
+                >
                   Importar excel (.csv)
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
@@ -399,6 +414,11 @@ export const MenuHorizontal = ({
       <ImportCSV
         isOpen={importCsvIsOpen}
         onRequestClose={closeImportCsvModal}
+        // onCsvImport={handleCsvImport}
+      />
+      <ImportCSVContour
+        isOpen={importCsvIsOpenContour}
+        onRequestClose={closeImportCsvModalContour}
         // onCsvImport={handleCsvImport}
       />
     </div>

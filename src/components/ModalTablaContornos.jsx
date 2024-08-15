@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import api, {
-  deleteContorno,
-  deleteCapa,
-  deleteCuevaListaContornos,
-} from "../api";
+import api, { deleteContorno, deleteCuevaListaContornos } from "../api";
 
 const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
   const customStyles = {
@@ -147,10 +143,10 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
                   {item.nombre}
                 </td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.longitud}
+                  {item.latitud}
                 </td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.latitud}
+                  {item.longitud}
                 </td>
               </tr>
             ))
