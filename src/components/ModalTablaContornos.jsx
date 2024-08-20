@@ -114,58 +114,60 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
         </select>
       </div>
 
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid black", padding: "8px" }}>ID</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>
-              Nombre
-            </th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>
-              Latitud
-            </th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>
-              Longitud
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {selectedOptionData.length > 0 ? (
-            selectedOptionData.map((item) => (
-              <tr key={item.id}>
+      <div class="table-container">
+        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+          <thead>
+            <tr>
+              <th style={{ border: "1px solid black", padding: "8px" }}>ID</th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Nombre
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Latitud
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Longitud
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {selectedOptionData.length > 0 ? (
+              selectedOptionData.map((item) => (
+                <tr key={item.id}>
+                  <td
+                    id="identificador"
+                    style={{ border: "1px solid black", padding: "8px" }}
+                  >
+                    {item.id}
+                  </td>
+                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                    {item.nombre}
+                  </td>
+                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                    {item.latitud}
+                  </td>
+                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                    {item.longitud}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
                 <td
-                  id="identificador"
-                  style={{ border: "1px solid black", padding: "8px" }}
+                  colSpan="12"
+                  style={{
+                    border: "1px solid black",
+                    padding: "8px",
+                    textAlign: "center",
+                  }}
                 >
-                  {item.id}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.nombre}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.latitud}
-                </td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>
-                  {item.longitud}
+                  No se ha seleccionado ninguna opción
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                colSpan="12"
-                style={{
-                  border: "1px solid black",
-                  padding: "8px",
-                  textAlign: "center",
-                }}
-              >
-                No se ha seleccionado ninguna opción
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       <div className="botonesForm">
         <button

@@ -501,6 +501,22 @@ module.exports = {
       });
     });
   },
+  getPolygons2(nombre) {
+    return new Promise((resolve, reject) => {
+      if (!nombre) {
+        return reject("El contorno no esta definido");
+      }
+
+      const sql = `SELECT latitud,longitud FROM ${nombre}`;
+      db.all(sql, (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+        return resolve(rows);
+      });
+    });
+  },
   getColor(nombre) {
     return new Promise((resolve, reject) => {
       db.get(

@@ -41,8 +41,13 @@ export const MenuHorizontal = ({
 
   const [importCsvIsOpenContour, setImportCsvIsOpenContour] = useState(false);
   const [openModalCreateContour, setOpenModalCreateContour] = useState(false);
+
+  //Seleccionar varias capas
   const [tablaSeleccionada, setTablaSeleccionada] = useState("");
+
+  //Seleccionar varios contornos
   const [tablaSeleccionada2, setTablaSeleccionada2] = useState("");
+
   const [tablas, setTablas] = useState([]);
   const [cuevas, setCuevas] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -176,12 +181,21 @@ export const MenuHorizontal = ({
   const handleSeleccionarContorno = (nombreTablaContorno) => {
     setTablaSeleccionada2(nombreTablaContorno);
     if (!contornosSeleccionados.includes(nombreTablaContorno)) {
-      setContornosSeleccionados((prevCapas) => [
-        ...prevCapas,
+      setContornosSeleccionados((prevContornos) => [
+        ...prevContornos,
         nombreTablaContorno,
       ]);
+      console.log(
+        "Acabo de seleccionar el contorno",
+        nombreDelContorno,
+        " y se ha añadido al array"
+      );
+      // console.log(
+      //   "Tamaño del array contorno Seleccionado",
+      //   contornosSeleccionados.length
+      // );
     } else {
-      //console.log("La capa ya está seleccionada");
+      console.log("El contorno ya está seleccionado");
     }
     closeNav();
   };

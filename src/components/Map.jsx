@@ -32,20 +32,27 @@ export const Map = ({
   contornosSeleccionados,
   setContornosSeleccionados,
 }) => {
+  //Esto es para el manejo de la visibilidad de las cuevas
   const [cuevas, setCuevas] = useState([]);
   const [index, setIndex] = useState(0);
   //Aqui meteré todas las cuevas de cada concejo
   const [todasCuevas, setTodasCuevas] = useState([]);
   //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
   const [capasVisibles, setCapasVisibles] = useState({});
+
+  //Esto es para el manejo de visibilidad de los contornos
+  const [contornos, setContornos] = useState([]);
+  const [index2, setIndex2] = useState(0);
+  //Aqui meteré todas las cuevas de cada concejo
+  const [todosContornos, setTodosContornos] = useState([]);
+  //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
+  const [contornosVisibles, setContornosVisibles] = useState({});
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
   const [cuevaActualizada, setCuevaActualizada] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState([0, 0]);
   const [waypoints, setWaypoints] = useState([]);
-  const [contornosVisibles, setContornosVisibles] = useState({});
-  const [index2, setIndex2] = useState(0);
-  const [todosContornos, setTodosContornos] = useState([]);
   const [colorContorno, setColorContorno] = useState([]);
   //¿?
   // const [colorSeleccionado, setcolorSeleccionado] = useState("#000");
@@ -122,50 +129,88 @@ export const Map = ({
     loadCuevas();
   }, [cuevaActualizada, capasSeleccionadas]);
 
+  //Carga solo un contorno
+  // const loadContornos = async () => {
+  //   if (contornosSeleccionados.length > 0) {
+  //     if (contornosSeleccionados.length >= index2) {
+  //       const colorDelContorno = await api.getColor(
+  //         contornosSeleccionados[index2]
+  //       );
+  //       setColorContorno([colorDelContorno]);
+  //       const cont = contornosSeleccionados[index2].split(" ").join("");
+  //       try {
+  //         const contorno = await api.getPolygons(cont);
+  //         let objects = [];
+  //         console.log("Valor de la variable contorno: ", contorno);
+  //         contorno.map((x) => {
+  //           console.log(x.nombre);
+  //           objects.push([x.longitud, x.latitud] ?? []);
+  //         });
+  //         setWaypoints(objects);
+
+  //       } catch (error) {
+  //         console.error("Error cargando contornos:", error);
+  //       }
+  //     }
+  //   }
+  // };
+
+  //Carga varios contornos
   const loadContornos = async () => {
     if (contornosSeleccionados.length > 0) {
       if (contornosSeleccionados.length >= index2) {
-        const colorDelContorno = await api.getColor(
-          contornosSeleccionados[index2]
-        );
-        setColorContorno([colorDelContorno]);
-
         const cont = contornosSeleccionados[index2].split(" ").join("");
         try {
-          const contorno = await api.getPolygons(cont);
+          let objectColor = [];
+          const colorDelContorno = await api.getColor(
+            contornosSeleccionados[index2]
+          );
+          objectColor.push(colorDelContorno ?? []);
+          console.log("Valor objectColor ", objectColor);
+          setColorContorno((prevColor) => {
+            // Agrega el nuevo color al array sin borrar los anteriores
+            const newColorArray = [...prevColor, objectColor ?? []];
+
+            // Retorna el nuevo array para actualizar el estado
+            return newColorArray;
+          });
+          console.log("Valor colorContorno", colorContorno);
+
+          const contorno = await api.getPolygons2(cont);
           let objects = [];
           console.log("Valor de la variable contorno: ", contorno);
           contorno.map((x) => {
-            console.log(x.nombre);
             objects.push([x.longitud, x.latitud] ?? []);
-            // setWaypoints([x.longitud, x.latitud] ?? []);
           });
-          setWaypoints(objects);
+          console.log("Valor variable object", objects);
+          setContornos(objects ?? []);
 
-          // console.log("Valor de la variable waypoint: ", waypoints);
+          setTodosContornos((prevContornos) => {
+            const nuevosContornos = [...prevContornos, objects ?? []];
+            console.log(
+              "Index: ",
+              index,
+              "Cuevas añadidas a todosContornos",
+              nuevosContornos
+            );
+            return nuevosContornos;
+          });
 
-          // setTodosContornos((prevContornos) => {
-          //   const contornos = [...prevContornos, contorno ?? []];
-          //   // console.log(
-          //   //   "Index: ",
-          //   //   index,
-          //   //   "Cuevas añadidas a todasCuevas",
-          //   //   nuevasCapas
-          //   // );
-          //   return contornos;
-          // });
+          setContornosVisibles((prevCont) => ({
+            ...prevCont,
+            [contornosSeleccionados[index2]]: true,
+          }));
+          console.log(
+            "Tamaño del array contorno Seleccionado",
+            contornosSeleccionados.length
+          );
 
-          //   setContornosVisibles((prev) => ({
-          //     ...prev,
-          //     [contornosSeleccionados[index2]]: true,
-          //   }));
-
-          //   setIndex2(index2 + 1);
-          //   console.log("Contorno seleccionado", contornosVisibles);
+          setIndex2(index2 + 1);
+          console.log("Contorno seleccionado", contornosVisibles);
         } catch (error) {
-          console.error("Error cargando contornos:", error);
+          //console.error("Error cargando contornos", error);
         }
-        //console.log("Capa visible", capasVisibles);
+        // console.log("Capa visible", capasVisibles);
       }
     }
   };
@@ -259,7 +304,7 @@ export const Map = ({
                 </LayerGroup>
               </Overlay>
             ))}
-            {waypoints.length <= 0 ? null : (
+            {/* {waypoints.length <= 0 ? null : (
               <Overlay name={contornosSeleccionados} checked={true}>
                 <Polygon
                   positions={waypoints}
@@ -268,8 +313,34 @@ export const Map = ({
                   weight={2}
                 />
               </Overlay>
-            )}
-            {crearContorno && (color != "#000") & (nombreDelContorno != "") ? (
+            )} */}
+
+            {/*Aqui estoy intentando mostrar varios contornos*/}
+            {contornosSeleccionados.map((contorno, index) => (
+              <Overlay
+                key={index}
+                name={`Contorno ${contorno}`}
+                checked={contornosVisibles[contorno]}
+                //onChange={(e) => handleLayerVisibility(contorno, e.target.checked)}
+              >
+                {/* La visibilidad de cada LayerGroup se controla utilizando el estado capasVisibles. */}
+                <LayerGroup name="Contornos de prueba">
+                  {contornosVisibles[contorno] &&
+                  todosContornos[index] &&
+                  todosContornos.length > index &&
+                  colorContorno.length > index ? (
+                    <Polygon
+                      positions={todosContornos[index]}
+                      color={colorContorno[index]}
+                      fill={false}
+                      weight={2}
+                    />
+                  ) : null}
+                </LayerGroup>
+              </Overlay>
+            ))}
+
+            {/* {crearContorno && (color != "#000") & (nombreDelContorno != "") ? (
               <Overlay name={nombreDelContorno} checked={true}>
                 <Polygon
                   positions={coordsPolygon}
@@ -278,7 +349,7 @@ export const Map = ({
                   weight={2}
                 />
               </Overlay>
-            ) : null}
+            ) : null} */}
           </LayersControl>
         </MapContainer>
         <div

@@ -77,3 +77,27 @@ form{
   border-radius: 4px;
   color: #1C2833;
 }
+/* Estilo del contenedor que envuelve la tabla */
+.table-container {
+  max-height: 300px; /* Limita la altura máxima del contenedor */
+  overflow-y: scroll; /* Activa el scroll vertical */
+  border: 1px solid #ccc; /* Añade un borde para visualizar el área de scroll */
+}
+
+/* Estilos para la tabla */
+table {
+  width: 100%; /* Asegura que la tabla ocupe todo el ancho del contenedor */
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd; /* Añade bordes a las celdas */
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4; /* Color de fondo para la cabecera */
+  position: sticky; /* Hace que la cabecera sea fija */
+  top: 0;
+}
