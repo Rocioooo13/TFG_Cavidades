@@ -96,6 +96,39 @@ module.exports = {
     });
     // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
+  addMap(nombre, url) {
+    return new Promise((resolve, reject) => {
+      db.get(`SELECT 1 FROM mapas WHERE url = ?`, [url], (err, row) => {
+        if (err) {
+          console.error("Error al ejecutar la consulta:", err.message);
+          return reject(err);
+        }
+        // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+        if (!row) {
+          // Ejecuta la inserción
+          db.run(
+            `INSERT INTO mapas (name, url) 
+    VALUES (?,?)`,
+            [nombre, url],
+            function (err) {
+              if (err) {
+                console.error("Error al insertar el registro:", err.message);
+                return reject(err);
+              }
+              console.log("Registro insertado correctamente.");
+              return resolve();
+            }
+          );
+        } else {
+          // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+          console.error(
+            "Ya existe este mapa en la lista de propiedades de mapas."
+          );
+          return reject();
+        }
+      });
+    });
+  },
 
   createCueva(
     denominacion,

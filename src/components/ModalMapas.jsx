@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import { addMap } from "../api";
 
 const customStyles = {
   content: {
@@ -10,7 +11,26 @@ const customStyles = {
   },
 };
 
-const ModalMapas = ({ isOpen, onRequestClose }) => {
+const ModalMapas = ({ isOpen, onRequestClose, setMapa }) => {
+  const añadirMapa = () => {
+    //Obtengo el valor del concejo para crear la tabla
+    // const nombreDelMapa = new String(
+    //   document.getElementById("nombreMapa").value)
+    //   .split(" ")
+    //   .join("");
+    const nombreDelMapa = document.getElementById("nombreMapa").value;
+    const urlDelMapa = document.getElementById("url").value;
+    setMapa(nombreDelMapa);
+
+    addMap(nombreDelMapa, urlDelMapa)
+      .then((_) => {
+        // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
+        //console.log("Aqui fallo 5");
+      })
+      .finally(() => {
+        onRequestClose();
+      });
+  };
   // Override zIndex to display the modal overlayed to the map
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -28,6 +48,7 @@ const ModalMapas = ({ isOpen, onRequestClose }) => {
           <label className="labelForm">Nombre:</label>
           <input
             className="inputForm"
+            id="nombreMapa"
             type="text"
             placeholder="Escribe el nombre del mapa"
           />
@@ -38,6 +59,7 @@ const ModalMapas = ({ isOpen, onRequestClose }) => {
           <input
             className="inputForm"
             type="text"
+            id="url"
             placeholder="Escribe la url del mapa"
           />
         </div>
@@ -46,7 +68,7 @@ const ModalMapas = ({ isOpen, onRequestClose }) => {
           <button className="botonForm" type="button" onClick={onRequestClose}>
             Cancelar
           </button>
-          <button className="botonForm" type="submit">
+          <button className="botonForm" type="button" onClick={añadirMapa}>
             Crear
           </button>
         </div>

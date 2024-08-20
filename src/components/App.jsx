@@ -16,6 +16,7 @@ export const App = () => {
   const [nombreDelContorno, setNombreDelContorno] = useState("");
   const [getContornos, setGetContornos] = useState([]);
   const [contornosSeleccionados, setContornosSeleccionados] = useState([]);
+  const [mapa, setMapa] = useState("");
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -38,6 +39,10 @@ export const App = () => {
     loadMap();
     loadMaps();
   }, []);
+  useEffect(() => {
+    loadMap();
+    loadMaps();
+  }, [mapa]);
   const openModalMapas = () => {
     setModalMapasIsOpen(true);
   };
@@ -185,7 +190,11 @@ export const App = () => {
           ) : null}
         </div>
       </div>
-      <ModalMapas isOpen={modalMapasIsOpen} onRequestClose={closeModalMapas} />
+      <ModalMapas
+        isOpen={modalMapasIsOpen}
+        onRequestClose={closeModalMapas}
+        setMapa={setMapa}
+      />
     </div>
   );
 };
