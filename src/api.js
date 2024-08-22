@@ -144,40 +144,7 @@ module.exports = {
     longitud
     //archivo
   ) {
-    // PARA MAPAS
-    // db.run(
-    //   `INSERT INTO mapas (name, url) VALUES (?, ?)`,
-    //   ["Google Maps", "https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"],
-    //   function (err) {
-    //     if (err) {
-    //       return console.log(err.message);
-    //     }
-    //   }
-    // );
-    // db.run(
-    //   `INSERT INTO mapas (name, url) VALUES (?, ?)`,
-    //   [
-    //     "Terrain Maps",
-    //     "https://1.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/terrain.day/{z}/{x}/{y}/256/png8?app_id=eAdkWGYRoc4RfxVo0Z4B&app_code=TrLJuXVK62IQk0vuXFzaig&lg=eng",
-    //   ],
-    //   function (err) {
-    //     if (err) {
-    //       return console.log(err.message);
-    //     }
-    //   }
-    // );
-    // db.run(
-    //   `INSERT INTO mapas (name, url) VALUES (?, ?)`,
-    //   [
-    //     "Satélite",
-    //     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    //   ],
-    //   function (err) {
-    //     if (err) {
-    //       return console.log(err.message);
-    //     }
-    //   }
-    // );
+    
     return new Promise((resolve, reject) => {
       db.get(
         `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,

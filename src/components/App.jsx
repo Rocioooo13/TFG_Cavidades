@@ -16,7 +16,7 @@ export const App = () => {
   const [nombreDelContorno, setNombreDelContorno] = useState("");
   const [getContornos, setGetContornos] = useState([]);
   const [contornosSeleccionados, setContornosSeleccionados] = useState([]);
-  const [mapa, setMapa] = useState("");
+  const [mapaNuevo, setMapaNuevo] = useState("");
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -29,10 +29,12 @@ export const App = () => {
     setMapSelected("");
     setTimeout(() => setMapSelected(item.url ?? ""), 500);
   };
-  //console.log("Mi mapa por defecto es: " + map);
+  
   const loadMaps = async () => {
+    let objectMaps;
     const mapsSelect = await api.getMaps();
-    setMaps(mapsSelect ?? []);
+    objectMaps = mapsSelect;
+    setMaps(objectMaps ?? []);
   };
 
   useEffect(() => {
@@ -40,9 +42,11 @@ export const App = () => {
     loadMaps();
   }, []);
   useEffect(() => {
-    loadMap();
-    loadMaps();
-  }, [mapa]);
+    //loadMap();
+    setTimeout(() => {
+      loadMaps();
+    }, 200);
+  }, [mapaNuevo]);
   const openModalMapas = () => {
     setModalMapasIsOpen(true);
   };
@@ -193,7 +197,8 @@ export const App = () => {
       <ModalMapas
         isOpen={modalMapasIsOpen}
         onRequestClose={closeModalMapas}
-        setMapa={setMapa}
+        mapaNuevo={mapaNuevo}
+        setMapaNuevo={setMapaNuevo}
       />
     </div>
   );

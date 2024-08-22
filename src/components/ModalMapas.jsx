@@ -11,16 +11,13 @@ const customStyles = {
   },
 };
 
-const ModalMapas = ({ isOpen, onRequestClose, setMapa }) => {
+const ModalMapas = ({ isOpen, onRequestClose, mapaNuevo, setMapaNuevo }) => {
   const añadirMapa = () => {
-    //Obtengo el valor del concejo para crear la tabla
-    // const nombreDelMapa = new String(
-    //   document.getElementById("nombreMapa").value)
-    //   .split(" ")
-    //   .join("");
+    let objectMapa = "";
     const nombreDelMapa = document.getElementById("nombreMapa").value;
+    objectMapa = nombreDelMapa;
     const urlDelMapa = document.getElementById("url").value;
-    setMapa(nombreDelMapa);
+    setMapaNuevo(objectMapa);
 
     addMap(nombreDelMapa, urlDelMapa)
       .then((_) => {
