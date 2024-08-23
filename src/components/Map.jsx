@@ -114,7 +114,6 @@ export const Map = ({
       }
     }
   };
-  
 
   const handleMarkerClick = (cueva) => {
     setCuevaSelected(cueva);
@@ -315,7 +314,7 @@ export const Map = ({
               </Overlay>
             ))}
 
-            {/* {crearContorno && (color != "#000") & (nombreDelContorno != "") ? (
+            {crearContorno && (color != "#000") & (nombreDelContorno != "") ? (
               <Overlay name={nombreDelContorno} checked={true}>
                 <Polygon
                   positions={coordsPolygon}
@@ -324,7 +323,7 @@ export const Map = ({
                   weight={2}
                 />
               </Overlay>
-            ) : null} */}
+            ) : null}
           </LayersControl>
         </MapContainer>
         <div
@@ -340,10 +339,10 @@ export const Map = ({
             onRequestClose={() => setIsModalOpen(false)}
             cuevaSelected={cuevaSelected}
             setCuevaActualizada={setCuevaActualizada}
-            todasCuevas ={todasCuevas}
-            setTodasCuevas = {setTodasCuevas}
-            capasSeleccionadas = {capasSeleccionadas}
-            index ={index}
+            todasCuevas={todasCuevas}
+            setTodasCuevas={setTodasCuevas}
+            capasSeleccionadas={capasSeleccionadas}
+            index={index}
           />
         </div>
       </div>

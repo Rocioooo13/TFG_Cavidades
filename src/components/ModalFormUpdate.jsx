@@ -150,22 +150,23 @@ const ModalFormUpdate = ({
     console.log("Nombre concejo update", conc);
     // createTable(conc);
     // //Obtengo latitud y longitud de la cueva
-    // var latlong = formulaLatitudLongitud();
+    var latlong = formulaLatitudLongitud();
+    console.log(latlong);
 
     //Inserto la cueva en la tabla creada
     const denom = document.getElementById("denominacion").value;
-    // const yDelForm = document.getElementById("y").value;
-    // const xDelForm = document.getElementById("x").value;
-    // const zDelForm = document.getElementById("z").value;
-    // const elip = document.getElementById("elipsoide").value;
-    // const huso = document.getElementById("huso").value;
-    // const zonautmIndex = document.getElementById("zona").selectedIndex;
-    // const zonautm = document.getElementById("zona")[zonautmIndex].label;
-    // console.log(zonautm);
-    // const hemisferioIndex =
-    //   document.getElementById("hemisferio1").selectedIndex;
-    // const hemisferio =
-    //   document.getElementById("hemisferio1")[hemisferioIndex].label;
+    const yDelForm = document.getElementById("y").value;
+    const xDelForm = document.getElementById("x").value;
+    const zDelForm = document.getElementById("z").value;
+    const elip = document.getElementById("elipsoide").value;
+    const huso = document.getElementById("huso").value;
+    const zonautmIndex = document.getElementById("zona").selectedIndex;
+    const zonautm = document.getElementById("zona")[zonautmIndex].label;
+    console.log(zonautm);
+    const hemisferioIndex =
+      document.getElementById("hemisferio1").selectedIndex;
+    const hemisferio =
+      document.getElementById("hemisferio1")[hemisferioIndex].label;
 
     // setTimeout(
     //   () => updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion),
@@ -175,6 +176,14 @@ const ModalFormUpdate = ({
     await updateCueva(
       conc,
       denom,
+      xDelForm,
+      yDelForm,
+      zDelForm,
+      elip,
+      huso,
+      zonautm,
+      latlong[0],
+      latlong[1],
       cuevaSelected.id,
       cuevaSelected.denominacion
     );

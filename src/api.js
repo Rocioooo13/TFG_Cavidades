@@ -300,7 +300,20 @@ module.exports = {
   //   });
   // },
 
-  updateCueva(concejo, denominacion, id, denominacionAnterior) {
+  updateCueva(
+    concejo,
+    denominacion,
+    xDelForm,
+    yDelForm,
+    zDelForm,
+    elip,
+    huso,
+    zonautm,
+    lat,
+    long,
+    id,
+    denominacionAnterior
+  ) {
     return new Promise((resolve, reject) => {
       db.get(
         `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
@@ -315,10 +328,8 @@ module.exports = {
             // Ejecuta la inserción
             console.log("Row no esta vacío");
             db.run(
-              //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo)
-              // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
-              `UPDATE ${concejo} SET denominacion = ? WHERE id IS ? AND denominacion IS ?`,
-              [denominacion, id, denominacionAnterior],
+              `UPDATE ${concejo} SET denominacion = ?, X = ?,Y = ?, Z= ?, latitud= ?, longitud= ? WHERE id IS ?`,
+              [denominacion, xDelForm, yDelForm, zDelForm, lat, long, id],
               function (err) {
                 if (err) {
                   return console.error(
