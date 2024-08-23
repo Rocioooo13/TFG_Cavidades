@@ -17,6 +17,10 @@ const ModalFormUpdate = ({
   onRequestClose,
   cuevaSelected,
   setCuevaActualizada,
+  todasCuevas,
+  setTodasCuevas,
+  capasSeleccionadas,
+  index,
 }) => {
   // console.log(cuevaSelected);
   // Override zIndex to display the modal overlayed to the map
@@ -138,11 +142,12 @@ const ModalFormUpdate = ({
   };
 
   //FALTA POR PERFECCIONAR PARA QUE LO HAGA CON CUALQUIER CAMPO!!!
-  const handleUpdateCueva = () => {
+  const handleUpdateCueva = async () => {
     //Obtengo el valor del concejo para crear la tabla
-    // const conc = new String(document.getElementById("concejo").value)
-    //   .split(" ")
-    //   .join("");
+    const conc = new String(document.getElementById("concejo").value);
+    // .split(" ")
+    // .join("");
+    console.log("Nombre concejo update", conc);
     // createTable(conc);
     // //Obtengo latitud y longitud de la cueva
     // var latlong = formulaLatitudLongitud();
@@ -166,12 +171,38 @@ const ModalFormUpdate = ({
     //   () => updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion),
     //   500
     // );
-    updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion).then(
-      (_) => {
-        setCuevaActualizada(true);
-        onRequestClose();
-      }
+
+    await updateCueva(
+      conc,
+      denom,
+      cuevaSelected.id,
+      cuevaSelected.denominacion
     );
+    if (capasSeleccionadas.length > 0) {
+      if (capasSeleccionadas.length >= index) {
+        try {
+          let objectCuevas;
+          const capa = await api.getLayers(cuevaSelected.concejo);
+          objectCuevas = capa;
+          const x = todasCuevas.findIndex((cuevas) =>
+            cuevas.find((cueva) => cueva.concejo === cuevaSelected.concejo)
+          );
+          console.log(todasCuevas);
+
+          setTodasCuevas((prevCapas) => {
+            prevCapas[x] = objectCuevas;
+            return prevCapas;
+          });
+
+          console.log("Cuevas ", todasCuevas);
+        } catch (error) {
+          console.error("Error cargando cuevas:", error);
+        }
+      }
+    }
+
+    setCuevaActualizada(true);
+    onRequestClose();
   };
   const handleDeleteCueva = () => {
     const concejo = document.getElementById("concejo").value;

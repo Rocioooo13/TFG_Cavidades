@@ -84,7 +84,7 @@ export const Map = ({
   const loadCuevas = async () => {
     if (capasSeleccionadas.length > 0) {
       if (capasSeleccionadas.length >= index) {
-        const conc = capasSeleccionadas[index].split(" ").join("");
+        const conc = new String(capasSeleccionadas[index]).split(" ").join("");
         try {
           const capa = await api.getLayers(conc);
           setCuevas(capa ?? []);
@@ -114,6 +114,7 @@ export const Map = ({
       }
     }
   };
+  
 
   const handleMarkerClick = (cueva) => {
     setCuevaSelected(cueva);
@@ -127,33 +128,7 @@ export const Map = ({
 
   useEffect(() => {
     loadCuevas();
-  }, [cuevaActualizada, capasSeleccionadas]);
-
-  //Carga solo un contorno
-  // const loadContornos = async () => {
-  //   if (contornosSeleccionados.length > 0) {
-  //     if (contornosSeleccionados.length >= index2) {
-  //       const colorDelContorno = await api.getColor(
-  //         contornosSeleccionados[index2]
-  //       );
-  //       setColorContorno([colorDelContorno]);
-  //       const cont = contornosSeleccionados[index2].split(" ").join("");
-  //       try {
-  //         const contorno = await api.getPolygons(cont);
-  //         let objects = [];
-  //         console.log("Valor de la variable contorno: ", contorno);
-  //         contorno.map((x) => {
-  //           console.log(x.nombre);
-  //           objects.push([x.longitud, x.latitud] ?? []);
-  //         });
-  //         setWaypoints(objects);
-
-  //       } catch (error) {
-  //         console.error("Error cargando contornos:", error);
-  //       }
-  //     }
-  //   }
-  // };
+  }, [capasSeleccionadas]);
 
   //Carga varios contornos
   const loadContornos = async () => {
@@ -365,6 +340,10 @@ export const Map = ({
             onRequestClose={() => setIsModalOpen(false)}
             cuevaSelected={cuevaSelected}
             setCuevaActualizada={setCuevaActualizada}
+            todasCuevas ={todasCuevas}
+            setTodasCuevas = {setTodasCuevas}
+            capasSeleccionadas = {capasSeleccionadas}
+            index ={index}
           />
         </div>
       </div>

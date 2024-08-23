@@ -144,7 +144,6 @@ module.exports = {
     longitud
     //archivo
   ) {
-    
     return new Promise((resolve, reject) => {
       db.get(
         `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
@@ -287,16 +286,110 @@ module.exports = {
     });
     // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },*/
-  updateCueva(denominacion, id, denominacionAnterior) {
-    return new Promise((resolve, _) => {
-      // console.log("Entro en updateCueva");
-      db.run(
-        "UPDATE concejodePrueba SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
-        [denominacion, id, denominacionAnterior]
+
+  //A esta funcion tengo que pasarle el nombre del concejo para que me busque en la tabla correspondiente
+  // updateCueva(denominacion, id, denominacionAnterior) {
+
+  //   return new Promise((resolve, _) => {
+  //     // console.log("Entro en updateCueva");
+  //     db.run(
+  //       "UPDATE concejodePrueba SET denominacion = ? WHERE id IS ? AND denominacion IS ?",
+  //       [denominacion, id, denominacionAnterior]
+  //     );
+  //     resolve();
+  //   });
+  // },
+
+  updateCueva(concejo, denominacion, id, denominacionAnterior) {
+    return new Promise((resolve, reject) => {
+      db.get(
+        `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
+        [denominacionAnterior],
+        (err, row) => {
+          if (err) {
+            console.error("Error al ejecutar la consulta:", err.message);
+            reject(err);
+          }
+          console.error("He hecho el get y devuelvo, ", row);
+          if (row) {
+            // Ejecuta la inserción
+            console.log("Row no esta vacío");
+            db.run(
+              //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo)
+              // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
+              `UPDATE ${concejo} SET denominacion = ? WHERE id IS ? AND denominacion IS ?`,
+              [denominacion, id, denominacionAnterior],
+              function (err) {
+                if (err) {
+                  return console.error(
+                    "Error al insertar el registro:",
+                    err.message
+                  );
+                }
+                console.log("Registro actualizado correctamente.");
+              }
+            );
+            resolve();
+          } else {
+            // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+            console.error("No existe un registro con la misma denominación.");
+            resolve();
+          }
+        }
       );
-      resolve();
     });
   },
+  // return new Promise((resolve, reject) => {
+  //   db.get(
+  //     `SELECT 1 FROM ${concejo} WHERE denominacion = ?`,
+  //     [denominacion],
+  //     (err, row) => {
+  //       if (err) {
+  //         console.error("Error al ejecutar la consulta:", err.message);
+  //         reject(err);
+  //       }
+
+  //       // Si row no está definido, significa que no se encontró ningún registro con la misma denominacion
+  //       if (!row) {
+  //         // Ejecuta la inserción
+  //         db.run(
+  //           //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo)
+  //           // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
+  //           `INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud)
+  //     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  //           [
+  //             denominacion,
+  //             X,
+  //             Y,
+  //             Z,
+  //             elipsoide,
+  //             huso,
+  //             zonaUTM,
+  //             hemisferio,
+  //             concejo,
+  //             latitud,
+  //             longitud,
+  //             //archivo,
+  //           ],
+  //           function (err) {
+  //             if (err) {
+  //               return console.error(
+  //                 "Error al insertar el registro:",
+  //                 err.message
+  //               );
+  //             }
+  //             console.log("Registro insertado correctamente.");
+  //           }
+  //         );
+  //         resolve();
+  //       } else {
+  //         // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+  //         console.error("Ya existe un registro con la misma denominación.");
+  //         resolve();
+  //       }
+  //     }
+  //   );
+  // });
 
   //Elimina una cueva
   deleteCueva(nombreConcejo, id) {
