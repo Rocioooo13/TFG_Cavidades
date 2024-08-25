@@ -31,12 +31,16 @@ export const Map = ({
   setNombreDelContorno,
   contornosSeleccionados,
   setContornosSeleccionados,
+  todasCuevas,
+  setTodasCuevas,
+  index,
+  setIndex,
 }) => {
   //Esto es para el manejo de la visibilidad de las cuevas
   const [cuevas, setCuevas] = useState([]);
-  const [index, setIndex] = useState(0);
+
   //Aqui meteré todas las cuevas de cada concejo
-  const [todasCuevas, setTodasCuevas] = useState([]);
+  // const [todasCuevas, setTodasCuevas] = useState([]);
   //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
   const [capasVisibles, setCapasVisibles] = useState({});
 

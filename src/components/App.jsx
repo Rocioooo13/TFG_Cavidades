@@ -17,6 +17,9 @@ export const App = () => {
   const [getContornos, setGetContornos] = useState([]);
   const [contornosSeleccionados, setContornosSeleccionados] = useState([]);
   const [mapaNuevo, setMapaNuevo] = useState("");
+  const [todasCuevas, setTodasCuevas] = useState([]);
+  const [index, setIndex] = useState(0);
+
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -100,6 +103,10 @@ export const App = () => {
           setGetContornos={setGetContornos}
           contornosSeleccionados={contornosSeleccionados}
           setContornosSeleccionados={setContornosSeleccionados}
+          todasCuevas = {todasCuevas}
+          setTodasCuevas = {setTodasCuevas}
+          index = {index}
+          setIndex = {setIndex}
         />
       </div>
       <div
@@ -127,6 +134,10 @@ export const App = () => {
             setNombreDelContorno={setNombreDelContorno}
             contornosSeleccionados={contornosSeleccionados}
             setContornosSeleccionados={setContornosSeleccionados}
+            todasCuevas = {todasCuevas}
+          setTodasCuevas = {setTodasCuevas}
+          index = {index}
+          setIndex = {setIndex}
           />
         </div>
 

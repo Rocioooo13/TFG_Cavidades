@@ -31,6 +31,10 @@ export const MenuHorizontal = ({
   setGetContornos,
   contornosSeleccionados,
   setContornosSeleccionados,
+  todasCuevas,
+  setTodasCuevas,
+  index,
+  setIndex,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
@@ -293,21 +297,6 @@ export const MenuHorizontal = ({
                 title="Cuevas"
                 className="collapsible-nav-dropdown"
               >
-                <NavDropdown.Item onClick={openModal} href="#form/3.1">
-                  Crear por formulario
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={openImportCsvModal} href="#csv/3.2">
-                  Importar excel (.csv)
-                </NavDropdown.Item>
-              </NavDropdown>
-              {/* <Nav.Link href="#pricing">Capas</Nav.Link> */}
-              <NavDropdown
-                autoClose="outside"
-                title="Capas"
-                className="collapsible-nav-dropdown"
-                aria-expanded={menuIsExpanded}
-              >
                 <NavDropdown.Item
                   onClick={openTablaCapas}
                   /*{closeNav}*/ href="#action/3.1"
@@ -315,11 +304,20 @@ export const MenuHorizontal = ({
                   Todas las capas
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
+                <NavDropdown.Item onClick={openModal} href="#form/3.1">
+                  Crear por formulario
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={openImportCsvModal} href="#csv/3.2">
+                  Importar excel (.csv)
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
                 <NavDropdown.Item>
                   <input
                     type="search"
                     placeholder="Busca una capa..."
                     list="listaConcejos"
+                    onClick={(e) => e.stopPropagation()}
                     onChange={(e) => setSearchText(e.target.value)} // Actualiza el texto de búsqueda
                   ></input>
                 </NavDropdown.Item>
@@ -334,8 +332,9 @@ export const MenuHorizontal = ({
                   </NavDropdown.Item>
                 ))}
               </NavDropdown>
+
               <NavDropdown
-                autoClose="inside"
+                autoClose="true"
                 title="Contornos"
                 className="collapsible-nav-dropdown"
               >
@@ -406,10 +405,23 @@ export const MenuHorizontal = ({
         </Container>
       </Navbar>
       {/* Agrega el componente ModalForm con las props adecuadas */}
-      <ModalForm isOpen={modalIsOpen} onRequestClose={closeModal} />
+      <ModalForm
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        capasSeleccionadas={capasSeleccionadas}
+        todasCuevas={todasCuevas}
+        setTodasCuevas={setTodasCuevas}
+        index={index}
+        setIndex={setIndex}
+      />
       <ModalTablaCapas
         isOpen={tablaCapasIsOpen}
         onRequestClose={closeTablaCapas}
+        capasSeleccionadas={capasSeleccionadas}
+        todasCuevas={todasCuevas}
+        setTodasCuevas={setTodasCuevas}
+        index={index}
+        setIndex={setIndex}
       />
       <ModalTablaContornos
         isOpen={tablaContornosIsOpen}

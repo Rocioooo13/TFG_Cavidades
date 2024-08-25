@@ -6,7 +6,6 @@ import api, {
   createListaCapas,
   añadirCapaListaCapas,
 } from "../api";
-import SuccessMessage from "./SuccessMessage";
 
 const customStyles = {
   content: {
@@ -16,7 +15,14 @@ const customStyles = {
   },
 };
 
-const ModalForm = ({ isOpen, onRequestClose }) => {
+const ModalForm = ({
+  isOpen,
+  onRequestClose,
+  capasSeleccionadas,
+  todasCuevas,
+  setTodasCuevas,
+  index,
+}) => {
   // Override zIndex to display the modal overlayed to the map
   const pruebaObtenerValor = () => {
     // Obtener el valor del label
@@ -136,7 +142,6 @@ const ModalForm = ({ isOpen, onRequestClose }) => {
     console.log("Longitud: ", longitud, " Latitud: ", latitud);
     return [longitud, latitud];
   };
-  const [showSuccess, setShowSuccess] = useState(false);
   const addCueva = () => {
     //Obtengo el valor del concejo para crear la tabla
     const conc = new String(document.getElementById("concejo").value)

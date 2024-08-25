@@ -27,6 +27,7 @@ module.exports = {
       const sql = `CREATE TABLE IF NOT EXISTS ${concejo} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
       db.run(sql, function (err) {
         if (err) {
+          alert("Error al crear la capa. Detalle del error: ", err.message);
           console.log("DB error: "); //err.message
           return reject(err);
         } else {
@@ -58,12 +59,11 @@ module.exports = {
                 err.message
               );
             }
-            console.log("Registro insertado correctamente.");
+            // console.log("Registro insertado correctamente.");
           }
         );
       } else {
         // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
-        console.error("Ya existe esta tabla en la lista de tablas.");
       }
     });
   },
@@ -112,15 +112,21 @@ module.exports = {
             [nombre, url],
             function (err) {
               if (err) {
+                alert(
+                  "Error al añadir el mapa. Detalle del error: ",
+                  err.message
+                );
                 console.error("Error al insertar el registro:", err.message);
                 return reject(err);
               }
+              alert("Mapa registrado correctamente.");
               console.log("Registro insertado correctamente.");
               return resolve();
             }
           );
         } else {
           // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+          alert("Ya existe un mapa con esa url en la base de datos.");
           console.error(
             "Ya existe este mapa en la lista de propiedades de mapas."
           );
@@ -178,17 +184,23 @@ module.exports = {
               ],
               function (err) {
                 if (err) {
+                  alert(
+                    "Error al insertar la cueva. Detalle del error: ",
+                    err.message
+                  );
                   return console.error(
                     "Error al insertar el registro:",
                     err.message
                   );
                 }
+                alert("La cueva se ha añadido correctamente.");
                 console.log("Registro insertado correctamente.");
               }
             );
             resolve();
           } else {
             // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+            alert("Ya existe una cueva con esa denominación en esta capa");
             console.error("Ya existe un registro con la misma denominación.");
             resolve();
           }
@@ -323,26 +335,30 @@ module.exports = {
             console.error("Error al ejecutar la consulta:", err.message);
             reject(err);
           }
-          console.error("He hecho el get y devuelvo, ", row);
           if (row) {
             // Ejecuta la inserción
-            console.log("Row no esta vacío");
             db.run(
               `UPDATE ${concejo} SET denominacion = ?, X = ?,Y = ?, Z= ?, latitud= ?, longitud= ? WHERE id IS ?`,
               [denominacion, xDelForm, yDelForm, zDelForm, lat, long, id],
               function (err) {
                 if (err) {
-                  return console.error(
-                    "Error al insertar el registro:",
+                  alert(
+                    "Error al actualizar la cueva. Detalle del error: ",
                     err.message
                   );
+                  // return console.error(
+                  //   "Error al actualizar el registro:",
+                  //   err.message
+                  // );
                 }
-                console.log("Registro actualizado correctamente.");
+                alert("Cueva actualizada correctamente ");
+                //console.log("Registro actualizado correctamente.");
               }
             );
             resolve();
           } else {
             // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
+            alert("No existe un registro con esa denominación");
             console.error("No existe un registro con la misma denominación.");
             resolve();
           }
@@ -410,9 +426,14 @@ module.exports = {
         [id],
         function (err) {
           if (err) {
+            alert(
+              "Error al eliminar la cueva. Detalle del error: ",
+              err.message
+            );
             console.error("Error al eliminar el registro:", err.message);
             reject(err);
           } else {
+            alert("La cueva se ha eliminado correctamente");
             console.log("Registro eliminado correctamente.");
             resolve();
           }
@@ -426,9 +447,11 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.run(`DROP TABLE ${nombreConcejo}`, function (err) {
         if (err) {
+          alert("Error al eliminar la capa. Detalle del error: ", err.message);
           console.error("Error al eliminar la capa:", err.message);
           reject(err);
         } else {
+          alert("La capa se ha eliminado correctamente.");
           console.log("Capa eliminada correctamente.");
           resolve();
         }
@@ -525,9 +548,11 @@ module.exports = {
       const sql = `CREATE TABLE IF NOT EXISTS ${nombre} (id  INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, latitud TEXT, longitud TEXT)`;
       db.run(sql, function (err) {
         if (err) {
+          alert("Error al crear el contorno. Detalle del error: ", err.message);
           console.log("DB error: "); //err.message
           return reject(err);
         } else {
+          alert("Contorno creado correctamente.");
           return resolve();
         }
       });
@@ -562,9 +587,14 @@ module.exports = {
         [nombre, coordenada[1], coordenada[0]],
         function (err) {
           if (err) {
+            alert(
+              "Error al añadir las coordenadas al contorno. Detalle del error: ",
+              err.message
+            );
             console.error("Error al insertar el registro:", err.message);
             return reject(err);
           }
+          alert("Coordenadas registradas correctamente.");
           console.log("Registro insertado correctamente.");
           return resolve();
         }
@@ -641,9 +671,14 @@ module.exports = {
     return new Promise((resolve, reject) => {
       db.run(`DROP TABLE ${nombre}`, function (err) {
         if (err) {
+          alert(
+            "Error al eliminar el contorno. Detalle del error: ",
+            err.message
+          );
           console.error("Error al eliminar el contorno:", err.message);
           reject(err);
         } else {
+          alert("Contorno eliminado correctamente.");
           console.log("Contorno eliminado correctamente.");
           resolve();
         }

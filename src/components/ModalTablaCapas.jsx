@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import api, { deleteCueva, deleteCapa, deleteCuevaListaCapas } from "../api";
 
-const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
+const ModalTablaCapas = ({
+  isOpen,
+  onRequestClose,
+  capasSeleccionadas,
+  todasCuevas,
+  setTodasCuevas,
+  index,
+  setIndex,
+}) => {
   const customStyles = {
     content: {
       width: "1100px",
@@ -48,10 +56,35 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
     onRequestClose();
   };
   const [idSeleccionado, setidSeleccionado] = useState("");
-  const handleClicBin = (id) => {
-    deleteCueva(nombreCapa.split(" ").join(""), id).then((_) => {
-      setidSeleccionado(id);
-    });
+  const handleClicBin = async (id) => {
+    await deleteCueva(nombreCapa.split(" ").join(""), id);
+    setidSeleccionado(id);
+    // setTimeout(async () => {
+    //   if (capasSeleccionadas.length > 0) {
+    //     if (capasSeleccionadas.length >= index) {
+    //       try {
+    //         let objectCuevas;
+    //         const capa = await api.getLayers(nombreCapa.split(" ").join(""));
+    //         objectCuevas = capa;
+    //         const x = todasCuevas.findIndex((cuevas) =>
+    //           cuevas.find(
+    //             (cueva) => cueva.concejo === nombreCapa.split(" ").join("")
+    //           )
+    //         );
+    //         console.log(todasCuevas);
+
+    //         setTodasCuevas((prevCapas) => {
+    //           prevCapas[x] = objectCuevas;
+    //           return prevCapas;
+    //         });
+
+    //         console.log("Cuevas ", todasCuevas);
+    //       } catch (error) {
+    //         console.error("Error cargando cuevas:", error);
+    //       }
+    //     }
+    //   }
+    // }, 200);
   };
 
   const [capaEliminada, setcapaEliminada] = useState(false);
@@ -238,13 +271,15 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
       </div>
 
       <div className="botonesForm">
-        <button
-          className="botonFormEliminar"
-          type="button"
-          onClick={handleClicEliminarCapa}
-        >
-          Eliminar capa
-        </button>
+        {nombreCapa ? (
+          <button
+            className="botonFormEliminar"
+            type="button"
+            onClick={handleClicEliminarCapa}
+          >
+            Eliminar capa
+          </button>
+        ) : null}
         <button className="botonForm" type="button" onClick={handleClicButton}>
           Cerrar
         </button>
@@ -252,5 +287,4 @@ const ModalTablaCapas = ({ isOpen, onRequestClose }) => {
     </Modal>
   );
 };
-
 export default ModalTablaCapas;

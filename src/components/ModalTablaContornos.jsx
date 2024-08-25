@@ -27,7 +27,7 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
   const loadTablas = async () => {
     const tablaSelected = await api.obtenerContornos();
     setTablasContornos(tablaSelected ?? []);
-    console.log(tablaSelected);
+    // console.log(tablaSelected);
   };
 
   //Las cuevas de la capa seleccionada
@@ -170,13 +170,15 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
       </div>
 
       <div className="botonesForm">
-        <button
-          className="botonFormEliminar"
-          type="button"
-          onClick={handleClicEliminarContorno}
-        >
-          Eliminar contorno
-        </button>
+        {nombreContorno ? (
+          <button
+            className="botonFormEliminar"
+            type="button"
+            onClick={handleClicEliminarContorno}
+          >
+            Eliminar contorno
+          </button>
+        ) : null}
         <button className="botonForm" type="button" onClick={handleClicButton}>
           Cerrar
         </button>
