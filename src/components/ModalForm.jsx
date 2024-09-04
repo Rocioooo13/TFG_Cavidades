@@ -22,6 +22,8 @@ const ModalForm = ({
   todasCuevas,
   setTodasCuevas,
   index,
+  capaNueva,
+  setCapaNueva,
 }) => {
   // Override zIndex to display the modal overlayed to the map
   const pruebaObtenerValor = () => {
@@ -143,6 +145,7 @@ const ModalForm = ({
     return [longitud, latitud];
   };
   const addCueva = () => {
+    setCapaNueva(false);
     //Obtengo el valor del concejo para crear la tabla
     const conc = new String(document.getElementById("concejo").value)
       .split(" ")
@@ -196,6 +199,8 @@ const ModalForm = ({
         })
         .finally(() => {
           onRequestClose();
+          setCapaNueva(true);
+          alert("La capa se ha creado correctamente.");
         });
       //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
       //onRequestClose(Map.setIsModalOpen(true));

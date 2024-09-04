@@ -10,6 +10,8 @@ const ModalTablaCapas = ({
   setTodasCuevas,
   index,
   setIndex,
+  capaNueva,
+  setCapaNueva,
 }) => {
   const customStyles = {
     content: {
@@ -89,11 +91,13 @@ const ModalTablaCapas = ({
 
   const [capaEliminada, setcapaEliminada] = useState(false);
   const handleClicEliminarCapa = (id) => {
+    setCapaNueva(false);
     setcapaEliminada(false);
     deleteCapa(nombreCapa.split(" ").join("")).then((_) => {
       deleteCuevaListaCapas(nombreCapa).then((_) => {
         setcapaEliminada(true);
         setNombreCapa("");
+        setCapaNueva(true);
       });
     });
   };
@@ -111,7 +115,7 @@ const ModalTablaCapas = ({
   useEffect(() => {
     loadTablas();
     //loadCapa();
-  }, [capaEliminada]);
+  }, [capaEliminada, capaNueva === true]);
 
   //Si hay un cambio en idSeleccionado se recarga la lista de Cuevas
   useEffect(() => {

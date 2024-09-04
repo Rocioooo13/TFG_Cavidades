@@ -35,6 +35,12 @@ export const MenuHorizontal = ({
   setTodasCuevas,
   index,
   setIndex,
+  capaNueva,
+  setCapaNueva,
+  contornoNuevo,
+  setContornoNuevo,
+  contornoEliminado,
+  setContornoEliminado,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
@@ -166,6 +172,11 @@ export const MenuHorizontal = ({
     loadCuevas();
   }, []);
 
+  useEffect(() => {
+    loadTablas();
+    loadCuevas();
+  }, [capaNueva === true]);
+
   const loadContornos = async () => {
     const contornoSelected = await api.obtenerContornos();
     setGetContornos(contornoSelected ?? []);
@@ -174,7 +185,7 @@ export const MenuHorizontal = ({
 
   useEffect(() => {
     loadContornos();
-  }, [coordsPolygon]);
+  }, [coordsPolygon, contornoNuevo === true, contornoEliminado]);
 
   //Para buscar una capa
   const filteredContornos = getContornos.filter((contorno) => {
@@ -413,6 +424,8 @@ export const MenuHorizontal = ({
         setTodasCuevas={setTodasCuevas}
         index={index}
         setIndex={setIndex}
+        capaNueva={capaNueva}
+        setCapaNueva={setCapaNueva}
       />
       <ModalTablaCapas
         isOpen={tablaCapasIsOpen}
@@ -422,10 +435,16 @@ export const MenuHorizontal = ({
         setTodasCuevas={setTodasCuevas}
         index={index}
         setIndex={setIndex}
+        capaNueva={capaNueva}
+        setCapaNueva={setCapaNueva}
       />
       <ModalTablaContornos
         isOpen={tablaContornosIsOpen}
         onRequestClose={closeTablaContornos}
+        contornoNuevo={contornoNuevo}
+        setContornoNuevo={setContornoNuevo}
+        contornoEliminado={contornoEliminado}
+        setContornoEliminado={setContornoEliminado}
       ></ModalTablaContornos>
       <ModalCreateContour
         isOpen={/*crearContorno*/ openModalCreateContour}
@@ -440,11 +459,15 @@ export const MenuHorizontal = ({
       <ImportCSV
         isOpen={importCsvIsOpen}
         onRequestClose={closeImportCsvModal}
+        capaNueva={capaNueva}
+        setCapaNueva={setCapaNueva}
         // onCsvImport={handleCsvImport}
       />
       <ImportCSVContour
         isOpen={importCsvIsOpenContour}
         onRequestClose={closeImportCsvModalContour}
+        contornoNuevo={contornoNuevo}
+        setContornoNuevo={setContornoNuevo}
         // onCsvImport={handleCsvImport}
       />
     </div>

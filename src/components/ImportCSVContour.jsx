@@ -5,7 +5,12 @@ import { SketchPicker } from "react-color";
 import { addContourProps, createContourTable, addContourImport } from "../api";
 import { Table } from "react-bootstrap";
 
-const ImportCSVContour = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
+const ImportCSVContour = ({
+  isOpen,
+  onRequestClose,
+  contornoNuevo,
+  setContornoNuevo /*, onCsvImport*/,
+}) => {
   const [file, setFile] = useState(null);
   const [tableName, setTableName] = useState(""); // Agrega un campo para el nombre de la tabla
   const [matriz, setMatriz] = useState([]);
@@ -38,6 +43,7 @@ const ImportCSVContour = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
   };
 
   const handleImportInTheBD = (matriz, tableName) => {
+    setContornoNuevo(false);
     const colorElegido = document.getElementById("color").value;
     setColorImport(colorElegido);
     const cont = new String(tableName).split(" ").join("");
@@ -65,6 +71,7 @@ const ImportCSVContour = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
           //console.log(coord);
           await addContourImport(cont, coord);
           onRequestClose();
+          setContornoNuevo(true);
         }
       }
     });

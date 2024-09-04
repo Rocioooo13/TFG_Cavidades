@@ -19,7 +19,9 @@ export const App = () => {
   const [mapaNuevo, setMapaNuevo] = useState("");
   const [todasCuevas, setTodasCuevas] = useState([]);
   const [index, setIndex] = useState(0);
-
+  const [capaNueva, setCapaNueva] = useState(false);
+  const [contornoNuevo, setContornoNuevo] = useState(false);
+  const [contornoEliminado, setContornoEliminado] = useState(false);
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -32,7 +34,7 @@ export const App = () => {
     setMapSelected("");
     setTimeout(() => setMapSelected(item.url ?? ""), 500);
   };
-  
+
   const loadMaps = async () => {
     let objectMaps;
     const mapsSelect = await api.getMaps();
@@ -60,6 +62,7 @@ export const App = () => {
 
   const submitContour = () => {
     // console.log(nombreDelContorno.split(" ").join(""));
+    setContornoNuevo(false);
     const nombreContornoSinEspacios = nombreDelContorno.split(" ").join("");
     api
       .createContourTable(nombreContornoSinEspacios)
@@ -75,6 +78,8 @@ export const App = () => {
         setColor("#000");
         setNombreDelContorno("");
         setCoordsPolygon([]);
+        alert("Controno creado correctamente");
+        setContornoNuevo(true);
 
         //console.log(" ", color);
       });
@@ -103,10 +108,16 @@ export const App = () => {
           setGetContornos={setGetContornos}
           contornosSeleccionados={contornosSeleccionados}
           setContornosSeleccionados={setContornosSeleccionados}
-          todasCuevas = {todasCuevas}
-          setTodasCuevas = {setTodasCuevas}
-          index = {index}
-          setIndex = {setIndex}
+          todasCuevas={todasCuevas}
+          setTodasCuevas={setTodasCuevas}
+          index={index}
+          setIndex={setIndex}
+          capaNueva={capaNueva}
+          setCapaNueva={setCapaNueva}
+          contornoNuevo={contornoNuevo}
+          setContornoNuevo={setContornoNuevo}
+          contornoEliminado = {contornoEliminado}
+          setContornoEliminado = {setContornoEliminado}
         />
       </div>
       <div
@@ -134,10 +145,14 @@ export const App = () => {
             setNombreDelContorno={setNombreDelContorno}
             contornosSeleccionados={contornosSeleccionados}
             setContornosSeleccionados={setContornosSeleccionados}
-            todasCuevas = {todasCuevas}
-          setTodasCuevas = {setTodasCuevas}
-          index = {index}
-          setIndex = {setIndex}
+            todasCuevas={todasCuevas}
+            setTodasCuevas={setTodasCuevas}
+            index={index}
+            setIndex={setIndex}
+            capaNueva={capaNueva}
+            setCapaNueva={setCapaNueva}
+            contornoNuevo={contornoNuevo}
+            setContornoNuevo={setContornoNuevo}
           />
         </div>
 

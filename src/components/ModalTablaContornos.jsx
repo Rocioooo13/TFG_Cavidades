@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import api, { deleteContorno, deleteCuevaListaContornos } from "../api";
 
-const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
+const ModalTablaContornos = ({
+  isOpen,
+  onRequestClose,
+  contornoNuevo,
+  setContornoNuevo,
+  contornoEliminado,
+  setContornoEliminado,
+}) => {
   const customStyles = {
     content: {
       width: "1100px",
@@ -57,9 +64,7 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
   //   });
   // };
 
-  const [contornoEliminado, setContornoEliminado] = useState(false);
   const handleClicEliminarContorno = (id) => {
-    setContornoEliminado(false);
     deleteContorno(nombreContorno.split(" ").join("")).then((_) => {
       deleteCuevaListaContornos(nombreContorno).then((_) => {
         setContornoEliminado(true);
@@ -67,6 +72,7 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
         //selectedOptionData = [];
       });
     });
+    setContornoEliminado(false);
   };
 
   useEffect(() => {
@@ -77,17 +83,17 @@ const ModalTablaContornos = ({ isOpen, onRequestClose }) => {
   //Si hay un cambio en nombreCapa se recarga la lista de Cuevas
   useEffect(() => {
     loadContorno();
-  }, [nombreContorno]);
+  }, [idSeleccionado, nombreContorno, contornoNuevo === true]);
 
   useEffect(() => {
     loadTablas();
     //loadCapa();
-  }, [contornoEliminado]);
+  }, [contornoEliminado === true, contornoNuevo === true]);
 
   //Si hay un cambio en idSeleccionado se recarga la lista de Cuevas
-  useEffect(() => {
-    loadContorno();
-  }, [idSeleccionado]);
+  // useEffect(() => {
+  //   loadContorno();
+  // }, []);
 
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (

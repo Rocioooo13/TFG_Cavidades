@@ -193,7 +193,7 @@ module.exports = {
                     err.message
                   );
                 }
-                alert("La cueva se ha añadido correctamente.");
+                
                 console.log("Registro insertado correctamente.");
               }
             );
@@ -552,7 +552,6 @@ module.exports = {
           console.log("DB error: "); //err.message
           return reject(err);
         } else {
-          alert("Contorno creado correctamente.");
           return resolve();
         }
       });
@@ -594,7 +593,6 @@ module.exports = {
             console.error("Error al insertar el registro:", err.message);
             return reject(err);
           }
-          alert("Coordenadas registradas correctamente.");
           console.log("Registro insertado correctamente.");
           return resolve();
         }

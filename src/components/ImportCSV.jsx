@@ -3,7 +3,12 @@ import Modal from "react-modal";
 import Papa from "papaparse";
 import { añadirCapaListaCapas, createCueva, createTable } from "../api";
 
-const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
+const ImportCSV = ({
+  isOpen,
+  onRequestClose,
+  capaNueva,
+  setCapaNueva /*, onCsvImport*/,
+}) => {
   const [file, setFile] = useState(null);
   const [tableName, setTableName] = useState(""); // Agrega un campo para el nombre de la tabla
   const [matriz, setMatriz] = useState([]);
@@ -31,6 +36,7 @@ const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
   };
 
   const handleImportInTheBD = (matriz, tableName) => {
+    setCapaNueva(false);
     const conc = new String(tableName).split(" ").join("");
     // console.log("Llega aqui 1 ", tableName);
 
@@ -76,6 +82,7 @@ const ImportCSV = ({ isOpen, onRequestClose /*, onCsvImport*/ }) => {
             })
             .finally(() => {
               onRequestClose();
+              setCapaNueva(true);
             });
         } else {
           console.log("Se ha encontrado un valor null y no se ha insertado.");
