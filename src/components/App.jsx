@@ -18,10 +18,12 @@ export const App = () => {
   const [contornosSeleccionados, setContornosSeleccionados] = useState([]);
   const [mapaNuevo, setMapaNuevo] = useState("");
   const [todasCuevas, setTodasCuevas] = useState([]);
+  const [capasVisibles, setCapasVisibles] = useState({});
   const [index, setIndex] = useState(0);
   const [capaNueva, setCapaNueva] = useState(false);
   const [contornoNuevo, setContornoNuevo] = useState(false);
   const [contornoEliminado, setContornoEliminado] = useState(false);
+
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
@@ -118,6 +120,8 @@ export const App = () => {
           setContornoNuevo={setContornoNuevo}
           contornoEliminado = {contornoEliminado}
           setContornoEliminado = {setContornoEliminado}
+          capasVisibles ={capasVisibles}
+          setCapasVisibles={setCapasVisibles}
         />
       </div>
       <div
@@ -153,6 +157,8 @@ export const App = () => {
             setCapaNueva={setCapaNueva}
             contornoNuevo={contornoNuevo}
             setContornoNuevo={setContornoNuevo}
+            capasVisibles ={capasVisibles}
+          setCapasVisibles={setCapasVisibles}
           />
         </div>
 

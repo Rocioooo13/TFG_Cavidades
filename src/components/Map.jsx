@@ -35,6 +35,8 @@ export const Map = ({
   setTodasCuevas,
   index,
   setIndex,
+  capasVisibles,
+  setCapasVisibles
 }) => {
   //Esto es para el manejo de la visibilidad de las cuevas
   const [cuevas, setCuevas] = useState([]);
@@ -42,7 +44,7 @@ export const Map = ({
   //Aqui meteré todas las cuevas de cada concejo
   // const [todasCuevas, setTodasCuevas] = useState([]);
   //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
-  const [capasVisibles, setCapasVisibles] = useState({});
+  
 
   //Esto es para el manejo de visibilidad de los contornos
   const [contornos, setContornos] = useState([]);
@@ -95,12 +97,12 @@ export const Map = ({
 
           setTodasCuevas((prevCapas) => {
             const nuevasCapas = [...prevCapas, capa ?? []];
-            // console.log(
-            //   "Index: ",
-            //   index,
-            //   "Cuevas añadidas a todasCuevas",
-            //   nuevasCapas
-            // );
+            console.log(
+              "Index: ",
+              index,
+              "Cuevas añadidas a todasCuevas",
+              nuevasCapas
+            );
             return nuevasCapas;
           });
 
@@ -165,12 +167,12 @@ export const Map = ({
 
           setTodosContornos((prevContornos) => {
             const nuevosContornos = [...prevContornos, objects ?? []];
-            console.log(
-              "Index: ",
-              index,
-              "Cuevas añadidas a todosContornos",
-              nuevosContornos
-            );
+            // console.log(
+            //   "Index: ",
+            //   index,
+            //   "Cuevas añadidas a todosContornos",
+            //   nuevosContornos
+            // );
             return nuevosContornos;
           });
 

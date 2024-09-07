@@ -6,12 +6,15 @@ const ModalTablaCapas = ({
   isOpen,
   onRequestClose,
   capasSeleccionadas,
+  setCapasSeleccionadas,
   todasCuevas,
   setTodasCuevas,
   index,
   setIndex,
   capaNueva,
   setCapaNueva,
+  capasVisibles,
+  setCapasVisibles,
 }) => {
   const customStyles = {
     content: {
@@ -90,16 +93,58 @@ const ModalTablaCapas = ({
   };
 
   const [capaEliminada, setcapaEliminada] = useState(false);
-  const handleClicEliminarCapa = (id) => {
+  const handleClicEliminarCapa = async (id) => {
     setCapaNueva(false);
     setcapaEliminada(false);
-    deleteCapa(nombreCapa.split(" ").join("")).then((_) => {
-      deleteCuevaListaCapas(nombreCapa).then((_) => {
-        setcapaEliminada(true);
-        setNombreCapa("");
-        setCapaNueva(true);
-      });
+    await deleteCapa(nombreCapa.split(" ").join(""));
+
+    await deleteCuevaListaCapas(nombreCapa);
+
+    // console.log(capasSeleccionadas);
+
+    if (capasSeleccionadas.length > 0) {
+      if (capasSeleccionadas.length >= index) {
+        try {
+          const x = todasCuevas.findIndex((cuevas) =>
+            cuevas.find((cueva) => cueva.concejo === nombreCapa)
+          );
+          // console.log(todasCuevas);
+
+          setTodasCuevas((prevCapas) => {
+            const filtered = prevCapas.filter((_, index) => {
+              return index !== x;
+            });
+            return filtered;
+          });
+
+          // setTimeout(() => console.log("Cuevas ", todasCuevas), 200);
+          // console.log("Capa visibles antes:", capasVisibles);
+          setCapasVisibles((prevCapasVisibles) => {
+            delete prevCapasVisibles[nombreCapa];
+            return prevCapasVisibles;
+          });
+          // setTimeout(
+          //   () => console.log("Capa visibles después:", capasVisibles),
+          //   200
+          // );
+        } catch (error) {
+          console.error("Error cargando cuevas:", error);
+        }
+      }
+    }
+
+    setCapasSeleccionadas((prevCapasSeleccionadas) => {
+      return prevCapasSeleccionadas.filter((capa) => capa !== nombreCapa);
     });
+
+    // setTimeout(
+    //   () => console.log("Capas seleccionadas ", capasSeleccionadas),
+    //   200
+    // );
+
+    setcapaEliminada(true);
+    setNombreCapa("");
+    setCapaNueva(true);
   };
 
   useEffect(() => {
