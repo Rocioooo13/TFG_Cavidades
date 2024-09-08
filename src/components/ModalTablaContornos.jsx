@@ -105,6 +105,7 @@ const ModalTablaContornos = ({
       ariaHideApp={false}
     >
       <h3>Tablas Contornos</h3>
+
       <br />
       <div style={{ marginBottom: "20px" }}>
         <label htmlFor="select" style={{ marginRight: "10px" }}>

@@ -232,6 +232,20 @@ module.exports = {
       });
     });
   },
+  getCuevasExportacion(concejo) {
+    return new Promise((resolve, reject) => {
+      if (!concejo) {
+        return reject("El concejo no esta definido");
+      }
+      db.all(`SELECT * FROM ${concejo}`, (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+        return resolve(rows);
+      });
+    });
+  },
 
   getCuevas2(concejo) {
     return new Promise((resolve, reject) => {

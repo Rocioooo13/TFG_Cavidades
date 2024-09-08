@@ -45,6 +45,20 @@ form{
   margin-top: 50px;
   gap: 10px
 }
+.botonTablaCapas{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; 
+}
+.botonTablaExportar{
+  margin-left: 8px;
+  background-color: #1C2833 ;
+  border: 2px solid black;
+  border-radius: 4px;
+  color: white;
+}
+
 .inputContainer{
   display: flex;
   flex-direction: row;

@@ -397,14 +397,6 @@ const ModalFormUpdate = ({
             style={customDelete}
           /> */}
         <div className="botonesForm">
-          {/* <button
-            className="botonForm"
-            type="button"
-            // onClick={formulaLatitudLongitud}
-            onClick={addCueva}
-          >
-            boton prueba
-          </button> */}
           <button
             className="botonFormEliminar"
             type="button"

@@ -158,6 +158,7 @@ const ModalTablaCapas = ({
   //Si hay un cambio en nombreCapa se recarga la lista de Cuevas
   useEffect(() => {
     loadCapa();
+    loadCuevasExportacion();
   }, [nombreCapa]);
 
   useEffect(() => {
@@ -170,6 +171,78 @@ const ModalTablaCapas = ({
     loadCapa();
   }, [idSeleccionado]);
 
+  //Para exportar
+  const [cuevasExport, setCuevasExport] = useState([]);
+  //Me creo las cabeceras del excel.
+  const headers = [
+    { label: "Denominacion", key: "denominacion" },
+    { label: "X", key: "X" },
+    { label: "Y", key: "Y" },
+    { label: "Z", key: "Z" },
+    { label: "Elipsoide", key: "elipsoide" },
+    { label: "Huso", key: "huso" },
+    { label: "Zona UTM", key: "zonaUTM" },
+    { label: "Hemisferio", key: "hemisferio" },
+    { label: "Concejo", key: "concejo" },
+    { label: "Latitud", key: "latitud" },
+    { label: "Longitud", key: "longitud" },
+  ];
+
+  //Obtengo las cuevas y las guardo en la variable cuevas
+  const loadCuevasExportacion = async () => {
+    const nombreConcejo = new String(nombreCapa).split(" ").join("");
+    console.log(nombreConcejo);
+    const cuevasArray = await api.getCuevasExportacion(nombreConcejo);
+    setCuevasExport(cuevasArray ?? []);
+    // console.log("Cuevas array: ", cuevasArray);
+  };
+
+  //en CsvReport creo tres variables a las que le doy los valores de cuevas, las cabeceras y el nombre del archivo
+  const csvReport = {
+    data: cuevasExport,
+    headers: headers,
+    filename: `Capa cuevas ${nombreCapa}.csv`,
+  };
+
+  // useEffect(() => {
+  //   loadCuevasExportacion();
+  // }, [nombreCapa !== ""]);
+
+  //Rellena el archivo y hace la descarga
+  const clicDownloadCapa = () => {
+    const csvData = csvReport.data
+      .map(
+        (item) =>
+          `${item.denominacion},${item.X},${item.Y},${item.Z},${item.elipsoide},${item.huso},${item.zonaUTM},${item.hemisferio},${item.concejo},${item.latitud},${item.longitud}`
+      )
+      .join("\n");
+
+    const csvContent = `${csvReport.headers
+      .map((header) => header.label)
+      .join(",")}\n${csvData}`;
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    //window.location.href = url;
+
+    link.setAttribute("download", csvReport.filename);
+    // Adjuntar el enlace al documento y simular clic
+    document.body.appendChild(link);
+    link.click();
+
+    // Eliminar el enlace del DOM
+    document.body.removeChild(link);
+    // const link = document.createElement('a');
+    // link.href = url;
+    // link.setAttribute('download', 'example.csv');
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+  };
+
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
@@ -179,7 +252,18 @@ const ModalTablaCapas = ({
       style={customStyles}
       ariaHideApp={false}
     >
-      <h3>Tabla Capas</h3>
+      <div className="botonTablaCapas">
+        <h3>Tabla Capas</h3>
+        {nombreCapa ? (
+          <button
+            className="botonTablaExportar"
+            type="button"
+            onClick={clicDownloadCapa}
+          >
+            Exportar capa a CSV
+          </button>
+        ) : null}
+      </div>
       <br />
       <div style={{ marginBottom: "20px" }}>
         <label htmlFor="select" style={{ marginRight: "10px" }}>

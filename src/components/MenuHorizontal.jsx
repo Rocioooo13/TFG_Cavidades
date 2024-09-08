@@ -226,63 +226,9 @@ export const MenuHorizontal = ({
     imprimirNombreContorno();
   }, [tablaSeleccionada2]);
 
-  //Para exportar
-  //Me creo las cabeceras del excel.
-  const headers = [
-    { label: "Denominacion", key: "denominacion" },
-    { label: "X", key: "X" },
-    { label: "Y", key: "Y" },
-    { label: "Z", key: "Z" },
-    { label: "Elipsoide", key: "elipsoide" },
-    { label: "Huso", key: "huso" },
-    { label: "Zona UTM", key: "zonaUTM" },
-    { label: "Hemisferio", key: "hemisferio" },
-    { label: "Concejo", key: "concejo" },
-    { label: "Latitud", key: "latitud" },
-    { label: "Longitud", key: "longitud" },
-  ];
-
-  //Obtengo las cuevas y las guardo en la variable cuevas
   const loadCuevas = async () => {
     const cuevasArray = await api.getCuevas();
     setCuevas(cuevasArray ?? []);
-    // console.log("Cuevas array: ", cuevasArray);
-  };
-
-  //en CsvReport creo tres variables a las que le doy los valores de cuevas, las cabeceras y el nombre del archivo
-  const csvReport = {
-    data: cuevas,
-    headers: headers,
-    filename: "Cuevas.csv",
-  };
-  //Rellena el archivo y hace la descarga
-  const clicDownload = () => {
-    //console.log(cuevas);
-    //console.log("Empieza la descarga");
-    const csvData = csvReport.data
-      .map(
-        (item) =>
-          `${item.denominacion},${item.X},${item.Y},${item.Z},${item.elipsoide},${item.huso},${item.zonaUTM},${item.hemisferio},${item.concejo},${item.latitud},${item.longitud}`
-      )
-      .join("\n");
-    //console.log("Hace el map");
-    //console.log(csvData);
-    const csvContent = `${csvReport.headers
-      .map((header) => header.label)
-      .join(",")}\n${csvData}`;
-    // console.log("Hace el map");
-    // console.log(csvContent);
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    // console.log("Hace el Blob");
-    // console.log(blob);
-    const url = window.URL.createObjectURL(blob);
-    window.location.href = url;
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.setAttribute('download', 'example.csv');
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
   };
 
   //Para buscar una capa
@@ -403,9 +349,9 @@ export const MenuHorizontal = ({
                   Exportar proyecto a...
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={clicDownload} href="#action/3.2">
-                  Exportar capa a...
-                </NavDropdown.Item>
+                {/* <NavDropdown.Item onClick={clicDownload} href="#action/3.2"> */}
+                {/* Exportar capa a... */}
+                {/* </NavDropdown.Item> */}
               </NavDropdown>
             </Nav>
             {/* <Nav>
