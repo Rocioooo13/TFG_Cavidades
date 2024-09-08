@@ -15,6 +15,8 @@ const ModalTablaCapas = ({
   setCapaNueva,
   capasVisibles,
   setCapasVisibles,
+  cuevaActualizada,
+  setCuevaActualizada,
 }) => {
   const customStyles = {
     content: {
@@ -61,35 +63,36 @@ const ModalTablaCapas = ({
     onRequestClose();
   };
   const [idSeleccionado, setidSeleccionado] = useState("");
-  const handleClicBin = async (id) => {
+  const handleClicBin = async (id, concejoCuevaEliminada) => {
+    setCuevaActualizada(false);
     await deleteCueva(nombreCapa.split(" ").join(""), id);
     setidSeleccionado(id);
-    // setTimeout(async () => {
-    //   if (capasSeleccionadas.length > 0) {
-    //     if (capasSeleccionadas.length >= index) {
-    //       try {
-    //         let objectCuevas;
-    //         const capa = await api.getLayers(nombreCapa.split(" ").join(""));
-    //         objectCuevas = capa;
-    //         const x = todasCuevas.findIndex((cuevas) =>
-    //           cuevas.find(
-    //             (cueva) => cueva.concejo === nombreCapa.split(" ").join("")
-    //           )
-    //         );
-    //         console.log(todasCuevas);
+    if (capasSeleccionadas.length > 0) {
+      if (capasSeleccionadas.length >= index) {
+        try {
+          let objectCuevasEliminadas;
+          const capa = await api.getLayers(concejoCuevaEliminada);
+          objectCuevasEliminadas = capa;
+          const x = todasCuevas.findIndex((cuevasEliminadas) =>
+            cuevasEliminadas.find(
+              (cuevaEliminada) =>
+                cuevaEliminada.concejo === concejoCuevaEliminada
+            )
+          );
+          // console.log(todasCuevas);
 
-    //         setTodasCuevas((prevCapas) => {
-    //           prevCapas[x] = objectCuevas;
-    //           return prevCapas;
-    //         });
+          setTodasCuevas((prevCapasEliminadas) => {
+            prevCapasEliminadas[x] = objectCuevasEliminadas;
+            return prevCapasEliminadas;
+          });
 
-    //         console.log("Cuevas ", todasCuevas);
-    //       } catch (error) {
-    //         console.error("Error cargando cuevas:", error);
-    //       }
-    //     }
-    //   }
-    // }, 200);
+          // setTimeout(console.log("Cuevas ", todasCuevas), 200);
+        } catch (error) {
+          console.error("Error cargando cuevas:", error);
+        }
+      }
+    }
+    setCuevaActualizada(true);
   };
 
   const [capaEliminada, setcapaEliminada] = useState(false);
@@ -274,7 +277,7 @@ const ModalTablaCapas = ({
                   </td>
                   <td
                     style={{ border: "1px solid black", padding: "8px" }}
-                    onClick={() => handleClicBin(item.id)}
+                    onClick={() => handleClicBin(item.id, item.concejo)}
                   >
                     <svg
                       width="20px"

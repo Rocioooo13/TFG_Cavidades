@@ -184,16 +184,16 @@ module.exports = {
               ],
               function (err) {
                 if (err) {
-                  alert(
-                    "Error al insertar la cueva. Detalle del error: ",
-                    err.message
-                  );
+                  // alert(
+                  //   "Error al insertar la cueva. Detalle del error: ",
+                  //   err.message
+                  // );
                   return console.error(
                     "Error al insertar el registro:",
                     err.message
                   );
                 }
-                
+
                 console.log("Registro insertado correctamente.");
               }
             );
@@ -586,10 +586,10 @@ module.exports = {
         [nombre, coordenada[1], coordenada[0]],
         function (err) {
           if (err) {
-            alert(
-              "Error al añadir las coordenadas al contorno. Detalle del error: ",
-              err.message
-            );
+            // alert(
+            //   "Error al añadir las coordenadas al contorno. Detalle del error: ",
+            //   err.message
+            // );
             console.error("Error al insertar el registro:", err.message);
             return reject(err);
           }

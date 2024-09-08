@@ -213,12 +213,35 @@ const ModalFormUpdate = ({
     setCuevaActualizada(true);
     onRequestClose();
   };
-  const handleDeleteCueva = () => {
+  const handleDeleteCueva = async () => {
     const concejo = document.getElementById("concejo").value;
-    deleteCueva(concejo, cuevaSelected.id).then((_) => {
-      setCuevaActualizada(true);
-      onRequestClose();
-    });
+    await deleteCueva(concejo, cuevaSelected.id);
+    if (capasSeleccionadas.length > 0) {
+      if (capasSeleccionadas.length >= index) {
+        try {
+          let objectCuevasEliminadas;
+          const capa = await api.getLayers(concejo);
+          objectCuevasEliminadas = capa;
+          const x = todasCuevas.findIndex((cuevasEliminadas) =>
+            cuevasEliminadas.find(
+              (cuevaEliminada) => cuevaEliminada.concejo === concejo
+            )
+          );
+          console.log(todasCuevas);
+
+          setTodasCuevas((prevCapasEliminadas) => {
+            prevCapasEliminadas[x] = objectCuevasEliminadas;
+            return prevCapasEliminadas;
+          });
+
+          setTimeout(console.log("Cuevas ", todasCuevas), 200);
+        } catch (error) {
+          console.error("Error cargando cuevas:", error);
+        }
+      }
+    }
+    setCuevaActualizada(true);
+    onRequestClose();
   };
 
   Modal.defaultStyles.overlay.zIndex = 1000;

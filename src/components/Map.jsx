@@ -36,7 +36,9 @@ export const Map = ({
   index,
   setIndex,
   capasVisibles,
-  setCapasVisibles
+  setCapasVisibles,
+  cuevaActualizada,
+  setCuevaActualizada,
 }) => {
   //Esto es para el manejo de la visibilidad de las cuevas
   const [cuevas, setCuevas] = useState([]);
@@ -44,7 +46,6 @@ export const Map = ({
   //Aqui meteré todas las cuevas de cada concejo
   // const [todasCuevas, setTodasCuevas] = useState([]);
   //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
-  
 
   //Esto es para el manejo de visibilidad de los contornos
   const [contornos, setContornos] = useState([]);
@@ -56,7 +57,6 @@ export const Map = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
-  const [cuevaActualizada, setCuevaActualizada] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState([0, 0]);
   const [waypoints, setWaypoints] = useState([]);
   const [colorContorno, setColorContorno] = useState([]);

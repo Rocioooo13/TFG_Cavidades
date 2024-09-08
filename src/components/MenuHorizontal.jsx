@@ -42,7 +42,9 @@ export const MenuHorizontal = ({
   contornoEliminado,
   setContornoEliminado,
   capasVisibles,
-  setCapasVisibles
+  setCapasVisibles,
+  cuevaActualizada,
+  setCuevaActualizada,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
@@ -440,8 +442,10 @@ export const MenuHorizontal = ({
         setIndex={setIndex}
         capaNueva={capaNueva}
         setCapaNueva={setCapaNueva}
-        capasVisibles ={capasVisibles}
-          setCapasVisibles={setCapasVisibles}
+        capasVisibles={capasVisibles}
+        setCapasVisibles={setCapasVisibles}
+        cuevaActualizada={cuevaActualizada}
+        setCuevaActualizada={setCuevaActualizada}
       />
       <ModalTablaContornos
         isOpen={tablaContornosIsOpen}
