@@ -204,10 +204,6 @@ const ModalTablaCapas = ({
     filename: `Capa cuevas ${nombreCapa}.csv`,
   };
 
-  // useEffect(() => {
-  //   loadCuevasExportacion();
-  // }, [nombreCapa !== ""]);
-
   //Rellena el archivo y hace la descarga
   const clicDownloadCapa = () => {
     const csvData = csvReport.data
@@ -226,21 +222,13 @@ const ModalTablaCapas = ({
 
     const link = document.createElement("a");
     link.href = url;
-    //window.location.href = url;
 
     link.setAttribute("download", csvReport.filename);
-    // Adjuntar el enlace al documento y simular clic
     document.body.appendChild(link);
+
     link.click();
 
-    // Eliminar el enlace del DOM
     document.body.removeChild(link);
-    // const link = document.createElement('a');
-    // link.href = url;
-    // link.setAttribute('download', 'example.csv');
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
   };
 
   Modal.defaultStyles.overlay.zIndex = 1000;

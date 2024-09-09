@@ -39,6 +39,16 @@ export const Map = ({
   setCapasVisibles,
   cuevaActualizada,
   setCuevaActualizada,
+  todosContornos,
+  setTodosContornos,
+  contornos,
+  setContornos,
+  colorContorno,
+  setColorContorno,
+  index2,
+  setIndex2,
+  contornosVisibles,
+  setContornosVisibles,
 }) => {
   //Esto es para el manejo de la visibilidad de las cuevas
   const [cuevas, setCuevas] = useState([]);
@@ -47,34 +57,10 @@ export const Map = ({
   // const [todasCuevas, setTodasCuevas] = useState([]);
   //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
 
-  //Esto es para el manejo de visibilidad de los contornos
-  const [contornos, setContornos] = useState([]);
-  const [index2, setIndex2] = useState(0);
-  //Aqui meteré todas las cuevas de cada concejo
-  const [todosContornos, setTodosContornos] = useState([]);
-  //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
-  const [contornosVisibles, setContornosVisibles] = useState({});
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cuevaSelected, setCuevaSelected] = useState(cuevaIni);
   const [selectedPosition, setSelectedPosition] = useState([0, 0]);
   const [waypoints, setWaypoints] = useState([]);
-  const [colorContorno, setColorContorno] = useState([]);
-  //¿?
-  // const [colorSeleccionado, setcolorSeleccionado] = useState("#000");
-  // const [nombreElegido, setNombreElegido] = useState("");
-
-  // const handleMChangeValues = () => {
-  //   setcolorSeleccionado(color);
-  //   setNombreElegido(nombreDelContorno);
-  // };
-
-  // useEffect(() => {
-  //   handleMChangeValues();
-  //   console.log("He cambiado el nombre del contorno a ", nombreElegido);
-  //   console.log("He cambiado el color del contorno a ", colorSeleccionado);
-  // }, [color, nombreDelContorno]);
-  // const [coordsPolygon, setCoordsPolygon] = useState([]);
 
   const customIcon = new L.DivIcon({
     className: "custom-icon",
@@ -146,7 +132,7 @@ export const Map = ({
             contornosSeleccionados[index2]
           );
           objectColor.push(colorDelContorno ?? []);
-          console.log("Valor objectColor ", objectColor);
+          // console.log("Valor objectColor ", objectColor);
           setColorContorno((prevColor) => {
             // Agrega el nuevo color al array sin borrar los anteriores
             const newColorArray = [...prevColor, objectColor ?? []];
@@ -154,15 +140,15 @@ export const Map = ({
             // Retorna el nuevo array para actualizar el estado
             return newColorArray;
           });
-          console.log("Valor colorContorno", colorContorno);
+          // console.log("Valor colorContorno", colorContorno);
 
           const contorno = await api.getPolygons2(cont);
           let objects = [];
-          console.log("Valor de la variable contorno: ", contorno);
+          // console.log("Valor de la variable contorno: ", contorno);
           contorno.map((x) => {
             objects.push([x.longitud, x.latitud] ?? []);
           });
-          console.log("Valor variable object", objects);
+          // console.log("Valor variable object", objects);
           setContornos(objects ?? []);
 
           setTodosContornos((prevContornos) => {
@@ -180,13 +166,13 @@ export const Map = ({
             ...prevCont,
             [contornosSeleccionados[index2]]: true,
           }));
-          console.log(
-            "Tamaño del array contorno Seleccionado",
-            contornosSeleccionados.length
-          );
+          // console.log(
+          //   "Tamaño del array contorno Seleccionado",
+          //   contornosSeleccionados.length
+          // );
 
           setIndex2(index2 + 1);
-          console.log("Contorno seleccionado", contornosVisibles);
+          // console.log("Contorno seleccionado", contornosVisibles);
         } catch (error) {
           //console.error("Error cargando contornos", error);
         }

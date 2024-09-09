@@ -15,7 +15,18 @@ export const App = () => {
   const [color, setColor] = useState("#000"); // Estado para mantener el color seleccionado
   const [nombreDelContorno, setNombreDelContorno] = useState("");
   const [getContornos, setGetContornos] = useState([]);
+  //Contornos
   const [contornosSeleccionados, setContornosSeleccionados] = useState([]);
+  //Esto es para el manejo de visibilidad de los contornos
+  const [contornos, setContornos] = useState([]);
+  const [index2, setIndex2] = useState(0);
+  //Aqui meteré todas las cuevas de cada concejo
+  const [todosContornos, setTodosContornos] = useState([]);
+  //Aqui manejo que capas estan visibles, es decir para almacenar la visibilidad de cada capa.
+  const [contornosVisibles, setContornosVisibles] = useState({});
+  //Guardamos aqui los colores
+  const [colorContorno, setColorContorno] = useState([]);
+
   const [mapaNuevo, setMapaNuevo] = useState("");
   const [todasCuevas, setTodasCuevas] = useState([]);
   const [capasVisibles, setCapasVisibles] = useState({});
@@ -124,6 +135,16 @@ export const App = () => {
           setCapasVisibles={setCapasVisibles}
           cuevaActualizada={cuevaActualizada}
           setCuevaActualizada={setCuevaActualizada}
+          todosContornos={todosContornos}
+          setTodosContornos={setTodosContornos}
+          contornos={contornos}
+          setContornos={setContornos}
+          colorContorno={colorContorno}
+          setColorContorno={setColorContorno}
+          index2={index2}
+          setIndex2={setIndex2}
+          contornosVisibles={contornosVisibles}
+          setContornosVisibles={setContornosVisibles}
         />
       </div>
       <div
@@ -163,6 +184,16 @@ export const App = () => {
             setCapasVisibles={setCapasVisibles}
             cuevaActualizada={cuevaActualizada}
             setCuevaActualizada={setCuevaActualizada}
+            todosContornos={todosContornos}
+            setTodosContornos={setTodosContornos}
+            contornos={contornos}
+            setContornos={setContornos}
+            colorContorno={colorContorno}
+            setColorContorno={setColorContorno}
+            index2={index2}
+            setIndex2={setIndex2}
+            contornosVisibles={contornosVisibles}
+            setContornosVisibles={setContornosVisibles}
           />
         </div>
 

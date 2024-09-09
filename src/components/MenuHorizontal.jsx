@@ -45,6 +45,16 @@ export const MenuHorizontal = ({
   setCapasVisibles,
   cuevaActualizada,
   setCuevaActualizada,
+  todosContornos,
+  setTodosContornos,
+  contornos,
+  setContornos,
+  colorContorno,
+  setColorContorno,
+  index2,
+  setIndex2,
+  contornosVisibles,
+  setContornosVisibles,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [menuIsExpanded, setMenuIsExpanded] = useState(false);
@@ -400,6 +410,18 @@ export const MenuHorizontal = ({
         setContornoNuevo={setContornoNuevo}
         contornoEliminado={contornoEliminado}
         setContornoEliminado={setContornoEliminado}
+        contornosSeleccionados={contornosSeleccionados}
+        setContornosSeleccionados={setContornosSeleccionados}
+        todosContornos={todosContornos}
+        setTodosContornos={setTodosContornos}
+        contornos={contornos}
+        setContornos={setContornos}
+        colorContorno={colorContorno}
+        setColorContorno={setColorContorno}
+        index2={index2}
+        setIndex2={setIndex2}
+        contornosVisibles={contornosVisibles}
+        setContornosVisibles={setContornosVisibles}
       ></ModalTablaContornos>
       <ModalCreateContour
         isOpen={/*crearContorno*/ openModalCreateContour}
