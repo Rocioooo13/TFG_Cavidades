@@ -6,6 +6,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import ModalForm from "./ModalForm";
 import ModalTablaCapas from "./ModalTablaCapas";
 import ModalTablaContornos from "./ModalTablaContornos";
+import geojson from "geojson";
 //import { ExportCSV } from "./ExportCSV";
 import api, { createTable, createUser, obtenertablas } from "../api";
 import { Form } from "react-bootstrap";
@@ -247,6 +248,174 @@ export const MenuHorizontal = ({
     return regex.test(tabla.nombre.toLowerCase());
   });
 
+  const [contornoGeoJSON, setContornoGeoJSON] = useState([]);
+  const loadContornoGeoJSON = async () => {
+    let objectGeoJSON = await api.getPolygons("pruebana3");
+
+    // Transforma los datos si es necesario
+    if (objectGeoJSON && Array.isArray(objectGeoJSON)) {
+      objectGeoJSON = objectGeoJSON.map((item) => ({
+        ...item,
+        latitud: item.latitud, // Asume que viene con otra propiedad que debes transformar
+        longitud: item.longitud, // Ajusta estos nombres según sea necesario
+      }));
+    }
+
+    setContornoGeoJSON(objectGeoJSON ?? []);
+  };
+  useEffect(() => {
+    loadContornoGeoJSON();
+  });
+
+  const exportToGeoJSON = async () => {
+    setTimeout(console.log(contornosSeleccionados.length), 200);
+    if (!contornosSeleccionados || contornosSeleccionados.length === 0) {
+      console.error("No hay contornos seleccionados para exportar.");
+      return;
+    }
+
+    const date = new Date();
+
+    // Estructura base de un archivo GeoJSON
+    const geoJSON = {
+      type: "FeatureCollection",
+      generator: "catalogo_cavidades",
+      timestamp: date.toISOString(),
+      features: [], // Este array contendrá las características (features)
+    };
+
+    setTimeout(console.log(contornosSeleccionados.length), 200);
+    // Bucle for para recorrer los contornos seleccionados
+    for (let i = 0; i < contornosSeleccionados.length; i++) {
+      const contorno = contornosSeleccionados[i].split(" ").join("");
+      const color = colorContorno[i]; // Limpiamos el nombre del contorno si es necesario
+
+      try {
+        // Llamada a la API para obtener las coordenadas del polígono
+        const objectGeoJSONTemp = await api.getPolygons(contorno);
+
+        // Verifica si hay datos válidos
+        if (objectGeoJSONTemp && objectGeoJSONTemp.length > 0) {
+          console.log(
+            `Contorno: ${contorno}, Datos recibidos:`,
+            objectGeoJSONTemp
+          );
+
+          // Estructura de cada feature (polígono) en el GeoJSON
+          const featuresGeoJSON = {
+            type: "Feature",
+            properties: {
+              nombre: contorno, // Se puede ajustar según sea necesario
+              color: color[i], // Puedes ajustar el color si tienes esta información
+            },
+            geometry: {
+              type: "Polygon",
+              coordinates: [[]], // Coordenadas del polígono
+            },
+          };
+
+          // Bucle para rellenar las coordenadas del polígono
+          for (let j = 0; j < objectGeoJSONTemp.length; j++) {
+            const line = objectGeoJSONTemp[j];
+            featuresGeoJSON.geometry.coordinates[0].push([
+              line.longitud,
+              line.latitud,
+            ]);
+          }
+
+          // Si hay coordenadas, cerramos el polígono uniendo el último punto con el primero
+          if (featuresGeoJSON.geometry.coordinates[0].length > 0) {
+            const firstPoint = featuresGeoJSON.geometry.coordinates[0][0];
+            featuresGeoJSON.geometry.coordinates[0].push(firstPoint);
+          }
+
+          // Añadimos el polígono (feature) al GeoJSON
+          geoJSON.features.push(featuresGeoJSON);
+          console.log("Feature añadida:", featuresGeoJSON);
+        } else {
+          console.warn(`No se encontraron datos para el contorno: ${contorno}`);
+        }
+      } catch (error) {
+        console.error(
+          `Error al obtener datos para el contorno: ${contorno}`,
+          error
+        );
+      }
+    }
+
+    // Verifica si se agregaron características (features) al GeoJSON
+    // if (geoJSON.features.length === 0) {
+    //   console.error("No se agregaron features al GeoJSON.");
+    //   return;
+    // }
+    for (let i = 0; i < capasSeleccionadas.length; i++) {
+      const capa = capasSeleccionadas[i].split(" ").join(""); // Limpiamos el nombre del contorno si es necesario
+
+      try {
+        // Llamada a la API para obtener las coordenadas del polígono
+        const objectGeoJSONTempCapa = await api.getCuevas2(capa);
+
+        // Verifica si hay datos válidos
+        if (objectGeoJSONTempCapa && objectGeoJSONTempCapa.length > 0) {
+          console.log(`Capa: ${capa}, Datos recibidos:`, objectGeoJSONTempCapa);
+
+          // Bucle para rellenar las coordenadas del polígono
+          for (let j = 0; j < objectGeoJSONTempCapa.length; j++) {
+            const line = objectGeoJSONTempCapa[j];
+
+            // Crear una nueva featureGeoJSON para cada línea
+            const featuresGeoJSONCapa = {
+              type: "Feature",
+              properties: {
+                denominacion: line.denominacion, // Se puede ajustar según sea necesario
+                X: line.X,
+                Y: line.Y,
+                Z: line.Z,
+                elipsoide: line.elipsoide,
+                huso: line.huso,
+                zonaUTM: line.zonaUTM,
+                hermisferio: line.hermisferio,
+                concejo: capa,
+                latitud: line.latitud,
+                longitud: line.longitud, // Puedes ajustar el color si tienes esta información
+              },
+              geometry: {
+                type: "Point",
+                coordinates: [line.longitud, line.latitud], // Coordenadas del punto
+              },
+            };
+
+            // Añadimos el punto (feature) al GeoJSON
+            geoJSON.features.push(featuresGeoJSONCapa);
+            console.log("Feature añadida:", featuresGeoJSONCapa);
+          }
+        } else {
+          console.warn(`No se encontraron datos para el contorno: ${capa}`);
+        }
+      } catch (error) {
+        console.error(
+          `Error al obtener datos para el contorno: ${capa}`,
+          error
+        );
+      }
+    }
+
+    // Creamos un archivo blob con el contenido del GeoJSON
+    const blob = new Blob([JSON.stringify(geoJSON, null, 2)], {
+      type: "application/json",
+    });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "contornos.geojson");
+    document.body.appendChild(link);
+    link.click();
+
+    // Limpiamos el enlace después de descargar
+    window.URL.revokeObjectURL(url);
+    link.remove();
+  };
+
   return (
     <div style={{ zIndex: 2, flex: "none" }}>
       <Navbar
@@ -359,9 +528,9 @@ export const MenuHorizontal = ({
                   Exportar proyecto a...
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                {/* <NavDropdown.Item onClick={clicDownload} href="#action/3.2"> */}
-                {/* Exportar capa a... */}
-                {/* </NavDropdown.Item> */}
+                <NavDropdown.Item onClick={exportToGeoJSON} href="#action/3.2">
+                  GeoJSON
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
             {/* <Nav>
