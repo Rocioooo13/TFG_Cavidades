@@ -8,6 +8,7 @@
     "@craco/craco": "^7.1.0",
     "bootstrap": "^5.3.2",
     "geojson": "^0.5.0",
+    "geojson2shp": "^0.5.0",
     "leaflet": "^1.9.4",
     "leaflet-routing-machine": "^3.2.12",
     "papaparse": "^5.4.1",

@@ -9,8 +9,9 @@ import ModalTablaContornos from "./ModalTablaContornos";
 import geojson from "geojson";
 import tokml from "tokml";
 import vkbeautify from "vkbeautify";
+import geojson2shp from "geojson2shp";
 //import { ExportCSV } from "./ExportCSV";
-import api, { createTable, createUser, obtenertablas } from "../api";
+import api, { createTable, obtenertablas } from "../api";
 import { Form } from "react-bootstrap";
 
 //Para exportar
@@ -186,12 +187,12 @@ export const MenuHorizontal = ({
 
   useEffect(() => {
     loadTablas();
-    loadCuevas();
+    // loadCuevas();
   }, []);
 
   useEffect(() => {
     loadTablas();
-    loadCuevas();
+    // loadCuevas();
   }, [capaNueva === true]);
 
   const loadContornos = async () => {
@@ -239,10 +240,10 @@ export const MenuHorizontal = ({
     imprimirNombreContorno();
   }, [tablaSeleccionada2]);
 
-  const loadCuevas = async () => {
-    const cuevasArray = await api.getCuevas();
-    setCuevas(cuevasArray ?? []);
-  };
+  // const loadCuevas = async () => {
+  //   const cuevasArray = await api.getCuevas();
+  //   setCuevas(cuevasArray ?? []);
+  // };
 
   //Para buscar una capa
   const filteredConcejos = tablas.filter((tabla) => {
@@ -293,8 +294,8 @@ export const MenuHorizontal = ({
         for (let j = 0; j < objectGeoJSONTemp.length; j++) {
           const line = objectGeoJSONTemp[j];
           featuresGeoJSON.geometry.coordinates[0].push([
-            line.longitud,
-            line.latitud,
+            Number(line.longitud),
+            Number(line.latitud),
           ]);
         }
 
@@ -311,7 +312,7 @@ export const MenuHorizontal = ({
     for (let i = 0; i < capasSeleccionadas.length; i++) {
       const capa = capasSeleccionadas[i].split(" ").join("");
 
-      const objectGeoJSONTempCapa = await api.getCuevas2(capa);
+      const objectGeoJSONTempCapa = await api.getLayers(capa);
 
       // Verifica si hay datos válidos
       if (objectGeoJSONTempCapa && objectGeoJSONTempCapa.length > 0) {
@@ -325,20 +326,20 @@ export const MenuHorizontal = ({
             type: "Feature",
             properties: {
               denominacion: line.denominacion,
-              X: line.X,
-              Y: line.Y,
-              Z: line.Z,
+              X: Number(line.X),
+              Y: Number(line.Y),
+              Z: Number(line.Z),
               elipsoide: line.elipsoide,
-              huso: line.huso,
+              huso: Number(line.huso),
               zonaUTM: line.zonaUTM,
               hemisferio: line.hemisferio,
               concejo: capa,
-              latitud: line.latitud,
-              longitud: line.longitud,
+              latitud: Number(line.latitud),
+              longitud: Number(line.longitud),
             },
             geometry: {
               type: "Point",
-              coordinates: [line.longitud, line.latitud],
+              coordinates: [Number(line.longitud), Number(line.latitud)],
             },
           };
 
@@ -405,8 +406,8 @@ export const MenuHorizontal = ({
         for (let j = 0; j < objectGeoJSONTemp.length; j++) {
           const line = objectGeoJSONTemp[j];
           featuresGeoJSON.geometry.coordinates[0].push([
-            Number(line.longitud),
             Number(line.latitud),
+            Number(line.longitud),
           ]);
         }
 
@@ -425,7 +426,7 @@ export const MenuHorizontal = ({
     for (let i = 0; i < capasSeleccionadas.length; i++) {
       const capa = capasSeleccionadas[i].split(" ").join("");
 
-      const objectGeoJSONTempCapa = await api.getCuevas2(capa);
+      const objectGeoJSONTempCapa = await api.getLayers(capa);
 
       if (objectGeoJSONTempCapa && objectGeoJSONTempCapa.length > 0) {
         // console.log(`Capa: ${capa}, Datos recibidos:`, objectGeoJSONTempCapa);
@@ -452,7 +453,7 @@ export const MenuHorizontal = ({
             },
             geometry: {
               type: "Point",
-              coordinates: [Number(line.longitud), Number(line.latitud)], // Coordenadas del punto
+              coordinates: [Number(line.latitud), Number(line.longitud)], // Coordenadas del punto
             },
           };
 
@@ -480,6 +481,210 @@ export const MenuHorizontal = ({
     // Limpiamos el enlace después de descargar
     window.URL.revokeObjectURL(url);
     link.remove();
+  };
+
+  const exportToGPX = async () => {
+    const date = new Date().toISOString();
+
+    // Estructura base del archivo GPX
+    let gpx = `<?xml version="1.0" encoding="UTF-8"?>
+  <gpx version="1.1" creator="MyApp" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+    <metadata>
+      <time>${date}</time>
+    </metadata>`;
+
+    // Bucle for para recorrer los contornos seleccionados y exportarlos como tracks (polígonos)
+    for (let i = 0; i < contornosSeleccionados.length; i++) {
+      const contorno = contornosSeleccionados[i].split(" ").join("");
+      const color = colorContorno[i]; // No se usa en GPX, pero lo dejamos por si se necesita en otro lugar
+
+      const objectGPXTemp = await api.getPolygons(contorno);
+
+      if (objectGPXTemp && objectGPXTemp.length > 0) {
+        gpx += `
+    <trk>
+      <name>${contorno}</name>
+      <trkseg>`;
+
+        // Bucle for para añadir cada punto (vértice) del polígono como un trackpoint
+        for (let j = 0; j < objectGPXTemp.length; j++) {
+          const line = objectGPXTemp[j];
+          gpx += `
+        <trkpt lat="${Number(line.longitud)}" lon="${Number(line.latitud)}">
+          <ele>${line.elevacion || 0}</ele>
+        </trkpt>`;
+        }
+
+        // Cerramos el polígono añadiendo el primer punto al final
+        const firstPoint = objectGPXTemp[0];
+        gpx += `
+        <trkpt lat="${Number(firstPoint.longitud)}" lon="${Number(
+          firstPoint.latitud
+        )}">
+          <ele>${firstPoint.elevacion || 0}</ele>
+        </trkpt>`;
+
+        gpx += `
+      </trkseg>
+    </trk>`;
+      }
+    }
+
+    // Bucle for para recorrer las capas seleccionadas y exportarlas como waypoints (puntos)
+    for (let i = 0; i < capasSeleccionadas.length; i++) {
+      const capa = capasSeleccionadas[i].split(" ").join("");
+
+      const objectGPXTempCapa = await api.getLayers(capa);
+
+      if (objectGPXTempCapa && objectGPXTempCapa.length > 0) {
+        // Bucle for para añadir cada capa como un waypoint
+        for (let j = 0; j < objectGPXTempCapa.length; j++) {
+          const line = objectGPXTempCapa[j];
+          const zValue = new String(line.Z).replace(" m", "");
+          gpx += `
+    <wpt lat="${Number(line.longitud)}" lon="${Number(line.latitud)}">
+      <name>${line.denominacion || capa}</name>
+      <ele>${zValue || 0}</ele>
+      <desc>Coordenadas: (${line.X}, ${line.Y}, Z: ${zValue})</desc>
+    </wpt>`;
+        }
+      }
+    }
+
+    // Cerrar el archivo GPX
+    gpx += `
+  </gpx>`;
+
+    // Crear el archivo GPX como un blob
+    const blob = new Blob([gpx], {
+      type: "application/gpx+xml",
+    });
+
+    // Crear un enlace para descargar el archivo
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "exported_data.gpx");
+    document.body.appendChild(link);
+    link.click();
+
+    // Limpiar el enlace después de la descarga
+    window.URL.revokeObjectURL(url);
+    link.remove();
+  };
+
+  const { convert } = require("geojson2shp");
+
+  const exportToShapefile = async () => {
+    const date = new Date();
+
+    // Estructura base de un archivo GeoJSON
+    const geoJSON = {
+      type: "FeatureCollection",
+      generator: "catalogo_cavidades",
+      timestamp: date.toISOString(),
+      features: [],
+    };
+
+    // Recorrer contornos seleccionados
+    for (let i = 0; i < contornosSeleccionados.length; i++) {
+      const contorno = contornosSeleccionados[i].split(" ").join("");
+      const color = colorContorno[i];
+
+      const objectGeoJSONTemp = await api.getPolygons(contorno);
+
+      if (objectGeoJSONTemp && objectGeoJSONTemp.length > 0) {
+        const featuresGeoJSON = {
+          type: "Feature",
+          properties: {
+            nombre: contorno,
+            color: color,
+          },
+          geometry: {
+            type: "Polygon",
+            coordinates: [[]],
+          },
+        };
+
+        for (let j = 0; j < objectGeoJSONTemp.length; j++) {
+          const line = objectGeoJSONTemp[j];
+          featuresGeoJSON.geometry.coordinates[0].push([
+            Number(line.latitud),
+            Number(line.longitud),
+          ]);
+        }
+
+        // Cerramos el polígono
+        if (featuresGeoJSON.geometry.coordinates[0].length > 0) {
+          const firstPoint = featuresGeoJSON.geometry.coordinates[0][0];
+          featuresGeoJSON.geometry.coordinates[0].push(firstPoint);
+        }
+
+        geoJSON.features.push(featuresGeoJSON);
+      }
+    }
+
+    // Recorrer capas seleccionadas
+    for (let i = 0; i < capasSeleccionadas.length; i++) {
+      const capa = capasSeleccionadas[i].split(" ").join("");
+      const objectGeoJSONTempCapa = await api.getLayers(capa);
+
+      if (objectGeoJSONTempCapa && objectGeoJSONTempCapa.length > 0) {
+        for (let j = 0; j < objectGeoJSONTempCapa.length; j++) {
+          const line = objectGeoJSONTempCapa[j];
+
+          const featuresGeoJSONCapa = {
+            type: "Feature",
+            properties: {
+              denominacion: line.denominacion,
+              longitud: line.latitud,
+              latitud: line.longitud,
+              X: line.X,
+              Y: line.Y,
+              Z: line.Z,
+              "DATUM, HZ": line.elipsoide + ", " + line.huso + line.zonaUTM,
+              // elipsoide: ,
+              // huso: ,
+              // zonaUTM: ,
+              // hemisferio: line.hemisferio,
+              concejo: capa,
+            },
+            geometry: {
+              type: "Point",
+              coordinates: [Number(line.latitud), Number(line.longitud)],
+            },
+          };
+
+          geoJSON.features.push(featuresGeoJSONCapa);
+        }
+      }
+    }
+
+    // Definir la ruta de salida para el archivo zip
+    const outputPath = "C:/Users/rocio/Desktop/contornos.zip";
+    const options = {
+      layer: "mi-capa",
+      targetCrs: 2154,
+    };
+    // console.log(geoJSON);
+
+    try {
+      // Asegúrate de que las coordenadas sean válidas
+      for (const feature of geoJSON.features) {
+        if (
+          feature.geometry.coordinates.length === 0 ||
+          !Array.isArray(feature.geometry.coordinates)
+        ) {
+          throw new Error("Coordenadas inválidas en GeoJSON");
+        }
+      }
+
+      // Convertir y exportar a Shapefile
+      await convert(geoJSON, outputPath, options);
+      console.log("Shapefile creado exitosamente en:", outputPath);
+    } catch (error) {
+      console.error("Error al crear el Shapefile:", error);
+    }
   };
 
   return (
@@ -587,13 +792,13 @@ export const MenuHorizontal = ({
               </NavDropdown>
               <NavDropdown
                 autoClose="true"
-                title="Exportar"
+                title="Exportar proyecto a..."
                 className="collapsible-nav-dropdown"
               >
-                <NavDropdown.Item onClick={closeNav} href="#action/3.1">
+                {/*<NavDropdown.Item onClick={closeNav} href="#action/3.1">
                   Exportar proyecto a...
                 </NavDropdown.Item>
-                <NavDropdown.Divider />
+                <NavDropdown.Divider />*/}
                 <NavDropdown.Item onClick={exportToGeoJSON} href="#action/3.2">
                   GeoJSON
                 </NavDropdown.Item>
@@ -602,15 +807,20 @@ export const MenuHorizontal = ({
                   KML
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.2">
+                <NavDropdown.Item
+                  onClick={exportToShapefile}
+                  href="#action/3.2"
+                >
                   Shapefile
                 </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.2">GML</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.2">GPX</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.2">OSM</NavDropdown.Item>
+                {/*<NavDropdown.Item href="#action/3.2">GML</NavDropdown.Item>
+                <NavDropdown.Divider />*/}
+                <NavDropdown.Item onClick={exportToGPX} href="#action/3.2">
+                  GPX
+                </NavDropdown.Item>
+                {/*<NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.2">OSM</NavDropdown.Item>*/}
               </NavDropdown>
             </Nav>
             {/* <Nav>

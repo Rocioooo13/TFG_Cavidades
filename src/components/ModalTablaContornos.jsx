@@ -86,7 +86,7 @@ const ModalTablaContornos = ({
           const x = todosContornos.findIndex((contornos) =>
             contornos.find((contorno) => contorno.nombre === nombreContorno)
           );
-          console.log("TodosContornos antes:", todosContornos);
+          //console.log("TodosContornos antes:", todosContornos);
 
           setTodosContornos((prevContornos) => {
             const filtered = prevContornos.filter((_, index) => {
@@ -94,29 +94,29 @@ const ModalTablaContornos = ({
             });
             return filtered;
           });
-          setTimeout(
-            console.log("TodosContornos despues:", todosContornos),
-            200
-          );
+          // setTimeout(
+          //   console.log("TodosContornos despues:", todosContornos),
+          //   200
+          // );
 
-          console.log("ColorContorno antes:", colorContorno);
+          // console.log("ColorContorno antes:", colorContorno);
           setColorContorno((prevColorContornos) => {
             const filtered = prevColorContornos.filter((_, index) => {
               return index !== x;
             });
             return filtered;
           });
-          setTimeout(console.log("colorContorno despues:", colorContorno), 200);
+          // setTimeout(console.log("colorContorno despues:", colorContorno), 200);
 
-          console.log("Contornos visibles antes:", contornosVisibles);
+          // console.log("Contornos visibles antes:", contornosVisibles);
           setContornosVisibles((prevContornosVisibles) => {
             delete prevContornosVisibles[nombreContorno];
             return prevContornosVisibles;
           });
-          setTimeout(
-            () => console.log("Contorno visibles después:", contornosVisibles),
-            200
-          );
+          // setTimeout(
+          //   () => console.log("Contorno visibles después:", contornosVisibles),
+          //   200
+          // );
         } catch (error) {
           console.error("Error cargando contornos:", error);
         }

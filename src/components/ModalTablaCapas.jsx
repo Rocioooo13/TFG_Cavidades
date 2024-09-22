@@ -50,7 +50,7 @@ const ModalTablaCapas = ({
     if (!nombreCapa) {
       setCapa([]);
     } else {
-      const getCapa = await api.getCuevas2(nombreCapa.split(" ").join(""));
+      const getCapa = await api.getLayers(nombreCapa.split(" ").join(""));
       setCapa(getCapa ?? []);
     }
   };
