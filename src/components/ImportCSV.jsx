@@ -73,7 +73,8 @@ const ImportCSV = ({
             item.hemisferio,
             conc,
             lat,
-            lon
+            lon,
+            item.archivo
             //document.getElementById("archivo").value
           )
             .then((_) => {

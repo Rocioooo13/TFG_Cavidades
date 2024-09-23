@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { Map } from "./Map";
 import { useEffect, useState } from "react";
 import api, { updateCueva, deleteCueva } from "../api";
+import ModalFileViewer from "./ModalFileViewer";
 
 const customStyles = {
   content: {
@@ -24,6 +25,18 @@ const ModalFormUpdate = ({
 }) => {
   // console.log(cuevaSelected);
   // Override zIndex to display the modal overlayed to the map
+  const [openFile, setOpenFile] = useState(false);
+  const [urlArchivoCueva, setUrlArchivoCueva] = useState("");
+  const openFileModal = () => {
+    const archivo = document.getElementById("archivo").value;
+    setUrlArchivoCueva(archivo);
+    setTimeout(console.log(urlArchivoCueva), setOpenFile(true), 200);
+  };
+
+  const closefileModal = () => {
+    setOpenFile(false);
+  };
+
   const pruebaObtenerValor = () => {
     // Obtener el valor del label
     const inputValor = document.getElementById("denominacion").value;
@@ -167,6 +180,13 @@ const ModalFormUpdate = ({
       document.getElementById("hemisferio1").selectedIndex;
     const hemisferio =
       document.getElementById("hemisferio1")[hemisferioIndex].label;
+    let archivo = document.getElementById("archivo").value;
+    const archivoTemp = document.getElementById("archivo").value;
+    if (archivoTemp === "" || archivoTemp === null) {
+      archivo = null;
+    } else {
+      archivo = archivoTemp;
+    }
 
     // setTimeout(
     //   () => updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion),
@@ -184,6 +204,7 @@ const ModalFormUpdate = ({
       zonautm,
       latlong[0],
       latlong[1],
+      archivo,
       cuevaSelected.id,
       cuevaSelected.denominacion
     );
@@ -381,7 +402,33 @@ const ModalFormUpdate = ({
             defaultValue={cuevaSelected.concejo}
           />
         </div>
+        <div className="inputContainer">
+          <label className="labelForm">Ruta archivo:</label>
+          <input
+            className="inputForm"
+            type="text"
+            placeholder="Escribe el concejo al que pertenece la cueva"
+            id="archivo"
+            defaultValue={cuevaSelected.archivo}
+          />
+        </div>
+        <div className="inputContainer">
+          <button onClick={openFileModal} className="botonForm" type="button">
+            Ver Archivo
+          </button>
+        </div>
 
+        {/* <div className="inputContainer">
+          <label className="Archivo">Archivo:</label> */}
+
+        {/* <input
+            className="inputForm"
+            type="text"
+            placeholder="Escribe el concejo al que pertenece la cueva"
+            id="concejo"
+            defaultValue={cuevaSelected.concejo}
+          /> */}
+        {/* </div> */}
         {/* <div className="inputContainer">
           <label className="labelForm">Archivo</label>
           <input
@@ -417,6 +464,18 @@ const ModalFormUpdate = ({
           </button>
         </div>
       </form>
+      <ModalFileViewer
+        isOpen={openFile}
+        onRequestClose={closefileModal}
+        urlArchivoCueva={urlArchivoCueva}
+        // capasSeleccionadas={capasSeleccionadas}
+        // todasCuevas={todasCuevas}
+        // setTodasCuevas={setTodasCuevas}
+        // index={index}
+        // setIndex={setIndex}
+        // capaNueva={capaNueva}
+        // setCapaNueva={setCapaNueva}
+      />
     </Modal>
   );
 };

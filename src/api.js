@@ -49,7 +49,7 @@ module.exports = {
   createTable(concejo) {
     return new Promise((resolve, reject) => {
       const nombreLayer = addNameOfLayerOrContour(concejo, "layer");
-      const sql = `CREATE TABLE IF NOT EXISTS ${nombreLayer} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT)`;
+      const sql = `CREATE TABLE IF NOT EXISTS ${nombreLayer} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo TEXT)`;
       db.run(sql, function (err) {
         if (err) {
           alert("Error al crear la capa. Detalle del error: ", err.message);
@@ -173,8 +173,8 @@ module.exports = {
     hemisferio,
     concejo,
     latitud,
-    longitud
-    //archivo
+    longitud,
+    archivo
   ) {
     return new Promise((resolve, reject) => {
       const nombreCapa = addNameOfLayerOrContour(concejo, "layer");
@@ -193,8 +193,8 @@ module.exports = {
             db.run(
               //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo)
               // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
-              `INSERT INTO ${nombreCapa} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              `INSERT INTO ${nombreCapa} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
               [
                 denominacion,
                 X,
@@ -207,7 +207,7 @@ module.exports = {
                 concejo,
                 latitud,
                 longitud,
-                //archivo,
+                archivo,
               ],
               function (err) {
                 if (err) {
@@ -281,6 +281,7 @@ module.exports = {
     zonautm,
     lat,
     long,
+    archivo,
     id,
     denominacionAnterior
   ) {
@@ -297,8 +298,8 @@ module.exports = {
           if (row) {
             // Ejecuta la inserción
             db.run(
-              `UPDATE ${nombreCapa} SET denominacion = ?, X = ?,Y = ?, Z= ?, latitud= ?, longitud= ? WHERE id IS ?`,
-              [denominacion, xDelForm, yDelForm, zDelForm, lat, long, id],
+              `UPDATE ${nombreCapa} SET denominacion = ?, X = ?,Y = ?, Z= ?, latitud= ?, longitud= ?, archivo = ? WHERE id IS ?`,
+              [denominacion, xDelForm, yDelForm, zDelForm, lat, long, archivo, id],
               function (err) {
                 if (err) {
                   alert(

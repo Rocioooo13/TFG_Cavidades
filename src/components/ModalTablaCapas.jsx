@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import api, { deleteCueva, deleteCapa, deleteCuevaListaCapas } from "../api";
+import ModalFileViewer from "./ModalFileViewer";
 
 const ModalTablaCapas = ({
   isOpen,
@@ -186,6 +187,7 @@ const ModalTablaCapas = ({
     { label: "Concejo", key: "concejo" },
     { label: "Latitud", key: "latitud" },
     { label: "Longitud", key: "longitud" },
+    { label: "Archivo", key: "archivo" },
   ];
 
   //Obtengo las cuevas y las guardo en la variable cuevas
@@ -209,7 +211,7 @@ const ModalTablaCapas = ({
     const csvData = csvReport.data
       .map(
         (item) =>
-          `${item.denominacion},${item.X},${item.Y},${item.Z},${item.elipsoide},${item.huso},${item.zonaUTM},${item.hemisferio},${item.concejo},${item.latitud},${item.longitud}`
+          `${item.denominacion},${item.X},${item.Y},${item.Z},${item.elipsoide},${item.huso},${item.zonaUTM},${item.hemisferio},${item.concejo},${item.latitud},${item.longitud}, ${item.archivo}`
       )
       .join("\n");
 
@@ -229,6 +231,21 @@ const ModalTablaCapas = ({
     link.click();
 
     document.body.removeChild(link);
+  };
+  const [openFile, setOpenFile] = useState(false);
+  const [urlArchivoCueva, setUrlArchivoCueva] = useState("");
+  const openFileModal = (archivo) => {
+    // const archivo = document.getElementById("archivo").value;
+
+    setOpenFile(true);
+  };
+  const verArchivo = (archivo) => {
+    setUrlArchivoCueva(archivo);
+    setTimeout(console.log(urlArchivoCueva), openFileModal(), 200);
+  };
+
+  const closefileModal = () => {
+    setOpenFile(false);
   };
 
   Modal.defaultStyles.overlay.zIndex = 1000;
@@ -299,6 +316,9 @@ const ModalTablaCapas = ({
               <th style={{ border: "1px solid black", padding: "8px" }}>
                 Longitud
               </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Archivo
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -346,6 +366,18 @@ const ModalTablaCapas = ({
                   </td>
                   <td style={{ border: "1px solid black", padding: "8px" }}>
                     {item.longitud}
+                  </td>
+                  <td style={{ border: "1px solid black", padding: "8px" }}>
+                    {/* {item.archivo} */}
+                    {item.archivo != null && item.archivo != "" ? (
+                      <button
+                        onClick={() => verArchivo(item.archivo)}
+                        className="botonForm"
+                        type="button"
+                      >
+                        Ver Archivo
+                      </button>
+                    ) : null}
                   </td>
                   <td
                     style={{ border: "1px solid black", padding: "8px" }}
@@ -408,6 +440,11 @@ const ModalTablaCapas = ({
           Cerrar
         </button>
       </div>
+      <ModalFileViewer
+        isOpen={openFile}
+        onRequestClose={closefileModal}
+        urlArchivoCueva={urlArchivoCueva}
+      />
     </Modal>
   );
 };

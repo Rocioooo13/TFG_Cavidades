@@ -173,6 +173,13 @@ const ModalForm = ({
       const huso = document.getElementById("huso").value;
       const zonautmIndex = document.getElementById("zona").selectedIndex;
       const zonautm = document.getElementById("zona")[zonautmIndex].label;
+      let archivo = document.getElementById("archivo").value;
+      const archivoTemp = document.getElementById("archivo").value;
+      if (archivoTemp === "" || archivoTemp === null) {
+        archivo = null;
+      } else {
+        archivo = archivoTemp;
+      }
       //console.log(zonautm);
       const hemisferioIndex =
         document.getElementById("hemisferio1").selectedIndex;
@@ -190,8 +197,8 @@ const ModalForm = ({
         hemisferio,
         conc,
         latlong[0],
-        latlong[1]
-        //document.getElementById("archivo").value
+        latlong[1],
+        archivo
       )
         .then((_) => {
           // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
@@ -335,6 +342,16 @@ const ModalForm = ({
             type="text"
             placeholder="Escribe el concejo al que pertenece la cueva"
             id="concejo"
+          />
+        </div>
+
+        <div className="inputContainer">
+          <label className="labelForm">Ruta archivo:</label>
+          <input
+            className="inputForm"
+            type="text"
+            placeholder="C:/Users/rocio/Desktop/archivo.pdf"
+            id="archivo"
           />
         </div>
 
