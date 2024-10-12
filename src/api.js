@@ -1,12 +1,12 @@
 const sqlite3 = require("sqlite3");
 
 const db = new sqlite3.Database("cavidades.sqlite3");
-/*const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
-db.run(sqlMapa, function (err) {
-  if (err) {
-    console.log("Ha habido un error"); //err.message
-  }
-});*/
+// const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
+// db.run(sqlMapa, function (err) {
+//   if (err) {
+//     console.log("Ha habido un error"); //err.message
+//   }
+// });
 
 function addNameOfLayerOrContour(nombre, type) {
   return nombre + "_" + type;
@@ -62,8 +62,17 @@ module.exports = {
     });
   },
   createListaCapas() {
-    const sql = `CREATE TABLE IF NOT EXISTS listaCapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,nombre TEXT)`;
-    return db.run(sql);
+    return new Promise((resolve, reject) => {
+      const sql = `CREATE TABLE IF NOT EXISTS listaCapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,nombre TEXT)`;
+      return db.run(sql, function (err) {
+        if (err) {
+          console.log("Ha habido un error: ", err.message);
+          return reject(err);
+        } else {
+          return resolve();
+        }
+      });
+    });
   },
   añadirCapaListaCapas(conc2) {
     const nombreCapa = addNameOfLayerOrContour(conc2, "layer");
@@ -94,34 +103,6 @@ module.exports = {
     });
   },
 
-  getMaps() {
-    return new Promise((resolve, reject) => {
-      db.all("SELECT * FROM mapas", (error, rows) => {
-        if (error) {
-          console.error("DB Error: ", error);
-          return reject(error);
-        }
-
-        // console.log(rows);
-        return resolve(rows);
-      });
-    });
-  },
-
-  getMap(id) {
-    return new Promise((resolve, reject) => {
-      db.get("SELECT url FROM mapas WHERE id = ?", [id], (error, row) => {
-        if (error) {
-          console.error("DB Error: ", error);
-          return reject(error);
-        }
-
-        // console.log(row);
-        return resolve(row.url);
-      });
-    });
-    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
-  },
   addMap(nombre, url) {
     return new Promise((resolve, reject) => {
       db.get(`SELECT 1 FROM mapas WHERE url = ?`, [url], (err, row) => {
@@ -157,6 +138,67 @@ module.exports = {
             "Ya existe este mapa en la lista de propiedades de mapas."
           );
           return reject();
+        }
+      });
+    });
+  },
+
+  createMapTable() {
+    return new Promise((resolve, reject) => {
+      const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
+      db.run(sqlMapa, function (err) {
+        if (err) {
+          console.log("Ha habido un error: ", err.message);
+          return reject(err);
+        } else {
+          return resolve();
+        }
+      });
+    });
+  },
+
+  getMaps() {
+    return new Promise((resolve, reject) => {
+      // TODO -> Comprobar
+      db.all("SELECT * FROM mapas", (error, rows) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+
+        // console.log(rows);
+        return resolve(rows);
+      });
+    });
+  },
+
+  getMap(id) {
+    return new Promise((resolve, reject) => {
+      db.get("SELECT url FROM mapas WHERE id = ?", [id], (error, row) => {
+        if (error) {
+          console.error("DB Error: ", error);
+          return reject(error);
+        }
+
+        // console.log(row);
+        return resolve(row?.url ?? null);
+      });
+    });
+    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
+  },
+
+  deleteMapaListaMapas(id) {
+    return new Promise((resolve, reject) => {
+      // const nombreCapa = addNameOfLayerOrContour(nombreConcejo, "layer");
+      db.run(`DELETE FROM mapas WHERE id = ?`, [id], function (err) {
+        if (err) {
+          alert("Error al eliminar la cueva. Detalle del error: ", err.message);
+          console.error("Error al eliminar el registro:", err.message);
+          reject(err);
+        } else {
+          alert("El mapa se ha eliminado correctamente");
+          console.log("Registro eliminado correctamente.");
+          resolve();
         }
       });
     });
@@ -299,7 +341,16 @@ module.exports = {
             // Ejecuta la inserción
             db.run(
               `UPDATE ${nombreCapa} SET denominacion = ?, X = ?,Y = ?, Z= ?, latitud= ?, longitud= ?, archivo = ? WHERE id IS ?`,
-              [denominacion, xDelForm, yDelForm, zDelForm, lat, long, archivo, id],
+              [
+                denominacion,
+                xDelForm,
+                yDelForm,
+                zDelForm,
+                lat,
+                long,
+                archivo,
+                id,
+              ],
               function (err) {
                 if (err) {
                   alert(
@@ -552,7 +603,7 @@ module.exports = {
             console.error("DB Error: ", error);
             return reject(error);
           }
-          return resolve(row.color);
+          return resolve(row?.color ?? null);
         }
       );
     });

@@ -180,6 +180,7 @@ export const MenuHorizontal = ({
   // }, [tablaSeleccionada]);
 
   const loadTablas = async () => {
+    await api.createListaCapas();
     const tablaSelected = await api.obtenertablas();
     setTablas(tablaSelected ?? []);
     // console.log(tablaSelected);
@@ -196,6 +197,7 @@ export const MenuHorizontal = ({
   }, [capaNueva === true]);
 
   const loadContornos = async () => {
+    await api.createContourPropsTable();
     const contornoSelected = await api.obtenerContornos();
     setGetContornos(contornoSelected ?? []);
     // console.log(tablaSelected);

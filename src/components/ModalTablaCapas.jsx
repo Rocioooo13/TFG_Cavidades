@@ -40,6 +40,7 @@ const ModalTablaCapas = ({
   //Los nombres de las tablas que hay en la BD
   const [tablas, setTablas] = useState([]);
   const loadTablas = async () => {
+    await api.createListaCapas();
     const tablaSelected = await api.obtenertablas();
     setTablas(tablaSelected ?? []);
     // console.log(tablaSelected);
@@ -193,7 +194,11 @@ const ModalTablaCapas = ({
   //Obtengo las cuevas y las guardo en la variable cuevas
   const loadCuevasExportacion = async () => {
     const nombreConcejo = new String(nombreCapa).split(" ").join("");
-    console.log(nombreConcejo);
+    if (!nombreConcejo) {
+      setCuevasExport([]);
+      return;
+    }
+    // console.log(nombreConcejo);
     const cuevasArray = await api.getCuevasExportacion(nombreConcejo);
     setCuevasExport(cuevasArray ?? []);
     // console.log("Cuevas array: ", cuevasArray);

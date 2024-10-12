@@ -38,7 +38,14 @@ export const App = () => {
 
   //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
-    const mapSelect = await api.getMap(2);
+    await api.createMapTable();
+    const mapSelect = await api.getMap(1);
+    if (!mapSelect) {
+      setMapSelected(
+        "https://1.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/terrain.day/{z}/{x}/{y}/256/png8?app_id=eAdkWGYRoc4RfxVo0Z4B&app_code=TrLJuXVK62IQk0vuXFzaig&lg=eng"
+      );
+      return;
+    }
     setMapSelected(mapSelect ?? "");
     console.log("Pongo incialmente el contorno a: ", crearContorno);
   };
@@ -50,7 +57,12 @@ export const App = () => {
 
   const loadMaps = async () => {
     let objectMaps;
+    await api.createMapTable();
     const mapsSelect = await api.getMaps();
+    if (!mapsSelect) {
+      setMaps([]);
+      return;
+    }
     objectMaps = mapsSelect;
     setMaps(objectMaps ?? []);
   };
@@ -96,6 +108,34 @@ export const App = () => {
 
         //console.log(" ", color);
       });
+  };
+  const [idSeleccionado, setidSeleccionado] = useState("");
+  const handleDeleteMap = async (id, nombre) => {
+    // setCuevaActualizada(false);
+    await api.deleteMapaListaMapas(id);
+    setidSeleccionado(id);
+    if (maps.length > 0) {
+      try {
+        let objectMapaEliminado;
+        const mapa = await api.getMaps();
+        objectMapaEliminado = mapa;
+        const x = maps.findIndex(
+          (map) => map.name === nombre
+          // map.find((mapaEliminado) => mapaEliminado.name === nombre)
+        );
+        // console.log(todasCuevas);
+
+        setMaps((prevMapasEliminados) => {
+          prevMapasEliminados[x] = objectMapaEliminado;
+          return prevMapasEliminados;
+        });
+
+        // setTimeout(console.log("Cuevas ", todasCuevas), 200);
+      } catch (error) {
+        console.error("Error cargando cuevas:", error);
+      }
+    }
+    // setCuevaActualizada(true);
   };
   return (
     <div
@@ -224,7 +264,7 @@ export const App = () => {
           ))} */}
           <div style={{ margin: "10%" }} className="listaMapas">
             <p style={{ color: "white" }}>Mapas</p>
-            {maps?.map((mapa) => (
+            {/* {maps?.map((mapa) => (
               <div
                 style={{
                   marginLeft: "10%",
@@ -237,7 +277,47 @@ export const App = () => {
               >
                 <p>{mapa.name}</p>
               </div>
-            ))}
+            ))} */}
+            {maps.length > 0 && (
+              <div className="table-container-mapas">
+                {maps.map((mapa) => (
+                  <table className="custom-table-mapas" key={mapa.name}>
+                    <tbody>
+                      <tr className="table-row-mapas">
+                        {/* Celda para el nombre del mapa */}
+                        <td
+                          className="table-cell-mapas"
+                          onClick={() => handleItemClick(mapa)}
+                          href="#form/3.1"
+                          id="listaConcejos"
+                        >
+                          {mapa.name}
+                        </td>
+
+                        {/* Celda separada para el SVG */}
+                        <td
+                          className="table-cell-mapas svg-cell"
+                          onClick={() => handleDeleteMap(mapa.id, mapa.name)}
+                        >
+                          <svg
+                            fill="#FFFF"
+                            width="20px"
+                            height="20px"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                            id="cross"
+                            className="icon glyph"
+                          >
+                            <path d="M13.41,12l6.3-6.29a1,1,0,1,0-1.42-1.42L12,10.59,5.71,4.29A1,1,0,0,0,4.29,5.71L10.59,12l-6.3,6.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l6.29,6.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z"></path>
+                          </svg>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                ))}
+              </div>
+            )}
+
             <p
               style={{ color: "white", fontSize: "12" }}
               onClick={openModalMapas}

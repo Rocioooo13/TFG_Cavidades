@@ -1,6 +1,7 @@
 {
   "name": "tfg_cavidades_rocio_duran_cid",
   "version": "0.1.0",
+  "author": "Rocío_Durán",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -30,7 +31,8 @@
     "eject": "react-scripts eject",
     "build": "craco build",
     "start": "electron .",
-    "start-web": "react-scripts start"
+    "start-web": "react-scripts start",
+    "electron-build": "electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +53,18 @@
   },
   "devDependencies": {
     "electron": "^28.1.0",
+    "electron-builder": "^25.0.5",
     "webpack-node-externals": "^3.0.0"
+  },
+  "build": {
+    "appId": "Catalogo_cavidades",
+    "files": [
+      "build//*",
+      "node_modules//*",
+      "index.js"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }

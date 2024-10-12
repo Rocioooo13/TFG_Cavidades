@@ -44,6 +44,7 @@ const ModalTablaContornos = ({
   //Los nombres de las tablas que hay en la BD
   const [tablasContornos, setTablasContornos] = useState([]);
   const loadTablas = async () => {
+    await api.createContourPropsTable();
     const tablaSelected = await api.obtenerContornos();
     setTablasContornos(tablaSelected ?? []);
     // console.log(tablaSelected);
@@ -170,7 +171,11 @@ const ModalTablaContornos = ({
   //Obtengo los contornos y las guardo en la variable contornosExport
   const loadContornosExportacion = async () => {
     const nombreContornoAux = new String(nombreContorno).split(" ").join("");
-    console.log(nombreContornoAux);
+    if (!nombreContornoAux) {
+      setContornosExport([]);
+      return;
+    }
+    // console.log(nombreContornoAux);
     const contornoArray = await api.getPolygons(nombreContornoAux);
     setContornosExport(contornoArray ?? []);
     // console.log("Cuevas array: ", cuevasArray);
