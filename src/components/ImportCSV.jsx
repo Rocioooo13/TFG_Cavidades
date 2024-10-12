@@ -97,10 +97,23 @@ const ImportCSV = ({
       handleImportInTheBD(matriz, tableName);
     }
   }, [matriz]);
+  const customStyles = {
+    content: {
+      width: "600px",
+      height: "300px",
+      margin: "auto",
+      padding: "20px",
+    },
+  };
 
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
-    <Modal isOpen={isOpen} onRequestClose={onRequestClose} ariaHideApp={false}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      ariaHideApp={false}
+      style={customStyles}
+    >
       <h3>Importar capa csv</h3>
       <br></br>
       <p>

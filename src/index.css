@@ -123,3 +123,68 @@ th {
 #closeFile{
   margin-right: 12px;
 }
+.table-container-menu {
+  max-height: 150px; /* Define la altura máxima para el contenedor */
+  overflow-y: auto; /* Habilita el scroll vertical cuando hay más elementos */
+  border: 1px solid transparent; /* Borde del contenedor */
+  margin-top: 10px;
+  padding: 5px;
+}
+
+/* Estilo para la tabla */
+.custom-table-menu {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Estilo para las filas de la tabla */
+.table-row-menu {
+  border: 1px solid transparent; /* Cambia el color de las líneas de la tabla */
+}
+
+/* Estilo para las celdas */
+.table-cell-menu {
+  padding: 8px;
+  border: 1px solid transparent;
+}
+/* Contenedor de la tabla */
+/* Contenedor de la tabla */
+/* Contenedor de la tabla */
+.table-container-mapas {
+  max-height: 250px; /* Altura máxima del contenedor */
+  overflow-y: auto; /* Scroll vertical */
+  margin: 10px 0;
+  padding: 5px;
+  border: 1px solid transparent; /* Bordes del contenedor */
+}
+
+/* Estilo para la tabla */
+.custom-table-mapas {
+  width: 100%;
+  border-collapse: collapse; /* Quita el espacio entre celdas */
+}
+
+/* Estilo para las filas de la tabla */
+.table-row-mapas {
+  color: white;
+  border: 1px solid transparent; /* Bordes de fila transparentes */
+}
+
+/* Estilo para la celda del nombre del mapa */
+.table-cell-mapas {
+  width: 85%; /* Ancho fijo del 85% para la celda del nombre */
+  padding: 8px;
+  border: none; /* Sin bordes */
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  overflow: hidden; /* Oculta el desbordamiento de texto */
+  text-overflow: ellipsis; /* Muestra "..." si el texto es muy largo */
+}
+
+/* Estilo para la celda del SVG */
+.table-cell-mapas.svg-cell {
+  width: 15%; /* Ancho fijo del 15% para la celda del SVG */
+  padding: 8px;
+  border: none; /* Sin bordes */
+  text-align: center; /* Centra el SVG */
+  vertical-align: middle; /* Alineación vertical */
+}

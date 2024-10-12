@@ -8,7 +8,7 @@ import ModalFileViewer from "./ModalFileViewer";
 const customStyles = {
   content: {
     width: "500px",
-    height: "600px",
+    height: "620px",
     margin: "auto",
   },
 };

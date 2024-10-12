@@ -204,11 +204,34 @@ const ModalForm = ({
           // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
           //console.log("Aqui fallo 5");
         })
-        .finally(() => {
+        .finally(async () => {
+          alert("La capa se ha creado correctamente.");
+          if (capasSeleccionadas.length > 0) {
+            if (capasSeleccionadas.length >= index) {
+              try {
+                let objectCuevas;
+                const capa = await api.getLayers(conc);
+                objectCuevas = capa;
+                const x = todasCuevas.findIndex((cuevas) =>
+                  cuevas.find((cueva) => cueva.concejo === conc2)
+                );
+                console.log(todasCuevas);
+
+                setTodasCuevas((prevCapas) => {
+                  prevCapas[x] = objectCuevas;
+                  return prevCapas;
+                });
+
+                console.log("Cuevas ", todasCuevas);
+              } catch (error) {
+                console.error("Error cargando cuevas:", error);
+              }
+            }
+          }
           onRequestClose();
           setCapaNueva(true);
-          alert("La capa se ha creado correctamente.");
         });
+
       //Cierro la ventana modal REVISAR PORQUE NO FUNCIONA
       //onRequestClose(Map.setIsModalOpen(true));
       //console.log("Aqui fallo 6");

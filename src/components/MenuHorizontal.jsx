@@ -294,8 +294,8 @@ export const MenuHorizontal = ({
         for (let j = 0; j < objectGeoJSONTemp.length; j++) {
           const line = objectGeoJSONTemp[j];
           featuresGeoJSON.geometry.coordinates[0].push([
-            Number(line.longitud),
             Number(line.latitud),
+            Number(line.longitud),
           ]);
         }
 
@@ -321,6 +321,7 @@ export const MenuHorizontal = ({
         // Bucle para rellenar las coordenadas del polígono
         for (let j = 0; j < objectGeoJSONTempCapa.length; j++) {
           const line = objectGeoJSONTempCapa[j];
+          const zValue = new String(line.Z).replace(" m", "");
 
           const featuresGeoJSONCapa = {
             type: "Feature",
@@ -328,7 +329,7 @@ export const MenuHorizontal = ({
               denominacion: line.denominacion,
               X: Number(line.X),
               Y: Number(line.Y),
-              Z: Number(line.Z),
+              Z: zValue,
               elipsoide: line.elipsoide,
               huso: Number(line.huso),
               zonaUTM: line.zonaUTM,
@@ -339,7 +340,7 @@ export const MenuHorizontal = ({
             },
             geometry: {
               type: "Point",
-              coordinates: [Number(line.longitud), Number(line.latitud)],
+              coordinates: [Number(line.latitud), Number(line.longitud)],
             },
           };
 
@@ -732,7 +733,7 @@ export const MenuHorizontal = ({
                     onChange={(e) => setSearchText(e.target.value)} // Actualiza el texto de búsqueda
                   ></input>
                 </NavDropdown.Item>
-                {filteredConcejos.map((tabla) => (
+                {/* {filteredConcejos.map((tabla) => (
                   <NavDropdown.Item
                     key={tabla.nombre}
                     onClick={() => handleSeleccionarTabla(tabla.nombre)}
@@ -741,7 +742,30 @@ export const MenuHorizontal = ({
                   >
                     {tabla.nombre}
                   </NavDropdown.Item>
-                ))}
+                ))} */}
+                {filteredConcejos.length > 0 && (
+                  <div className="table-container-menu">
+                    {filteredConcejos.map((tabla) => (
+                      <table className="custom-table-menu" key={tabla.nombre}>
+                        <tbody>
+                          <tr className="table-row-menu">
+                            <td className="table-cell-menu">
+                              <NavDropdown.Item
+                                onClick={() =>
+                                  handleSeleccionarTabla(tabla.nombre)
+                                }
+                                href="#form/3.1"
+                                id="listaConcejos"
+                              >
+                                {tabla.nombre}
+                              </NavDropdown.Item>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    ))}
+                  </div>
+                )}
               </NavDropdown>
 
               <NavDropdown
@@ -779,7 +803,7 @@ export const MenuHorizontal = ({
                     onChange={(e) => setSearchContorno(e.target.value)} // Actualiza el texto de búsqueda
                   ></input>
                 </NavDropdown.Item>
-                {filteredContornos.map((contorno) => (
+                {/* {filteredContornos.map((contorno) => (
                   <NavDropdown.Item
                     key={contorno.nombre}
                     onClick={() => handleSeleccionarContorno(contorno.nombre)}
@@ -788,7 +812,33 @@ export const MenuHorizontal = ({
                   >
                     {contorno.nombre}
                   </NavDropdown.Item>
-                ))}
+                ))} */}
+                {filteredContornos.length > 0 && (
+                  <div className="table-container-menu">
+                    {filteredContornos.map((contorno) => (
+                      <table
+                        className="custom-table-menu"
+                        key={contorno.nombre}
+                      >
+                        <tbody>
+                          <tr className="table-row-menu">
+                            <td className="table-cell-menu">
+                              <NavDropdown.Item
+                                onClick={() =>
+                                  handleSeleccionarContorno(contorno.nombre)
+                                }
+                                href="#form/3.1"
+                                id="listaConcejos"
+                              >
+                                {contorno.nombre}
+                              </NavDropdown.Item>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    ))}
+                  </div>
+                )}
               </NavDropdown>
               <NavDropdown
                 autoClose="true"

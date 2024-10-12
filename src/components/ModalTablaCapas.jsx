@@ -21,7 +21,7 @@ const ModalTablaCapas = ({
 }) => {
   const customStyles = {
     content: {
-      width: "1100px",
+      width: "1300px",
       height: "600px",
       margin: "auto",
       padding: "20px",

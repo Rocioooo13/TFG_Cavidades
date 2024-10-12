@@ -83,8 +83,8 @@ const ModalTablaContornos = ({
     if (contornosSeleccionados.length > 0) {
       if (contornosSeleccionados.length >= index2) {
         try {
-          const x = todosContornos.findIndex((contornos) =>
-            contornos.find((contorno) => contorno.nombre === nombreContorno)
+          const x = contornosSeleccionados.findIndex(
+            (contorno) => contorno === nombreContorno
           );
           //console.log("TodosContornos antes:", todosContornos);
 
