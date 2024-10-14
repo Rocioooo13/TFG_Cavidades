@@ -147,14 +147,11 @@ th {
   padding: 8px;
   border: 1px solid transparent;
 }
-/* Contenedor de la tabla */
-/* Contenedor de la tabla */
-/* Contenedor de la tabla */
 .table-container-mapas {
   max-height: 250px; /* Altura máxima del contenedor */
   overflow-y: auto; /* Scroll vertical */
   margin: 10px 0;
-  padding: 5px;
+  padding: 0px;
   border: 1px solid transparent; /* Bordes del contenedor */
 }
 
@@ -172,19 +169,32 @@ th {
 
 /* Estilo para la celda del nombre del mapa */
 .table-cell-mapas {
-  width: 85%; /* Ancho fijo del 85% para la celda del nombre */
-  padding: 8px;
+  width: 85%; /* Ancho fijo para la celda del nombre */
+  max-width: 85%; /* Garantiza que nunca supere el ancho asignado */
+  padding: 5px;
   border: none; /* Sin bordes */
-  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-  overflow: hidden; /* Oculta el desbordamiento de texto */
+  /*white-space: nowrap;*/
+  overflow: hidden; /* Oculta el desbordamiento */
   text-overflow: ellipsis; /* Muestra "..." si el texto es muy largo */
+  word-break: break-all; /* Fuerza a que las palabras largas se partan */
+  vertical-align: middle; 
+  text-align: left;/* Alinea el contenido verticalmente */
 }
 
 /* Estilo para la celda del SVG */
 .table-cell-mapas.svg-cell {
-  width: 15%; /* Ancho fijo del 15% para la celda del SVG */
+  width: 15%; /* Ancho fijo menor para la celda del SVG */
+  max-width: 15%; /* Mantén el ancho fijo */
   padding: 8px;
   border: none; /* Sin bordes */
   text-align: center; /* Centra el SVG */
-  vertical-align: middle; /* Alineación vertical */
+  vertical-align: top; /* Centra el SVG verticalmente */
 }
+
+/* Estilo para el SVG */
+.icon.glyph {
+  display: inline-block;
+  vertical-align: middle; /* Centra el SVG dentro de la celda */
+}
+
+

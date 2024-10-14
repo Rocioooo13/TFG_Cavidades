@@ -71,6 +71,7 @@ export const App = () => {
     loadMap();
     loadMaps();
   }, []);
+
   useEffect(() => {
     //loadMap();
     setTimeout(() => {
@@ -109,34 +110,15 @@ export const App = () => {
         //console.log(" ", color);
       });
   };
-  const [idSeleccionado, setidSeleccionado] = useState("");
+  const [mapaEliminado, setMapaEliminado] = useState(false);
   const handleDeleteMap = async (id, nombre) => {
-    // setCuevaActualizada(false);
+    setMapaEliminado(false);
     await api.deleteMapaListaMapas(id);
-    setidSeleccionado(id);
-    if (maps.length > 0) {
-      try {
-        let objectMapaEliminado;
-        const mapa = await api.getMaps();
-        objectMapaEliminado = mapa;
-        const x = maps.findIndex(
-          (map) => map.name === nombre
-          // map.find((mapaEliminado) => mapaEliminado.name === nombre)
-        );
-        // console.log(todasCuevas);
-
-        setMaps((prevMapasEliminados) => {
-          prevMapasEliminados[x] = objectMapaEliminado;
-          return prevMapasEliminados;
-        });
-
-        // setTimeout(console.log("Cuevas ", todasCuevas), 200);
-      } catch (error) {
-        console.error("Error cargando cuevas:", error);
-      }
-    }
-    // setCuevaActualizada(true);
+    setMapaEliminado(true);
   };
+  useEffect(() => {
+    loadMaps();
+  }, [mapaEliminado === true]);
   return (
     <div
       style={{
