@@ -23,8 +23,6 @@ const ModalFormUpdate = ({
   capasSeleccionadas,
   index,
 }) => {
-  // console.log(cuevaSelected);
-  // Override zIndex to display the modal overlayed to the map
   const [openFile, setOpenFile] = useState(false);
   const [urlArchivoCueva, setUrlArchivoCueva] = useState("");
   const openFileModal = () => {
@@ -38,10 +36,8 @@ const ModalFormUpdate = ({
   };
 
   const pruebaObtenerValor = () => {
-    // Obtener el valor del label
     const inputValor = document.getElementById("denominacion").value;
 
-    // Imprimir el valor recuperado
     console.log(inputValor);
   };
 
@@ -53,7 +49,6 @@ const ModalFormUpdate = ({
     const e12 = 0.006739497;
     const c = 6399593.626;
 
-    //Cambiar porque tengo que ver como obtener el valor de un input --> HECHO
     const yDelForm = document.getElementById("y").value;
     const hemisferioIndex =
       document.getElementById("hemisferio1").selectedIndex;
@@ -69,62 +64,62 @@ const ModalFormUpdate = ({
       yAlSurEcuador = Number(yDelForm);
     }
     console.log("yAlSurDelEcuador ", yAlSurEcuador);
-    const fi = Number((yAlSurEcuador / (6366197.724 * 0.9996)).toFixed(9)); // 9 o 8
+    const fi = Number((yAlSurEcuador / (6366197.724 * 0.9996)).toFixed(9));
     console.log("fi ", fi);
     const ni = Number(
       (
         (c / Math.pow(1 + e12 * Math.pow(Math.cos(fi), 2), 1 / 2)) *
         0.9996
       ).toFixed(3)
-    ); //3
+    );
     console.log("ni ", ni);
-    const a = Number(((xDelForm - 500000) / ni).toFixed(9)); //9 o 8
+    const a = Number(((xDelForm - 500000) / ni).toFixed(9));
     console.log("a ", a);
-    const A1 = Number(Math.sin(2 * fi).toFixed(9)); //9 o 7
+    const A1 = Number(Math.sin(2 * fi).toFixed(9));
     console.log("A1 ", A1);
-    const A2 = Number((A1 * Math.pow(Math.cos(fi), 2)).toFixed(9)); //9 o 8
+    const A2 = Number((A1 * Math.pow(Math.cos(fi), 2)).toFixed(9));
     console.log("A2 ", A2);
-    const J2 = Number((fi + A1 / 2).toFixed(9)); // 9 o 8 //FALLAAAAAAAAAAAAAAAAAAAA AQUI
+    const J2 = Number((fi + A1 / 2).toFixed(9));
     console.log("J2 ", J2);
-    const J4 = Number(((3 * J2 + A2) / 4).toFixed(9)); //9
+    const J4 = Number(((3 * J2 + A2) / 4).toFixed(9));
     console.log("J4 ", J4);
     const J6 = Number(
       ((5 * J4 + A2 * Math.pow(Math.cos(fi), 2)) / 3).toFixed(9)
-    ); //9 o 8
+    );
     console.log("J6 ", J6);
-    const alfa = Number(((3 / 4) * e12).toFixed(9)); //9
+    const alfa = Number(((3 / 4) * e12).toFixed(9));
     console.log("alfa ", alfa);
     const beta1 = ((5 / 3) * Math.pow(alfa, 2)).toExponential(4);
-    const beta = Number(beta1); // 4,2582E-05 parseFloat(numero).toExponential(4)
+    const beta = Number(beta1);
     console.log("beta ", beta);
     const gamma1 = ((35 / 27) * Math.pow(alfa, 3)).toExponential(5);
-    const gamma = Number(gamma1); // 1.67406E-07
+    const gamma = Number(gamma1);
     console.log("gamma ", gamma);
     const bfi = Number(
       (0.9996 * c * (fi - alfa * J2 + beta * J4 - gamma * J6)).toFixed(3)
-    ); // 3
+    );
     console.log("bfi ", bfi);
-    const b = Number(((yAlSurEcuador - bfi) / ni).toFixed(9)); // 9 o 8
+    const b = Number(((yAlSurEcuador - bfi) / ni).toFixed(9));
     console.log("b ", b);
     const zeta1 = (
       ((e12 * Math.pow(a, 2)) / 2) *
       Math.pow(Math.cos(fi), 2)
     ).toExponential(5);
-    const zeta = Number(zeta1); // 1.20996E-06
+    const zeta = Number(zeta1);
     console.log("zeta ", zeta);
-    const xi = Number((a * (1 - zeta / 3)).toFixed(9)); //9 o 8
+    const xi = Number((a * (1 - zeta / 3)).toFixed(9));
     console.log("xi ", xi);
-    const eta = Number((b * (1 - zeta) + fi).toFixed(9)); // 9 o 8
+    const eta = Number((b * (1 - zeta) + fi).toFixed(9));
     console.log("eta ", eta);
     const senhxi = Number(
       ((Math.pow(Math.E, xi) - Math.pow(Math.E, -xi)) / 2).toFixed(9)
-    ); //9 o 8
+    );
     console.log("senhxi ", senhxi);
-    const deltaLambda = Number(Math.atan(senhxi / Math.cos(eta)).toFixed(9)); //9 o 8
+    const deltaLambda = Number(Math.atan(senhxi / Math.cos(eta)).toFixed(9));
     console.log("deltaLambda ", deltaLambda);
     const tan = Number(
       Math.atan(Math.cos(deltaLambda) * Math.tan(eta)).toFixed(9)
-    ); //9 o 8
+    );
     console.log("tan ", tan);
     const meridianoCentral1 = 6 * huso - 183;
     console.log("meridianoCentral1 ", meridianoCentral1);
@@ -136,7 +131,7 @@ const ModalFormUpdate = ({
           (3 / 2) * e12 * Math.sin(fi) * Math.cos(fi) * (tan - fi)) *
           (tan - fi)
       ).toFixed(9)
-    ); //9 o 8
+    );
     console.log("redianes ", radianes);
     const longitud1 = Number(
       +(deltaLambda / Math.PI) * 180 + meridianoCentral1
@@ -146,27 +141,20 @@ const ModalFormUpdate = ({
     if (meridianoCentral1 === -183) {
       longitud = 0;
     } else {
-      longitud = Number(longitud1.toFixed(7)); // 7
+      longitud = Number(longitud1.toFixed(7));
     }
-    const latitud = Number((+(radianes / Math.PI) * 180).toFixed(7)); // 7
+    const latitud = Number((+(radianes / Math.PI) * 180).toFixed(7));
 
     console.log("Longitud: ", longitud, " Latitud: ", latitud);
     return [longitud, latitud];
   };
 
-  //FALTA POR PERFECCIONAR PARA QUE LO HAGA CON CUALQUIER CAMPO!!!
   const handleUpdateCueva = async () => {
-    //Obtengo el valor del concejo para crear la tabla
     const conc = new String(document.getElementById("concejo").value);
-    // .split(" ")
-    // .join("");
     console.log("Nombre concejo update", conc);
-    // createTable(conc);
-    // //Obtengo latitud y longitud de la cueva
     var latlong = formulaLatitudLongitud();
     console.log(latlong);
 
-    //Inserto la cueva en la tabla creada
     const denom = document.getElementById("denominacion").value;
     const yDelForm = document.getElementById("y").value;
     const xDelForm = document.getElementById("x").value;
@@ -187,11 +175,6 @@ const ModalFormUpdate = ({
     } else {
       archivo = archivoTemp;
     }
-
-    // setTimeout(
-    //   () => updateCueva(denom, cuevaSelected.id, cuevaSelected.denominacion),
-    //   500
-    // );
 
     await updateCueva(
       conc,
@@ -418,32 +401,6 @@ const ModalFormUpdate = ({
           </button>
         </div>
 
-        {/* <div className="inputContainer">
-          <label className="Archivo">Archivo:</label> */}
-
-        {/* <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe el concejo al que pertenece la cueva"
-            id="concejo"
-            defaultValue={cuevaSelected.concejo}
-          /> */}
-        {/* </div> */}
-        {/* <div className="inputContainer">
-          <label className="labelForm">Archivo</label>
-          <input
-            className="inputForm"
-            type="file"
-            placeholder="Seleccione un archivo"
-            id="archivo"
-            defaultValue={cuevaSelected.archivo}
-          />
-        </div> */}
-
-        {/* <img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA6klEQVR4nK3TzwoBURgF8LNQrNmwkJXlxIJnkD+vQMlDkD1bnoLiESYWPIKUPIKU7FhMo1umdBvu951x6tSd23z3V3caQJYpgCeA8KPmeYI/xhyYtfZyAB7MYR6AYUxD5b7nQnzrWrT1XYhJLyHSlVxZI2awLFhHNfPOVGMGIVhHrUiQQkIkL0FSAAISCd7zolxJ5AJFjiRy0CBbEtlokCWJLDTInERmGmRMIiMNMiCRvgbpkEhLg9RJpKZBSiRS1CAZEklDmbsSuYHIWYmcGGRv/cmhY71jkLV1366uGKRtfZdfNe81v530AgRFEd52yqZoAAAAAElFTkSuQmCC"
-            style={customDelete}
-          /> */}
         <div className="botonesForm">
           <button
             className="botonFormEliminar"
@@ -468,13 +425,6 @@ const ModalFormUpdate = ({
         isOpen={openFile}
         onRequestClose={closefileModal}
         urlArchivoCueva={urlArchivoCueva}
-        // capasSeleccionadas={capasSeleccionadas}
-        // todasCuevas={todasCuevas}
-        // setTodasCuevas={setTodasCuevas}
-        // index={index}
-        // setIndex={setIndex}
-        // capaNueva={capaNueva}
-        // setCapaNueva={setCapaNueva}
       />
     </Modal>
   );

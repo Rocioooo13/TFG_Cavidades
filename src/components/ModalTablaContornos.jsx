@@ -31,26 +31,20 @@ const ModalTablaContornos = ({
     },
   };
 
-  //La opcion que selecciono del desplegable
   const [selectedOption, setSelectedOption] = useState("");
   const [nombreContorno, setNombreContorno] = useState("");
   const handleChange = (event) => {
-    //const nombre = new String(event.target.value).split(" ").join("");
     setSelectedOption(event.target.value);
     setNombreContorno(event.target.value);
-    //console.log(nombreContorno);
   };
 
-  //Los nombres de las tablas que hay en la BD
   const [tablasContornos, setTablasContornos] = useState([]);
   const loadTablas = async () => {
     await api.createContourPropsTable();
     const tablaSelected = await api.obtenerContornos();
     setTablasContornos(tablaSelected ?? []);
-    // console.log(tablaSelected);
   };
 
-  //Las cuevas de la capa seleccionada
   const [contorno, setContorno] = useState([]);
   const loadContorno = async () => {
     if (!nombreContorno) {
@@ -71,11 +65,6 @@ const ModalTablaContornos = ({
     onRequestClose();
   };
   const [idSeleccionado, setidSeleccionado] = useState("");
-  // const handleClicBin = (id) => {
-  //   deleteCueva(nombreContorno.split(" ").join(""), id).then((_) => {
-  //     setidSeleccionado(id);
-  //   });
-  // };
 
   const handleClicEliminarContorno = async (id) => {
     await deleteContorno(nombreContorno.split(" ").join(""));
@@ -87,7 +76,6 @@ const ModalTablaContornos = ({
           const x = contornosSeleccionados.findIndex(
             (contorno) => contorno === nombreContorno
           );
-          //console.log("TodosContornos antes:", todosContornos);
 
           setTodosContornos((prevContornos) => {
             const filtered = prevContornos.filter((_, index) => {
@@ -95,29 +83,16 @@ const ModalTablaContornos = ({
             });
             return filtered;
           });
-          // setTimeout(
-          //   console.log("TodosContornos despues:", todosContornos),
-          //   200
-          // );
-
-          // console.log("ColorContorno antes:", colorContorno);
           setColorContorno((prevColorContornos) => {
             const filtered = prevColorContornos.filter((_, index) => {
               return index !== x;
             });
             return filtered;
           });
-          // setTimeout(console.log("colorContorno despues:", colorContorno), 200);
-
-          // console.log("Contornos visibles antes:", contornosVisibles);
           setContornosVisibles((prevContornosVisibles) => {
             delete prevContornosVisibles[nombreContorno];
             return prevContornosVisibles;
           });
-          // setTimeout(
-          //   () => console.log("Contorno visibles después:", contornosVisibles),
-          //   200
-          // );
         } catch (error) {
           console.error("Error cargando contornos:", error);
         }
@@ -143,7 +118,6 @@ const ModalTablaContornos = ({
     loadContorno();
   }, []);
 
-  //Si hay un cambio en nombreCapa se recarga la lista de Cuevas
   useEffect(() => {
     loadContorno();
     loadContornosExportacion();
@@ -151,44 +125,31 @@ const ModalTablaContornos = ({
 
   useEffect(() => {
     loadTablas();
-    //loadCapa();
   }, [contornoEliminado === true, contornoNuevo === true]);
 
-  //Si hay un cambio en idSeleccionado se recarga la lista de Cuevas
-  // useEffect(() => {
-  //   loadContorno();
-  // }, []);
-
-  //Para exportar
   const [contornosExport, setContornosExport] = useState([]);
-  //Me creo las cabeceras del excel.
   const headersContorno = [
     { label: "Nombre", key: "nombre" },
     { label: "Latitud", key: "latitud" },
     { label: "Longitud", key: "longitud" },
   ];
 
-  //Obtengo los contornos y las guardo en la variable contornosExport
   const loadContornosExportacion = async () => {
     const nombreContornoAux = new String(nombreContorno).split(" ").join("");
     if (!nombreContornoAux) {
       setContornosExport([]);
       return;
     }
-    // console.log(nombreContornoAux);
     const contornoArray = await api.getPolygons(nombreContornoAux);
     setContornosExport(contornoArray ?? []);
-    // console.log("Cuevas array: ", cuevasArray);
   };
 
-  //en CsvReport creo tres variables a las que le doy los valores de contornos, las cabeceras y el nombre del archivo
   const csvReport = {
     data: contornosExport,
     headers: headersContorno,
     filename: `Capa contorno ${nombreContorno}.csv`,
   };
 
-  //Rellena el archivo y hace la descarga
   const clicDownloadContorno = () => {
     const csvData = csvReport.data
       .map((item) => `${item.nombre},${item.latitud},${item.longitud}`)

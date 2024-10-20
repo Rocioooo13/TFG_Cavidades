@@ -7,10 +7,10 @@ const ImportCSV = ({
   isOpen,
   onRequestClose,
   capaNueva,
-  setCapaNueva /*, onCsvImport*/,
+  setCapaNueva,
 }) => {
   const [file, setFile] = useState(null);
-  const [tableName, setTableName] = useState(""); // Agrega un campo para el nombre de la tabla
+  const [tableName, setTableName] = useState(""); 
   const [matriz, setMatriz] = useState([]);
 
   const handleFileChange = (event) => {
@@ -21,9 +21,7 @@ const ImportCSV = ({
     if (file && tableName) {
       Papa.parse(file, {
         complete: (result) => {
-          // console.log(result);
-          setMatriz(result.data); // Asegúrate de que estás estableciendo los datos correctamente
-          //onCsvImport({ tableName, data: result.data });
+          setMatriz(result.data);
           onRequestClose();
         },
         header: true,
@@ -38,13 +36,10 @@ const ImportCSV = ({
   const handleImportInTheBD = (matriz, tableName) => {
     setCapaNueva(false);
     const conc = new String(tableName).split(" ").join("");
-    // console.log("Llega aqui 1 ", tableName);
 
     createTable(conc).then((_) => {
-      // console.log("Llega aqui 2");
 
       añadirCapaListaCapas(tableName);
-      // console.log("Llega aqui 3");
 
       matriz.map((item) => {
         const lat = new String(item.latitud).replace(",", ".");
@@ -75,11 +70,8 @@ const ImportCSV = ({
             lat,
             lon,
             item.archivo
-            //document.getElementById("archivo").value
           )
             .then((_) => {
-              // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
-              // console.log("Llega aqui 4");
             })
             .finally(() => {
               onRequestClose();

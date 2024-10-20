@@ -15,8 +15,6 @@ const customStyles = {
     margin: "auto",
   },
 };
-// const file = "C:/Users/rocio/Desktop/cuevaPrueba.pdf";
-// const type = "pdf";
 
 const ModalFileViewer = ({ isOpen, onRequestClose, urlArchivoCueva }) => {
   Modal.defaultStyles.overlay.zIndex = 1000;
@@ -30,14 +28,11 @@ const ModalFileViewer = ({ isOpen, onRequestClose, urlArchivoCueva }) => {
       style={customStyles}
       ariaHideApp={false}
     >
-      {/* <h3>Visualizar archivo</h3>
-      <br /> */}
+      
       <FileViewer
         className="fileViewerStyle"
         fileType={type}
         filePath={file}
-        // errorComponent={CustomErrorComponent}
-        // onError={this.onError}
       />
       <div className="botonesForm">
         <button

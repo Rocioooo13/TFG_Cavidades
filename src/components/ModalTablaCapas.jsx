@@ -28,25 +28,20 @@ const ModalTablaCapas = ({
     },
   };
 
-  //La opcion que selecciono del desplegable
   const [selectedOption, setSelectedOption] = useState("");
   const [nombreCapa, setNombreCapa] = useState("");
   const handleChange = (event) => {
-    //const nombre = new String(event.target.value).split(" ").join("");
     setSelectedOption(event.target.value);
     setNombreCapa(event.target.value);
   };
 
-  //Los nombres de las tablas que hay en la BD
   const [tablas, setTablas] = useState([]);
   const loadTablas = async () => {
     await api.createListaCapas();
     const tablaSelected = await api.obtenertablas();
     setTablas(tablaSelected ?? []);
-    // console.log(tablaSelected);
   };
 
-  //Las cuevas de la capa seleccionada
   const [capa, setCapa] = useState([]);
   const loadCapa = async () => {
     if (!nombreCapa) {
@@ -81,14 +76,12 @@ const ModalTablaCapas = ({
                 cuevaEliminada.concejo === concejoCuevaEliminada
             )
           );
-          // console.log(todasCuevas);
 
           setTodasCuevas((prevCapasEliminadas) => {
             prevCapasEliminadas[x] = objectCuevasEliminadas;
             return prevCapasEliminadas;
           });
 
-          // setTimeout(console.log("Cuevas ", todasCuevas), 200);
         } catch (error) {
           console.error("Error cargando cuevas:", error);
         }
@@ -105,7 +98,6 @@ const ModalTablaCapas = ({
 
     await deleteCuevaListaCapas(nombreCapa);
 
-    // console.log(capasSeleccionadas);
 
     if (capasSeleccionadas.length > 0) {
       if (capasSeleccionadas.length >= index) {
@@ -113,7 +105,6 @@ const ModalTablaCapas = ({
           const x = todasCuevas.findIndex((cuevas) =>
             cuevas.find((cueva) => cueva.concejo === nombreCapa)
           );
-          // console.log(todasCuevas);
 
           setTodasCuevas((prevCapas) => {
             const filtered = prevCapas.filter((_, index) => {
@@ -122,16 +113,10 @@ const ModalTablaCapas = ({
             return filtered;
           });
 
-          // setTimeout(() => console.log("Cuevas ", todasCuevas), 200);
-          // console.log("Capa visibles antes:", capasVisibles);
           setCapasVisibles((prevCapasVisibles) => {
             delete prevCapasVisibles[nombreCapa];
             return prevCapasVisibles;
           });
-          // setTimeout(
-          //   () => console.log("Capa visibles después:", capasVisibles),
-          //   200
-          // );
         } catch (error) {
           console.error("Error cargando cuevas:", error);
         }
@@ -142,10 +127,7 @@ const ModalTablaCapas = ({
       return prevCapasSeleccionadas.filter((capa) => capa !== nombreCapa);
     });
 
-    // setTimeout(
-    //   () => console.log("Capas seleccionadas ", capasSeleccionadas),
-    //   200
-    // );
+    
 
     setcapaEliminada(true);
     setNombreCapa("");
@@ -157,7 +139,6 @@ const ModalTablaCapas = ({
     loadCapa();
   }, []);
 
-  //Si hay un cambio en nombreCapa se recarga la lista de Cuevas
   useEffect(() => {
     loadCapa();
     loadCuevasExportacion();
@@ -165,17 +146,13 @@ const ModalTablaCapas = ({
 
   useEffect(() => {
     loadTablas();
-    //loadCapa();
   }, [capaEliminada, capaNueva === true]);
 
-  //Si hay un cambio en idSeleccionado se recarga la lista de Cuevas
   useEffect(() => {
     loadCapa();
   }, [idSeleccionado]);
 
-  //Para exportar
   const [cuevasExport, setCuevasExport] = useState([]);
-  //Me creo las cabeceras del excel.
   const headers = [
     { label: "Denominacion", key: "denominacion" },
     { label: "X", key: "X" },
@@ -191,27 +168,22 @@ const ModalTablaCapas = ({
     { label: "Archivo", key: "archivo" },
   ];
 
-  //Obtengo las cuevas y las guardo en la variable cuevas
   const loadCuevasExportacion = async () => {
     const nombreConcejo = new String(nombreCapa).split(" ").join("");
     if (!nombreConcejo) {
       setCuevasExport([]);
       return;
     }
-    // console.log(nombreConcejo);
     const cuevasArray = await api.getCuevasExportacion(nombreConcejo);
     setCuevasExport(cuevasArray ?? []);
-    // console.log("Cuevas array: ", cuevasArray);
   };
 
-  //en CsvReport creo tres variables a las que le doy los valores de cuevas, las cabeceras y el nombre del archivo
   const csvReport = {
     data: cuevasExport,
     headers: headers,
     filename: `Capa cuevas ${nombreCapa}.csv`,
   };
 
-  //Rellena el archivo y hace la descarga
   const clicDownloadCapa = () => {
     const csvData = csvReport.data
       .map(
@@ -240,7 +212,6 @@ const ModalTablaCapas = ({
   const [openFile, setOpenFile] = useState(false);
   const [urlArchivoCueva, setUrlArchivoCueva] = useState("");
   const openFileModal = (archivo) => {
-    // const archivo = document.getElementById("archivo").value;
 
     setOpenFile(true);
   };
@@ -373,7 +344,6 @@ const ModalTablaCapas = ({
                     {item.longitud}
                   </td>
                   <td style={{ border: "1px solid black", padding: "8px" }}>
-                    {/* {item.archivo} */}
                     {item.archivo != null && item.archivo != "" ? (
                       <button
                         onClick={() => verArchivo(item.archivo)}

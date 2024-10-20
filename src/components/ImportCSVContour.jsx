@@ -9,10 +9,10 @@ const ImportCSVContour = ({
   isOpen,
   onRequestClose,
   contornoNuevo,
-  setContornoNuevo /*, onCsvImport*/,
+  setContornoNuevo,
 }) => {
   const [file, setFile] = useState(null);
-  const [tableName, setTableName] = useState(""); // Agrega un campo para el nombre de la tabla
+  const [tableName, setTableName] = useState("");
   const [matriz, setMatriz] = useState([]);
   const [colorImport, setColorImport] = useState("");
 
@@ -21,16 +21,14 @@ const ImportCSVContour = ({
   };
 
   const handleChangeComplete = (newColor) => {
-    setColorImport(newColor.hex); // Actualizar el estado con el color seleccionado
+    setColorImport(newColor.hex);
   };
 
   const handleImport = () => {
     if (file && tableName) {
       Papa.parse(file, {
         complete: (result) => {
-          // console.log(result);
-          setMatriz(result.data); // Asegúrate de que estás estableciendo los datos correctamente
-          //onCsvImport({ tableName, data: result.data });
+          setMatriz(result.data);
           onRequestClose();
         },
         header: true,
@@ -47,13 +45,9 @@ const ImportCSVContour = ({
     const colorElegido = document.getElementById("color").value;
     setColorImport(colorElegido);
     const cont = new String(tableName).split(" ").join("");
-    // console.log("Llega aqui 1 ", tableName);
 
     createContourTable(cont).then(async (_) => {
-      // console.log("Llega aqui 2");
-
       addContourProps(tableName, colorImport);
-      // console.log("Llega aqui 3");
 
       for (let index = 0; index < matriz.length; index++) {
         const item = matriz[index];
@@ -68,7 +62,6 @@ const ImportCSVContour = ({
           console.log("Se ha encontrado un valor null y no se ha insertado.");
         } else {
           const coord = [lat, lon];
-          //console.log(coord);
           await addContourImport(cont, coord);
           onRequestClose();
           setContornoNuevo(true);
@@ -118,7 +111,6 @@ const ImportCSVContour = ({
         <input
           className="inputForm"
           type="text"
-          // placeholder="Escribe el nombre del contorno"
           id="color"
           value={colorImport}
           readOnly
@@ -127,8 +119,8 @@ const ImportCSVContour = ({
       </div>
       <div className="colorPickerContainer">
         <SketchPicker
-          color={colorImport} // Pasar el color seleccionado al SketchPicker
-          onChangeComplete={handleChangeComplete} // Actualizar el color cuando se seleccione uno nuevo
+          color={colorImport}
+          onChangeComplete={handleChangeComplete}
         />
         <div
           className="colorDisplay"
@@ -136,7 +128,7 @@ const ImportCSVContour = ({
             marginTop: "20px",
             width: "100px",
             height: "100px",
-            backgroundColor: { colorImport }, // Mostrar el color seleccionado en un div
+            backgroundColor: { colorImport },
           }}
         />
       </div>

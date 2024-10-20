@@ -21,14 +21,11 @@ const ModalMapas = ({ isOpen, onRequestClose, mapaNuevo, setMapaNuevo }) => {
 
     addMap(nombreDelMapa, urlDelMapa)
       .then((_) => {
-        // El _ hace referencia a que la variable devuelta no la usamos y nos da igual
-        //console.log("Aqui fallo 5");
       })
       .finally(() => {
         onRequestClose();
       });
   };
-  // Override zIndex to display the modal overlayed to the map
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal

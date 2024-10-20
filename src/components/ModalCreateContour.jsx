@@ -21,15 +21,10 @@ export const ModalCreateContour = ({
   nombreDelContorno,
   setNombreDelContorno,
 }) => {
-  //const [colorSeleccionado, setColorSeleccionado] = useState("#ffff");
 
   const handleChangeComplete = (newColor) => {
-    setColor(newColor.hex); // Actualizar el estado con el color seleccionado
+    setColor(newColor.hex); 
   };
-
-  // const handleChangeNombreContorno = (newName) => {
-  //   setNombreContorno(newName);
-  // };
 
   const handleClicCrearContorno = async () => {
     const colorElegido = document.getElementById("color").value;
@@ -39,30 +34,8 @@ export const ModalCreateContour = ({
     const addContour = await addContourProps(nombreDelContorno, color);
     onRequestClose();
     setCrearContorno(true);
-
-    // createContourPropsTable()
-    //   .then((_) => {
-    //     addContourProps(nombreDelContorno, color)
-    //       .then((_) => {})
-    //       .finally(() => {
-    //         onRequestClose();
-    //         setCrearContorno(true);
-    //       });
-    //   })
-    //   .finally(() => {
-    //     onRequestClose();
-    //     setCrearContorno(true);
-    //   });
-
-    // onRequestClose();
-    // setCrearContorno(true);
   };
 
-  // useEffect(() => {
-  //   // Esta parte se ejecutará cada vez que 'color' cambie
-
-  //   console.log("Color cambiado:", color);
-  // }, [color]);
 
   Modal.defaultStyles.overlay.zIndex = 1000;
   return (
@@ -82,8 +55,8 @@ export const ModalCreateContour = ({
           type="text"
           placeholder="Escribe el nombre del contorno"
           id="nombreContorno"
-          value={nombreDelContorno} // Vincula el valor del input con el estado
-          onChange={(e) => setNombreDelContorno(e.target.value)} // Actualiza el estado al cambiar el input
+          value={nombreDelContorno} 
+          onChange={(e) => setNombreDelContorno(e.target.value)} 
         />
       </div>
       <div className="inputContainer">
@@ -91,7 +64,6 @@ export const ModalCreateContour = ({
         <input
           className="inputForm"
           type="text"
-          // placeholder="Escribe el nombre del contorno"
           id="color"
           value={color}
           readOnly
@@ -100,8 +72,8 @@ export const ModalCreateContour = ({
       </div>
       <div className="colorPickerContainer">
         <SketchPicker
-          color={color} // Pasar el color seleccionado al SketchPicker
-          onChangeComplete={handleChangeComplete} // Actualizar el color cuando se seleccione uno nuevo
+          color={color} 
+          onChangeComplete={handleChangeComplete} 
         />
         <div
           className="colorDisplay"
@@ -109,7 +81,7 @@ export const ModalCreateContour = ({
             marginTop: "20px",
             width: "100px",
             height: "100px",
-            backgroundColor: { color }, // Mostrar el color seleccionado en un div
+            backgroundColor: { color }, 
           }}
         />
       </div>

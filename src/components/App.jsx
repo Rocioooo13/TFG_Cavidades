@@ -1,6 +1,5 @@
 import { MenuHorizontal } from "./MenuHorizontal";
 import { Map } from "./Map";
-import { ListMaps } from "./ListMaps";
 import api from "../api";
 import { useEffect, useState } from "react";
 import ModalMapas from "./ModalMapas";
@@ -50,7 +49,6 @@ export const App = () => {
     console.log("Pongo incialmente el contorno a: ", crearContorno);
   };
   const handleItemClick = (item) => {
-    // console.log("Valor de item.url " + item.url);
     setMapSelected("");
     setTimeout(() => setMapSelected(item.url ?? ""), 500);
   };
@@ -73,7 +71,6 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    //loadMap();
     setTimeout(() => {
       loadMaps();
     }, 200);
@@ -87,7 +84,6 @@ export const App = () => {
   };
 
   const submitContour = () => {
-    // console.log(nombreDelContorno.split(" ").join(""));
     setContornoNuevo(false);
     const nombreContornoSinEspacios = nombreDelContorno.split(" ").join("");
     api
@@ -106,8 +102,6 @@ export const App = () => {
         setCoordsPolygon([]);
         alert("Controno creado correctamente");
         setContornoNuevo(true);
-
-        //console.log(" ", color);
       });
   };
   const [mapaEliminado, setMapaEliminado] = useState(false);
@@ -227,46 +221,15 @@ export const App = () => {
             backgroundColor: "#2B3035",
           }}
         >
-          {/* <h3 style={{ margin: "10%", color: "green" }}>Lista</h3>
-          <hr style={{ marginLeft: "10%" }} />
-
-          {maps?.map((mapa) => (
-            <ul
-              key={mapa.id}
-              style={{
-                marginLeft: "10%",
-                color: "white",
-                backgroundColor: mapSelected === mapa ? "#90EE90" : "green",
-                cursor: "pointer",
-              }}
-              onClick={() => handleItemClick(mapa)}
-            >
-              <p>{mapa.name}</p>
-            </ul>
-          ))} */}
           <div style={{ margin: "10%" }} className="listaMapas">
             <p style={{ color: "white" }}>Mapas</p>
-            {/* {maps?.map((mapa) => (
-              <div
-                style={{
-                  marginLeft: "10%",
-                  color: "white",
-                  //backgroundColor: mapSelected === mapa ? "#90EE90" : "green",
-                  cursor: "pointer",
-                }}
-                key={mapa.id}
-                onClick={() => handleItemClick(mapa)}
-              >
-                <p>{mapa.name}</p>
-              </div>
-            ))} */}
+
             {maps.length > 0 && (
               <div className="table-container-mapas">
                 {maps.map((mapa) => (
                   <table className="custom-table-mapas" key={mapa.name}>
                     <tbody>
                       <tr className="table-row-mapas">
-                        {/* Celda para el nombre del mapa */}
                         <td
                           className="table-cell-mapas"
                           onClick={() => handleItemClick(mapa)}
@@ -275,8 +238,6 @@ export const App = () => {
                         >
                           {mapa.name}
                         </td>
-
-                        {/* Celda separada para el SVG */}
                         <td
                           className="table-cell-mapas svg-cell"
                           onClick={() => handleDeleteMap(mapa.id, mapa.name)}
@@ -305,7 +266,6 @@ export const App = () => {
               onClick={openModalMapas}
             >
               <u>+ Añadir mapa</u>
-              {/* {(crearContorno = true ? <u> Finalizar contorno</u> : null)} */}
             </p>
           </div>
           {crearContorno ? (
