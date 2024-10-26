@@ -83,26 +83,26 @@ export const App = () => {
     setModalMapasIsOpen(false);
   };
 
-  const submitContour = () => {
+  const submitContour = async () => {
     setContornoNuevo(false);
     const nombreContornoSinEspacios = nombreDelContorno.split(" ").join("");
-    api
-      .createContourTable(nombreContornoSinEspacios)
-      .then(async (_) => {
-        for (let index = 0; index < coordsPolygon.length; index++) {
-          const coord = coordsPolygon[index];
-          await api.addContour(nombreContornoSinEspacios, coord);
-        }
-      })
-      .finally(() => {
-        setCrearContorno(false);
+    await api.createContourTable(nombreContornoSinEspacios);
 
-        setColor("#000");
-        setNombreDelContorno("");
-        setCoordsPolygon([]);
-        alert("Controno creado correctamente");
-        setContornoNuevo(true);
-      });
+    for (let index = 0; index < coordsPolygon.length; index++) {
+      const coord = coordsPolygon[index];
+      await api.addContour(nombreContornoSinEspacios, coord);
+    }
+    let objecNombre = "";
+    let objectColor = "#000";
+
+    setCrearContorno(false);
+
+    setColor(objectColor);
+    setNombreDelContorno(objecNombre);
+
+    setCoordsPolygon([]);
+    alert("Controno creado correctamente");
+    setContornoNuevo(true);
   };
   const [mapaEliminado, setMapaEliminado] = useState(false);
   const handleDeleteMap = async (id, nombre) => {

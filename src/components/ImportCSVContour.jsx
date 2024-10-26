@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
+import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
 import { SketchPicker } from "react-color";
 import { addContourProps, createContourTable, addContourImport } from "../api";
@@ -85,62 +85,74 @@ const ImportCSVContour = ({
     },
   };
 
-  Modal.defaultStyles.overlay.zIndex = 1000;
+  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      ariaHideApp={false}
+      show={isOpen}
+      // onRequestClose={onRequestClose}
+      // ariaHideApp={false}
       style={customStyles}
     >
-      <h3>Importar contorno csv</h3>
-      <br></br>
-      <p>
-        Selecciona el .csv y escribe el nombre que quieres ponerle al contorno
-      </p>
-      <br></br>
-      <input
-        type="text"
-        placeholder="Nombre de la tabla"
-        value={tableName}
-        onChange={(e) => setTableName(e.target.value)}
-      />
-      <input type="file" accept=".csv" onChange={handleFileChange} />
-      <div className="inputContainer">
-        <label className="labelForm">Color: </label>
+      <Modal.Header>
+        <Modal.Title>Importar contorno csv</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          Selecciona el .csv y escribe el nombre que quieres ponerle al contorno
+        </p>
+        <br></br>
         <input
-          className="inputForm"
+          name="nombreCapaContorno"
           type="text"
-          id="color"
-          value={colorImport}
-          readOnly
-          style={{ border: 0 }}
+          placeholder="Nombre de la tabla"
+          value={tableName}
+          onChange={(e) => setTableName(e.target.value)}
         />
-      </div>
-      <div className="colorPickerContainer">
-        <SketchPicker
-          color={colorImport}
-          onChangeComplete={handleChangeComplete}
+        <input
+          name="fileCapaContorno"
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
         />
-        <div
-          className="colorDisplay"
-          style={{
-            marginTop: "20px",
-            width: "100px",
-            height: "100px",
-            backgroundColor: { colorImport },
-          }}
-        />
-      </div>
+        <div className="inputContainer">
+          <label className="labelForm">Color: </label>
+          <input
+            name="colorCapaContorno"
+            className="inputForm"
+            type="text"
+            id="color"
+            value={colorImport}
+            readOnly
+            style={{ border: 0 }}
+          />
+        </div>
+        <div className="colorPickerContainer">
+          <SketchPicker
+            color={colorImport}
+            onChangeComplete={handleChangeComplete}
+          />
+          <div
+            className="colorDisplay"
+            style={{
+              marginTop: "20px",
+              width: "100px",
+              height: "100px",
+              backgroundColor: { colorImport },
+            }}
+          />
+        </div>
+      </Modal.Body>
 
-      <div className="botonesForm">
-        <button className="botonForm" type="button" onClick={onRequestClose}>
-          Cancelar
-        </button>
-        <button className="botonForm" type="button" onClick={handleImport}>
-          Importar
-        </button>
-      </div>
+      <Modal.Footer>
+        <div className="botonesForm">
+          <button className="botonForm" type="button" onClick={onRequestClose}>
+            Cancelar
+          </button>
+          <button className="botonForm" type="button" onClick={handleImport}>
+            Importar
+          </button>
+        </div>
+      </Modal.Footer>
     </Modal>
   );
 };

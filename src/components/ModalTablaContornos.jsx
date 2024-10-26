@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
+import Modal from "react-bootstrap/Modal";
 import api, { deleteContorno, deleteCuevaListaContornos } from "../api";
 
 const ModalTablaContornos = ({
@@ -173,112 +173,122 @@ const ModalTablaContornos = ({
     document.body.removeChild(link);
   };
 
-  Modal.defaultStyles.overlay.zIndex = 1000;
+  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Tablas Contornos"
-      style={customStyles}
-      ariaHideApp={false}
+      show={isOpen}
+      // onRequestClose={onRequestClose}
+      // contentLabel="Tablas Contornos"
+      dialogClassName="modal-90w modal-90h"
+      size="lg"
+      // ariaHideApp={false}
     >
-      <div className="botonTablaCapas">
-        <h3>Tablas Contornos</h3>
-        {nombreContorno ? (
-          <button
-            className="botonTablaExportar"
-            type="button"
-            onClick={clicDownloadContorno}
-          >
-            Exportar contorno a CSV
-          </button>
-        ) : null}
-      </div>
+      <Modal.Header>
+        <div className="botonTablaCapas">
+          <Modal.Title>Tablas Contornos</Modal.Title>
+          {nombreContorno ? (
+            <button
+              className="botonTablaExportar"
+              type="button"
+              onClick={clicDownloadContorno}
+            >
+              Exportar contorno a CSV
+            </button>
+          ) : null}
+        </div>
+      </Modal.Header>
+      <Modal.Body>
+        <div style={{ marginBottom: "20px" }}>
+          <label htmlFor="select" style={{ marginRight: "10px" }}>
+            Selecciona un contorno:
+          </label>
+          <select id="select" value={selectedOption} onChange={handleChange}>
+            <option value="">--Seleccione una opción--</option>
+            {tablasContornos.map((tabla) => (
+              <option key={tabla.id} value={tabla.nombre}>
+                {tabla.nombre}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <br />
-      <div style={{ marginBottom: "20px" }}>
-        <label htmlFor="select" style={{ marginRight: "10px" }}>
-          Selecciona un contorno:
-        </label>
-        <select id="select" value={selectedOption} onChange={handleChange}>
-          <option value="">--Seleccione una opción--</option>
-          {tablasContornos.map((tabla) => (
-            <option key={tabla.id} value={tabla.nombre}>
-              {tabla.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div class="table-container">
-        <table style={{ borderCollapse: "collapse", width: "100%" }}>
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid black", padding: "8px" }}>ID</th>
-              <th style={{ border: "1px solid black", padding: "8px" }}>
-                Nombre
-              </th>
-              <th style={{ border: "1px solid black", padding: "8px" }}>
-                Latitud
-              </th>
-              <th style={{ border: "1px solid black", padding: "8px" }}>
-                Longitud
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {selectedOptionData.length > 0 ? (
-              selectedOptionData.map((item) => (
-                <tr key={item.id}>
+        <div className="table-container">
+          <table style={{ borderCollapse: "collapse", width: "100%" }}>
+            <thead>
+              <tr>
+                <th style={{ border: "1px solid black", padding: "8px" }}>
+                  ID
+                </th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>
+                  Nombre
+                </th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>
+                  Latitud
+                </th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>
+                  Longitud
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedOptionData.length > 0 ? (
+                selectedOptionData.map((item) => (
+                  <tr key={item.id}>
+                    <td
+                      id="identificador"
+                      style={{ border: "1px solid black", padding: "8px" }}
+                    >
+                      {item.id}
+                    </td>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>
+                      {item.nombre}
+                    </td>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>
+                      {item.latitud}
+                    </td>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>
+                      {item.longitud}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
                   <td
-                    id="identificador"
-                    style={{ border: "1px solid black", padding: "8px" }}
+                    colSpan="12"
+                    style={{
+                      border: "1px solid black",
+                      padding: "8px",
+                      textAlign: "center",
+                    }}
                   >
-                    {item.id}
-                  </td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
-                    {item.nombre}
-                  </td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
-                    {item.latitud}
-                  </td>
-                  <td style={{ border: "1px solid black", padding: "8px" }}>
-                    {item.longitud}
+                    No se ha seleccionado ninguna opción
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan="12"
-                  style={{
-                    border: "1px solid black",
-                    padding: "8px",
-                    textAlign: "center",
-                  }}
-                >
-                  No se ha seleccionado ninguna opción
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="botonesForm">
-        {nombreContorno ? (
+              )}
+            </tbody>
+          </table>
+        </div>
+      </Modal.Body>
+      <Modal.Footer>
+        <div className="botonesForm">
+          {nombreContorno ? (
+            <button
+              className="botonFormEliminar"
+              type="button"
+              onClick={handleClicEliminarContorno}
+            >
+              Eliminar contorno
+            </button>
+          ) : null}
           <button
-            className="botonFormEliminar"
+            className="botonForm"
             type="button"
-            onClick={handleClicEliminarContorno}
+            onClick={handleClicButton}
           >
-            Eliminar contorno
+            Cerrar
           </button>
-        ) : null}
-        <button className="botonForm" type="button" onClick={handleClicButton}>
-          Cerrar
-        </button>
-      </div>
+        </div>
+      </Modal.Footer>
     </Modal>
   );
 };

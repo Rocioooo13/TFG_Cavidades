@@ -128,8 +128,21 @@ export const MenuHorizontal = ({
   };
 
   const handleClickActivarContorno = () => {
+    let objecNombre = "";
+    let objectColor = "#000";
+    setColor(objectColor);
+    setNombreDelContorno(objecNombre);
+
     setCoordsPolygon([]);
     setCrearContorno(true);
+    setTimeout(() => {
+      console.log(
+        "NombreDelContorno: ",
+        nombreDelContorno,
+        "y color elegido: ",
+        color
+      );
+    }, 500);
     setOpenModalCreateContour(true);
     closeNav();
   };
@@ -630,6 +643,7 @@ export const MenuHorizontal = ({
                 <NavDropdown.Divider />
                 <NavDropdown.Item>
                   <input
+                    name="buscarCapaCuevas"
                     type="search"
                     placeholder="Busca una capa..."
                     list="listaConcejos"
@@ -690,6 +704,7 @@ export const MenuHorizontal = ({
                 <NavDropdown.Divider />
                 <NavDropdown.Item>
                   <input
+                    name="buscarCapaContorno"
                     type="search"
                     placeholder="Busca un contorno..."
                     list="listaContornos"

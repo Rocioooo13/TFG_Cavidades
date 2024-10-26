@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Modal from "react-modal";
+import Modal from "react-bootstrap/Modal";
 import Papa from "papaparse";
 import { añadirCapaListaCapas, createCueva, createTable } from "../api";
 
-const ImportCSV = ({
-  isOpen,
-  onRequestClose,
-  capaNueva,
-  setCapaNueva,
-}) => {
+const ImportCSV = ({ isOpen, onRequestClose, capaNueva, setCapaNueva }) => {
   const [file, setFile] = useState(null);
-  const [tableName, setTableName] = useState(""); 
+  const [tableName, setTableName] = useState("");
   const [matriz, setMatriz] = useState([]);
 
   const handleFileChange = (event) => {
@@ -38,7 +33,6 @@ const ImportCSV = ({
     const conc = new String(tableName).split(" ").join("");
 
     createTable(conc).then((_) => {
-
       añadirCapaListaCapas(tableName);
 
       matriz.map((item) => {
@@ -71,8 +65,7 @@ const ImportCSV = ({
             lon,
             item.archivo
           )
-            .then((_) => {
-            })
+            .then((_) => {})
             .finally(() => {
               onRequestClose();
               setCapaNueva(true);
@@ -98,36 +91,46 @@ const ImportCSV = ({
     },
   };
 
-  Modal.defaultStyles.overlay.zIndex = 1000;
+  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      ariaHideApp={false}
+      show={isOpen}
+      // onRequestClose={onRequestClose}
+      // ariaHideApp={false}
       style={customStyles}
     >
-      <h3>Importar capa csv</h3>
-      <br></br>
-      <p>
-        Selecciona el .csv y escribe el nombre que quieres ponerle a la capa
-      </p>
-      <br></br>
-      <input
-        type="text"
-        placeholder="Nombre de la tabla"
-        value={tableName}
-        onChange={(e) => setTableName(e.target.value)}
-      />
-      <input type="file" accept=".csv" onChange={handleFileChange} />
-
-      <div className="botonesForm">
-        <button className="botonForm" type="button" onClick={onRequestClose}>
-          Cancelar
-        </button>
-        <button className="botonForm" type="button" onClick={handleImport}>
-          Importar
-        </button>
-      </div>
+      <Modal.Header>
+        <Modal.Title>Importar capa csv</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <p>
+          Selecciona el .csv y escribe el nombre que quieres ponerle a la capa
+        </p>
+        <br></br>
+        <input
+          name="nombreCapaCueva"
+          type="text"
+          placeholder="Nombre de la tabla"
+          value={tableName}
+          onChange={(e) => setTableName(e.target.value)}
+        />
+        <input
+          name="fileCapaCueva"
+          type="file"
+          accept=".csv"
+          onChange={handleFileChange}
+        />
+      </Modal.Body>
+      <Modal.Footer>
+        <div className="botonesForm">
+          <button className="botonForm" type="button" onClick={onRequestClose}>
+            Cancelar
+          </button>
+          <button className="botonForm" type="button" onClick={handleImport}>
+            Importar
+          </button>
+        </div>
+      </Modal.Footer>
     </Modal>
   );
 };

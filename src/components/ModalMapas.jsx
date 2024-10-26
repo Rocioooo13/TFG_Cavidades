@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "react-modal";
+import Modal from "react-bootstrap/Modal";
 import { addMap } from "../api";
 
 const customStyles = {
@@ -20,52 +20,61 @@ const ModalMapas = ({ isOpen, onRequestClose, mapaNuevo, setMapaNuevo }) => {
     setMapaNuevo(objectMapa);
 
     addMap(nombreDelMapa, urlDelMapa)
-      .then((_) => {
-      })
+      .then((_) => {})
       .finally(() => {
         onRequestClose();
       });
   };
-  Modal.defaultStyles.overlay.zIndex = 1000;
+  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Formulario Modal"
+      show={isOpen}
+      // onRequestClose={onRequestClose}
+      // contentLabel="Formulario Modal"
       style={customStyles}
-      ariaHideApp={false}
+      // ariaHideApp={false}
     >
-      <h3>Añadir mapa</h3>
-      <br />
+      <Modal.Header>
+        <Modal.Title>Añadir mapa</Modal.Title>
+      </Modal.Header>
       <form className="form">
-        <div className="inputContainer">
-          <label className="labelForm">Nombre:</label>
-          <input
-            className="inputForm"
-            id="nombreMapa"
-            type="text"
-            placeholder="Escribe el nombre del mapa"
-          />
-        </div>
+        <Modal.Body>
+          <div className="inputContainer">
+            <label className="labelForm">Nombre:</label>
+            <input
+              name="nombreMapa"
+              className="inputForm"
+              id="nombreMapa"
+              type="text"
+              placeholder="Escribe el nombre del mapa"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">URL:</label>
-          <input
-            className="inputForm"
-            type="text"
-            id="url"
-            placeholder="Escribe la url del mapa"
-          />
-        </div>
-
-        <div className="botonesForm">
-          <button className="botonForm" type="button" onClick={onRequestClose}>
-            Cancelar
-          </button>
-          <button className="botonForm" type="button" onClick={añadirMapa}>
-            Crear
-          </button>
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">URL:</label>
+            <input
+              name="urlMapa"
+              className="inputForm"
+              type="text"
+              id="url"
+              placeholder="Escribe la url del mapa"
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="botonesForm">
+            <button
+              className="botonForm"
+              type="button"
+              onClick={onRequestClose}
+            >
+              Cancelar
+            </button>
+            <button className="botonForm" type="button" onClick={añadirMapa}>
+              Crear
+            </button>
+          </div>
+        </Modal.Footer>
       </form>
     </Modal>
   );

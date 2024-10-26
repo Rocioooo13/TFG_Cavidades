@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Modal from "react-modal";
+import Modal from "react-bootstrap/Modal";
 import api, {
   createTable,
   createCueva,
@@ -47,7 +47,6 @@ const ModalForm = ({
     const xDelForm = document.getElementById("x").value;
     const huso = document.getElementById("huso").value;
 
-  
     var yAlSurEcuador = 0;
     if (hemisferio === "S") {
       yAlSurEcuador = Number(yDelForm - 10000000);
@@ -62,13 +61,13 @@ const ModalForm = ({
         (c / Math.pow(1 + e12 * Math.pow(Math.cos(fi), 2), 1 / 2)) *
         0.9996
       ).toFixed(3)
-    ); 
+    );
     console.log("ni ", ni);
-    const a = Number(((xDelForm - 500000) / ni).toFixed(9)); 
+    const a = Number(((xDelForm - 500000) / ni).toFixed(9));
     console.log("a ", a);
-    const A1 = Number(Math.sin(2 * fi).toFixed(9)); 
+    const A1 = Number(Math.sin(2 * fi).toFixed(9));
     console.log("A1 ", A1);
-    const A2 = Number((A1 * Math.pow(Math.cos(fi), 2)).toFixed(9)); 
+    const A2 = Number((A1 * Math.pow(Math.cos(fi), 2)).toFixed(9));
     console.log("A2 ", A2);
     const J2 = Number((fi + A1 / 2).toFixed(9));
     console.log("J2 ", J2);
@@ -81,16 +80,16 @@ const ModalForm = ({
     const alfa = Number(((3 / 4) * e12).toFixed(9)); //9
     console.log("alfa ", alfa);
     const beta1 = ((5 / 3) * Math.pow(alfa, 2)).toExponential(4);
-    const beta = Number(beta1); 
+    const beta = Number(beta1);
     console.log("beta ", beta);
     const gamma1 = ((35 / 27) * Math.pow(alfa, 3)).toExponential(5);
-    const gamma = Number(gamma1); 
+    const gamma = Number(gamma1);
     console.log("gamma ", gamma);
     const bfi = Number(
       (0.9996 * c * (fi - alfa * J2 + beta * J4 - gamma * J6)).toFixed(3)
-    ); 
+    );
     console.log("bfi ", bfi);
-    const b = Number(((yAlSurEcuador - bfi) / ni).toFixed(9)); 
+    const b = Number(((yAlSurEcuador - bfi) / ni).toFixed(9));
     console.log("b ", b);
     const zeta1 = (
       ((e12 * Math.pow(a, 2)) / 2) *
@@ -100,7 +99,7 @@ const ModalForm = ({
     console.log("zeta ", zeta);
     const xi = Number((a * (1 - zeta / 3)).toFixed(9));
     console.log("xi ", xi);
-    const eta = Number((b * (1 - zeta) + fi).toFixed(9)); 
+    const eta = Number((b * (1 - zeta) + fi).toFixed(9));
     console.log("eta ", eta);
     const senhxi = Number(
       ((Math.pow(Math.E, xi) - Math.pow(Math.E, -xi)) / 2).toFixed(9)
@@ -184,8 +183,7 @@ const ModalForm = ({
         latlong[1],
         archivo
       )
-        .then((_) => {
-        })
+        .then((_) => {})
         .finally(async () => {
           alert("La capa se ha creado correctamente.");
           if (capasSeleccionadas.length > 0) {
@@ -215,158 +213,173 @@ const ModalForm = ({
         });
     });
   };
-  Modal.defaultStyles.overlay.zIndex = 1000;
+  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onRequestClose}
-      contentLabel="Formulario Modal"
+      show={isOpen}
+      // onRequestClose={onRequestClose}
+      // contentLabel="Formulario Modal"
       style={customStyles}
-      ariaHideApp={false}
+      // ariaHideApp={false}
     >
-      <h3>Crear cueva</h3>
-      <br />
+      <Modal.Header>
+        <Modal.Title>Crear cueva</Modal.Title>
+      </Modal.Header>
       <form className="form">
-        <div className="inputContainer">
-          <label className="labelForm">Denominación:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe el nombre de la cueva"
-            id="denominacion"
-          />
-        </div>
+        <Modal.Body>
+          <div className="inputContainer">
+            <label className="labelForm">Denominación:</label>
+            <input
+              name="denominacionCueva"
+              className="inputForm"
+              type="text"
+              placeholder="Escribe el nombre de la cueva"
+              id="denominacion"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">X:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe la coordenada X de la cueva"
-            id="x"
-          />
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">X:</label>
+            <input
+              name="XCueva"
+              className="inputForm"
+              type="text"
+              placeholder="Escribe la coordenada X de la cueva"
+              id="x"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Y:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe la coordenada Y de la cueva"
-            id="y"
-          />
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Y:</label>
+            <input
+              name="YCueva"
+              className="inputForm"
+              type="text"
+              placeholder="Escribe la coordenada Y de la cueva"
+              id="y"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Z:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe la coordenada Z de la cueva en m"
-            id="z"
-          />
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Z:</label>
+            <input
+              name="ZCueva"
+              className="inputForm"
+              type="text"
+              placeholder="Escribe la coordenada Z de la cueva en m"
+              id="z"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Elipsoide:</label>
-          <input
-            className="inputForm"
-            defaultValue={"WGS84"}
-            type="text"
-            placeholder="Escribe el elipsoide de la cueva"
-            id="elipsoide"
-          />
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Elipsoide:</label>
+            <input
+              name="elipsoideCueva"
+              className="inputForm"
+              defaultValue={"WGS84"}
+              type="text"
+              placeholder="Escribe el elipsoide de la cueva"
+              id="elipsoide"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Huso:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe el huso de la cueva"
-            id="huso"
-          />
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Huso:</label>
+            <input
+              name="husoCueva"
+              className="inputForm"
+              type="text"
+              placeholder="Escribe el huso de la cueva"
+              id="huso"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Zona UTM:</label>
-          <select
-            className="selectForm"
-            defaultChecked="true"
-            placeholder="Selecciona el hemisferio al que pertenece la cueva"
-            id="zona"
-          >
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="G">G</option>
-            <option value="H">H</option>
-            <option value="J">J</option>
-            <option value="K">K</option>
-            <option value="L">L</option>
-            <option value="M">M</option>
-            <option value="N">N</option>
-            <option value="P">P</option>
-            <option value="Q">Q</option>
-            <option value="R">R</option>
-            <option value="S">S</option>
-            <option value="T" selected={true}>
-              T
-            </option>
-            <option value="U">U</option>
-            <option value="V">V</option>
-            <option value="W">W</option>
-            <option value="X">X</option>
-          </select>
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Zona UTM:</label>
+            <select
+              name="zonautmCueva"
+              className="selectForm"
+              defaultChecked="true"
+              placeholder="Selecciona el hemisferio al que pertenece la cueva"
+              id="zona"
+            >
+              <option value="C">C</option>
+              <option value="D">D</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="G">G</option>
+              <option value="H">H</option>
+              <option value="J">J</option>
+              <option value="K">K</option>
+              <option value="L">L</option>
+              <option value="M">M</option>
+              <option value="N">N</option>
+              <option value="P">P</option>
+              <option value="Q">Q</option>
+              <option value="R">R</option>
+              <option value="S">S</option>
+              <option value="T" selected={true}>
+                T
+              </option>
+              <option value="U">U</option>
+              <option value="V">V</option>
+              <option value="W">W</option>
+              <option value="X">X</option>
+            </select>
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Hemisferio:</label>
-          <select
-            className="selectForm"
-            defaultChecked="true"
-            placeholder="Selecciona el hemisferio al que pertenece la cueva"
-            id="hemisferio1"
-          >
-            <option value="Norte" selected={true}>
-              N
-            </option>
-            <option value="Sur">S</option>
-          </select>
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Hemisferio:</label>
+            <select
+              name="hemisferioCueva"
+              className="selectForm"
+              defaultChecked="true"
+              placeholder="Selecciona el hemisferio al que pertenece la cueva"
+              id="hemisferio1"
+            >
+              <option value="Norte" selected={true}>
+                N
+              </option>
+              <option value="Sur">S</option>
+            </select>
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Concejo:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="Escribe el concejo al que pertenece la cueva"
-            id="concejo"
-          />
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Concejo:</label>
+            <input
+              name="concejocueva"
+              className="inputForm"
+              type="text"
+              placeholder="Escribe el concejo al que pertenece la cueva"
+              id="concejo"
+            />
+          </div>
 
-        <div className="inputContainer">
-          <label className="labelForm">Ruta archivo:</label>
-          <input
-            className="inputForm"
-            type="text"
-            placeholder="C:/Users/rocio/Desktop/archivo.pdf"
-            id="archivo"
-          />
-        </div>
-
-        
-
-        <div className="botonesForm">
-          
-          <button className="botonForm" type="button" onClick={onRequestClose}>
-            Cancelar
-          </button>
-          <button className="botonForm" type="button" onClick={addCueva}>
-            Crear
-          </button>
-        </div>
+          <div className="inputContainer">
+            <label className="labelForm">Ruta archivo:</label>
+            <input
+              name="archivoCueva"
+              className="inputForm"
+              type="text"
+              placeholder="C:/Users/rocio/Desktop/archivo.pdf"
+              id="archivo"
+            />
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="botonesForm">
+            <button
+              className="botonForm"
+              type="button"
+              onClick={onRequestClose}
+            >
+              Cancelar
+            </button>
+            <button className="botonForm" type="button" onClick={addCueva}>
+              Crear
+            </button>
+          </div>
+        </Modal.Footer>
       </form>
     </Modal>
   );
