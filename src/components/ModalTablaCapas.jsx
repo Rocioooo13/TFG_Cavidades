@@ -219,17 +219,15 @@ const ModalTablaCapas = ({
     setOpenFile(false);
   };
 
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
       show={isOpen}
-      // onRequestClose={onRequestClose}
-      // contentLabel="Tabla Capas"
+      onHide={onRequestClose}
+      centered
       dialogClassName="modal-90w modal-90h"
       size="xl"
-      // ariaHideApp={false}
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <div className="botonTablaCapas">
           <Modal.Title>Tabla Capas</Modal.Title>
           {nombreCapa ? (

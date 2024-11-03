@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import L from "leaflet";
 import ModalFormUpdate from "./ModalFormUpdate";
-import { MenuHorizontal } from "./MenuHorizontal";
 
 const { BaseLayer, Overlay } = LayersControl;
 

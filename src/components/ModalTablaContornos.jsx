@@ -173,17 +173,15 @@ const ModalTablaContornos = ({
     document.body.removeChild(link);
   };
 
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
       show={isOpen}
-      // onRequestClose={onRequestClose}
-      // contentLabel="Tablas Contornos"
+      onHide={onRequestClose}
+      centered
       dialogClassName="modal-90w modal-90h"
       size="lg"
-      // ariaHideApp={false}
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <div className="botonTablaCapas">
           <Modal.Title>Tablas Contornos</Modal.Title>
           {nombreContorno ? (

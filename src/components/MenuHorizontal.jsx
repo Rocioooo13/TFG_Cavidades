@@ -6,14 +6,10 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import ModalForm from "./ModalForm";
 import ModalTablaCapas from "./ModalTablaCapas";
 import ModalTablaContornos from "./ModalTablaContornos";
-import geojson from "geojson";
 import tokml from "tokml";
 import vkbeautify from "vkbeautify";
-import geojson2shp from "geojson2shp";
-import api, { createTable, obtenertablas } from "../api";
-import { Form } from "react-bootstrap";
+import api from "../api";
 
-import { CSVLink } from "react-csv";
 import ImportCSV from "./ImportCSV";
 import ImportCSVContour from "./ImportCSVContour";
 import ModalCreateContour from "./ModalCreateContour";
@@ -309,7 +305,7 @@ export const MenuHorizontal = ({
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "contornos.geojson");
+    link.setAttribute("download", "capas.geojson");
     document.body.appendChild(link);
     link.click();
 
@@ -407,7 +403,7 @@ export const MenuHorizontal = ({
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "contornos.kml");
+    link.setAttribute("download", "capas.kml");
     document.body.appendChild(link);
     link.click();
 
@@ -487,7 +483,7 @@ export const MenuHorizontal = ({
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "exported_data.gpx");
+    link.setAttribute("download", "capas.gpx");
     document.body.appendChild(link);
     link.click();
 
@@ -496,9 +492,18 @@ export const MenuHorizontal = ({
   };
 
   const { convert } = require("geojson2shp");
+  const path = require("path");
+  const os = require("os");
 
   const exportToShapefile = async () => {
     const date = new Date();
+    const dd = String(date.getUTCDate()).padStart(2, "0");
+    const MM = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const yyyy = date.getUTCFullYear(); // Año
+    const hh = String(date.getUTCHours()).padStart(2, "0");
+    const mm = String(date.getUTCMinutes()).padStart(2, "0");
+
+    const customFormattedDate = `${dd}-${MM}-${yyyy}T${hh},${mm}`;
 
     // Estructura base de un archivo GeoJSON
     const geoJSON = {
@@ -562,7 +567,6 @@ export const MenuHorizontal = ({
               X: line.X,
               Y: line.Y,
               Z: line.Z,
-              // "DATUM, HZ":  + ", " +  + ,
               elipsoide: line.elipsoide,
               huso: line.huso,
               zonaUTM: line.zonaUTM,
@@ -582,16 +586,19 @@ export const MenuHorizontal = ({
       }
     }
 
-    // Definir la ruta de salida para el archivo zip
-    const outputPath = "C:/Users/rocio/Desktop/contornos.zip";
+    const dir = os.homedir();
+    const pathTest = path.join(
+      dir,
+      "Downloads",
+      "capas_" + customFormattedDate + ".zip"
+    );
+
     const options = {
       layer: "mi-capa",
       targetCrs: 2154,
     };
-    // console.log(geoJSON);
 
     try {
-      // Asegúrate de que las coordenadas sean válidas
       for (const feature of geoJSON.features) {
         if (
           feature.geometry.coordinates.length === 0 ||
@@ -601,9 +608,8 @@ export const MenuHorizontal = ({
         }
       }
 
-      // Convertir y exportar a Shapefile
-      await convert(geoJSON, outputPath, options);
-      console.log("Shapefile creado exitosamente en:", outputPath);
+      await convert(geoJSON, pathTest, options);
+      console.log("Shapefile creado exitosamente en:", pathTest);
     } catch (error) {
       console.error("Error al crear el Shapefile:", error);
     }

@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import { Map } from "./Map";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import api, { updateCueva, deleteCueva } from "../api";
 import ModalFileViewer from "./ModalFileViewer";
 
@@ -248,16 +247,9 @@ const ModalFormUpdate = ({
     onRequestClose();
   };
 
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
-    <Modal
-      show={isOpen}
-      // onRequestClose={onRequestClose}
-      // contentLabel="Formulario Modal"
-      style={customStyles}
-      // ariaHideApp={false}
-    >
-      <Modal.Header>
+    <Modal show={isOpen} onHide={onRequestClose} centered style={customStyles}>
+      <Modal.Header closeButton>
         <Modal.Title>Detalles cueva</Modal.Title>
       </Modal.Header>
       <form className="form">

@@ -85,15 +85,14 @@ const ImportCSVContour = ({
     },
   };
 
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
       show={isOpen}
-      // onRequestClose={onRequestClose}
-      // ariaHideApp={false}
+      onHide={onRequestClose}
+      centered
       style={customStyles}
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>Importar contorno csv</Modal.Title>
       </Modal.Header>
       <Modal.Body>

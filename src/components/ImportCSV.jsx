@@ -91,15 +91,9 @@ const ImportCSV = ({ isOpen, onRequestClose, capaNueva, setCapaNueva }) => {
     },
   };
 
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
-    <Modal
-      show={isOpen}
-      // onRequestClose={onRequestClose}
-      // ariaHideApp={false}
-      style={customStyles}
-    >
-      <Modal.Header>
+    <Modal show={isOpen} onHide={onRequestClose} centered style={customStyles}>
+      <Modal.Header closeButton>
         <Modal.Title>Importar capa csv</Modal.Title>
       </Modal.Header>
       <Modal.Body>

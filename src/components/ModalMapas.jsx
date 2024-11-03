@@ -25,16 +25,14 @@ const ModalMapas = ({ isOpen, onRequestClose, mapaNuevo, setMapaNuevo }) => {
         onRequestClose();
       });
   };
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
       show={isOpen}
-      // onRequestClose={onRequestClose}
-      // contentLabel="Formulario Modal"
+      onHide={onRequestClose}
+      centered
       style={customStyles}
-      // ariaHideApp={false}
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>Añadir mapa</Modal.Title>
       </Modal.Header>
       <form className="form">

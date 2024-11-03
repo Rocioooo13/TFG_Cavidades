@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import Modal from "react-bootstrap/Modal";
 import { SketchPicker } from "react-color";
 import { createContourPropsTable, addContourProps } from "../api";
@@ -24,52 +24,30 @@ export const ModalCreateContour = ({
 }) => {
   const [mostrarComponente, setMostrarComponente] = useState(false);
 
-  // Manejar la selección de color
   const handleChangeComplete = (newColor) => {
     setColor(newColor.hex);
   };
 
-  // Crear el contorno cuando se hace clic en "Guardar"
   const handleClicCrearContorno = async () => {
-    // Usamos directamente el estado `color`
     await createContourPropsTable();
     const addContour = await addContourProps(nombreDelContorno, color);
     onRequestClose();
     setCrearContorno(true);
   };
 
-  // Mostrar el input solo cuando el modal esté completamente abierto
-  useEffect(() => {
-    if (isOpen) {
-      setTimeout(() => {
-        setMostrarComponente(true);
-      }, 500); // Delay de 500ms para asegurar que el modal está completamente listo
-    } else {
-      setMostrarComponente(false); // Ocultar el componente cuando el modal se cierre
-    }
-  }, [isOpen]);
-
-  // const inputElement = useCallback((inputElement) => {
-  //   if (inputElement) {
-  //     inputElement.focus();
-  //   }
-  // }, []);
-
   const handleNombreContorno = (e) => {
     setNombreDelContorno(e.target.value);
   };
 
-  //Modal.defaultStyles.overlay.zIndex = 1000; // Asegurar el z-index del modal
   return (
     <Modal
       id="modalCreateContour"
       show={isOpen}
-      //onRequestClose={onRequestClose}
-      // contentLabel="Modal Create Contour"
+      onHide={onRequestClose}
+      centered
       style={customStyles}
-      // ariaHideApp={false}
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>Propiedades del contorno</Modal.Title>
       </Modal.Header>
       {/* <br /> */}

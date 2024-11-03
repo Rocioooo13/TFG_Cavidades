@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import FileViewer from "react-file-viewer";
 import api, {
@@ -17,18 +17,15 @@ const customStyles = {
 };
 
 const ModalFileViewer = ({ isOpen, onRequestClose, urlArchivoCueva }) => {
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   const file = urlArchivoCueva;
   const type = file.slice(-3);
   return (
     <Modal
       show={isOpen}
-      // onRequestClose={onRequestClose}
-      // contentLabel="Modal FileViewer"
       onHide={onRequestClose}
+      centered
       dialogClassName="modal-90w"
       size="xl"
-      // ariaHideApp={false}
     >
       <Modal.Header closeButton>
         <Modal.Title>Visor de archivo</Modal.Title>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import api, {
   createTable,
@@ -213,16 +213,14 @@ const ModalForm = ({
         });
     });
   };
-  // Modal.defaultStyles.overlay.zIndex = 1000;
   return (
     <Modal
       show={isOpen}
-      // onRequestClose={onRequestClose}
-      // contentLabel="Formulario Modal"
+      onHide={onRequestClose}
+      centered
       style={customStyles}
-      // ariaHideApp={false}
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title>Crear cueva</Modal.Title>
       </Modal.Header>
       <form className="form">
