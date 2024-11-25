@@ -53,26 +53,22 @@ export const ModalCreateContour = ({
       {/* <br /> */}
       <form id="createContour">
         <Modal.Body>
-          {mostrarComponente ? (
-            <div className="inputContainer" id="modalCreateContour">
-              <label className="labelForm" htmlFor="nameOfContour">
-                Nombre:{" "}
-              </label>
-              <input
-                name="nombreDelContorno"
-                className="inputForm"
-                type="text"
-                label="nameOfContour"
-                placeholder="Escribe el nombre del contorno"
-                id="nombreContorno"
-                value={nombreDelContorno}
-                onChange={(e) => handleNombreContorno(e)}
-                form="createContour"
-              />
-            </div>
-          ) : (
-            <h1>Cargando...</h1>
-          )}
+          <div className="inputContainer" id="modalCreateContour">
+            <label className="labelForm" htmlFor="nameOfContour">
+              Nombre:{" "}
+            </label>
+            <input
+              name="nombreDelContorno"
+              className="inputForm"
+              type="text"
+              label="nameOfContour"
+              placeholder="Escribe el nombre del contorno"
+              id="nombreContorno"
+              value={nombreDelContorno}
+              onChange={(e) => handleNombreContorno(e)}
+              form="createContour"
+            />
+          </div>
           <div className="inputContainer">
             <label className="labelForm">Color: </label>
             <input

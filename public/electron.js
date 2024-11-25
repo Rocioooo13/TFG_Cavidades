@@ -45,7 +45,7 @@ async function createWindow() {
   win.loadFile(path.join(__dirname, "../build/index.html"));
 
   // rest of code.. PARA QUE SE ABRA LA VENTANA DevTool
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 }
 
 app.on("ready", createWindow);

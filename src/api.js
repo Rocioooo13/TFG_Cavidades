@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3");
-
 const db = new sqlite3.Database("cavidades.sqlite3");
+
 // const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
 // db.run(sqlMapa, function (err) {
 //   if (err) {

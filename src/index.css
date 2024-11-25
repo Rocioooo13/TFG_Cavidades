@@ -5,11 +5,9 @@ form{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* align-items: center; */
 }
 .labelForm{
   margin-top: 12px;
-  /* display: "block"; */
 }
 
 .inputForm{
