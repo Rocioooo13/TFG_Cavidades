@@ -128,6 +128,8 @@ const ModalTablaCapas = ({
     setcapaEliminada(true);
     setNombreCapa("");
     setCapaNueva(true);
+
+    setIndex(index - 1);
   };
 
   useEffect(() => {
@@ -212,7 +214,7 @@ const ModalTablaCapas = ({
   };
   const verArchivo = (archivo) => {
     setUrlArchivoCueva(archivo);
-    setTimeout(console.log(urlArchivoCueva), openFileModal(), 200);
+    setTimeout(openFileModal(), 200);
   };
 
   const closefileModal = () => {

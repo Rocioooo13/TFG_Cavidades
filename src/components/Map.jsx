@@ -69,7 +69,7 @@ export const Map = ({
 
   const loadCuevas = async () => {
     if (capasSeleccionadas.length > 0) {
-      if (capasSeleccionadas.length >= index) {
+      if (capasSeleccionadas.length > index) {
         const conc = new String(capasSeleccionadas[index]).split(" ").join("");
         try {
           const capa = await api.getLayers(conc);
@@ -77,24 +77,19 @@ export const Map = ({
 
           setTodasCuevas((prevCapas) => {
             const nuevasCapas = [...prevCapas, capa ?? []];
-            console.log(
-              "Index: ",
-              index,
-              "Cuevas añadidas a todasCuevas",
-              nuevasCapas
-            );
+            console.log(nuevasCapas);
             return nuevasCapas;
           });
 
           setCapasVisibles((prev) => ({
             ...prev,
             [capasSeleccionadas[index]]: true,
-          }));
+          }
+        ));
 
           setIndex(index + 1);
-          console.log("Capa seleccionada", capasVisibles);
         } catch (error) {
-          console.error("Error cargando cuevas:", error);
+          // console.error("Error cargando cuevas:", error);
         }
       }
     }
@@ -116,7 +111,7 @@ export const Map = ({
 
   const loadContornos = async () => {
     if (contornosSeleccionados.length > 0) {
-      if (contornosSeleccionados.length >= index2) {
+      if (contornosSeleccionados.length > index2) {
         const cont = contornosSeleccionados[index2].split(" ").join("");
         try {
           let objectColor = [];
@@ -161,10 +156,8 @@ export const Map = ({
       click(e) {
         const latlng = [e.latlng.lat, e.latlng.lng];
         setSelectedPosition(latlng);
-        console.log("Coordinates on click: ", latlng);
         if (latlng[0] !== 0 && latlng[1] !== 0) {
           setCoordsPolygon([...coordsPolygon, latlng]);
-          console.log(coordsPolygon);
         }
       },
     });
@@ -193,65 +186,73 @@ export const Map = ({
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url={url}
           />
-          <LayersControl name="Capas" position="topright">
-            {capasSeleccionadas.map((capa, index) => (
-              <Overlay
-                key={index}
-                name={`Capa ${capa}`}
-                checked={capasVisibles[capa]}
-              >
-                <LayerGroup name="Cuevas de prueba">
-                  {capasVisibles[capa] &&
-                    todasCuevas[index] &&
-                    todasCuevas[index].map((cueva) => (
-                      <Marker
-                        key={cueva.id}
-                        position={[cueva.longitud, cueva.latitud]}
-                        icon={customIcon}
-                      >
-                        <Popup>
-                          <div style={{ textAlign: "center" }}>
-                            <p>{cueva.denominacion}</p>
-                            <hr />
-                            <button
-                              style={{
-                                color: "white",
-                                backgroundColor: "green",
-                              }}
-                              onClick={() => handleMarkerClick(cueva)}
-                            >
-                              Detalles
-                            </button>
-                          </div>
-                        </Popup>
-                        <Tooltip>{cueva.denominacion}</Tooltip>
-                      </Marker>
-                    ))}
-                </LayerGroup>
-              </Overlay>
-            ))}
+          <LayersControl
+            name="Capas"
+            position="topright"
+            key={`${capasSeleccionadas.length}-${contornosSeleccionados.length}`}
+          >
+            {capasSeleccionadas.length > 0
+              ? capasSeleccionadas.map((capa, index) => (
+                  <Overlay
+                    key={index}
+                    name={`Capa ${capa}`}
+                    checked={capasVisibles[capa]}
+                  >
+                    <LayerGroup name="Cuevas de prueba">
+                      {capasVisibles[capa] &&
+                        todasCuevas[index] &&
+                        todasCuevas[index].map((cueva) => (
+                          <Marker
+                            key={cueva.id}
+                            position={[cueva.longitud, cueva.latitud]}
+                            icon={customIcon}
+                          >
+                            <Popup>
+                              <div style={{ textAlign: "center" }}>
+                                <p>{cueva.denominacion}</p>
+                                <hr />
+                                <button
+                                  style={{
+                                    color: "white",
+                                    backgroundColor: "green",
+                                  }}
+                                  onClick={() => handleMarkerClick(cueva)}
+                                >
+                                  Detalles
+                                </button>
+                              </div>
+                            </Popup>
+                            <Tooltip>{cueva.denominacion}</Tooltip>
+                          </Marker>
+                        ))}
+                    </LayerGroup>
+                  </Overlay>
+                ))
+              : null}
 
-            {contornosSeleccionados.map((contorno, index) => (
-              <Overlay
-                key={index}
-                name={`Contorno ${contorno}`}
-                checked={contornosVisibles[contorno]}
-              >
-                <LayerGroup name="Contornos de prueba">
-                  {contornosVisibles[contorno] &&
-                  todosContornos[index] &&
-                  todosContornos.length > index &&
-                  colorContorno.length > index ? (
-                    <Polygon
-                      positions={todosContornos[index]}
-                      color={colorContorno[index]}
-                      fill={false}
-                      weight={2}
-                    />
-                  ) : null}
-                </LayerGroup>
-              </Overlay>
-            ))}
+            {contornosSeleccionados.length > 0
+              ? contornosSeleccionados.map((contorno, index) => (
+                  <Overlay
+                    key={index}
+                    name={`Contorno ${contorno}`}
+                    checked={contornosVisibles[contorno]}
+                  >
+                    <LayerGroup name="Contornos de prueba">
+                      {contornosVisibles[contorno] &&
+                      todosContornos[index] &&
+                      todosContornos.length > index &&
+                      colorContorno.length > index ? (
+                        <Polygon
+                          positions={todosContornos[index]}
+                          color={colorContorno[index]}
+                          fill={false}
+                          weight={2}
+                        />
+                      ) : null}
+                    </LayerGroup>
+                  </Overlay>
+                ))
+              : null}
 
             {crearContorno && (color != "#000") & (nombreDelContorno != "") ? (
               <Overlay name={nombreDelContorno} checked={true}>

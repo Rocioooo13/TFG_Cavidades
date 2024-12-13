@@ -131,14 +131,6 @@ export const MenuHorizontal = ({
 
     setCoordsPolygon([]);
     setCrearContorno(true);
-    setTimeout(() => {
-      console.log(
-        "NombreDelContorno: ",
-        nombreDelContorno,
-        "y color elegido: ",
-        color
-      );
-    }, 500);
     setOpenModalCreateContour(true);
     closeNav();
   };
@@ -193,23 +185,11 @@ export const MenuHorizontal = ({
         ...prevContornos,
         nombreTablaContorno,
       ]);
-      console.log(
-        "Acabo de seleccionar el contorno",
-        nombreDelContorno,
-        " y se ha añadido al array"
-      );
     } else {
-      console.log("El contorno ya está seleccionado");
+      // console.log("El contorno ya está seleccionado");
     }
     closeNav();
   };
-  const imprimirNombreContorno = () => {
-    console.log("Nombre tabla :", contornosSeleccionados);
-  };
-
-  useEffect(() => {
-    imprimirNombreContorno();
-  }, [tablaSeleccionada2]);
 
   const filteredConcejos = tablas.filter((tabla) => {
     const regex = new RegExp(searchText.toLowerCase(), "g");
@@ -609,9 +589,11 @@ export const MenuHorizontal = ({
       }
 
       await convert(geoJSON, pathTest, options);
-      console.log("Shapefile creado exitosamente en:", pathTest);
+      alert(
+        "Las capas se han exportado correctamente a formato Shapefile en la carpeta 'Descargas'."
+      );
     } catch (error) {
-      console.error("Error al crear el Shapefile:", error);
+      alert("Error al crear el Shapefile:", error);
     }
   };
 

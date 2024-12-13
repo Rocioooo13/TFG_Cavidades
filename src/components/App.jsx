@@ -35,7 +35,6 @@ export const App = () => {
   const [contornoEliminado, setContornoEliminado] = useState(false);
   const [cuevaActualizada, setCuevaActualizada] = useState(false);
 
-  //Me devuelve la URL console.log(api.getMap(2)[0]);
   const loadMap = async () => {
     await api.createMapTable();
     const mapSelect = await api.getMap(1);
@@ -46,11 +45,21 @@ export const App = () => {
       return;
     }
     setMapSelected(mapSelect ?? "");
-    console.log("Pongo incialmente el contorno a: ", crearContorno);
   };
   const handleItemClick = (item) => {
     setMapSelected("");
-    setTimeout(() => setMapSelected(item.url ?? ""), 500);
+    setTimeout(() => {
+      if (item?.url !== "") {
+        setMapSelected(
+          item?.url ??
+            "https://1.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/terrain.day/{z}/{x}/{y}/256/png8?app_id=eAdkWGYRoc4RfxVo0Z4B&app_code=TrLJuXVK62IQk0vuXFzaig&lg=eng"
+        );
+      } else {
+        setMapSelected(
+          "https://1.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/terrain.day/{z}/{x}/{y}/256/png8?app_id=eAdkWGYRoc4RfxVo0Z4B&app_code=TrLJuXVK62IQk0vuXFzaig&lg=eng"
+        );
+      }
+    }, 500);
   };
 
   const loadMaps = async () => {
@@ -101,7 +110,7 @@ export const App = () => {
     setNombreDelContorno(objecNombre);
 
     setCoordsPolygon([]);
-    alert("Controno creado correctamente");
+    alert("Contorno creado correctamente");
     setContornoNuevo(true);
   };
   const [mapaEliminado, setMapaEliminado] = useState(false);
@@ -288,6 +297,7 @@ export const App = () => {
         onRequestClose={closeModalMapas}
         mapaNuevo={mapaNuevo}
         setMapaNuevo={setMapaNuevo}
+        setMapSelected={setMapSelected}
       />
     </div>
   );

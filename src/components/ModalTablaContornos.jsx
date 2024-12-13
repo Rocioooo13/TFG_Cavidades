@@ -99,18 +99,16 @@ const ModalTablaContornos = ({
       }
     }
 
-    console.log("contornosSeleccionados antes:", contornosSeleccionados);
     setContornosSeleccionados((prevContornossSeleccionados) => {
       return prevContornossSeleccionados.filter(
         (contorno) => contorno !== nombreContorno
       );
     });
-    setTimeout(
-      console.log("contornosSeleccionados:", contornosSeleccionados),
-      200
-    );
+
     setNombreContorno("");
     setContornoEliminado(false);
+
+    setIndex2(index2 - 1);
   };
 
   useEffect(() => {

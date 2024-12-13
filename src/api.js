@@ -1,13 +1,6 @@
 const sqlite3 = require("sqlite3");
 const db = new sqlite3.Database("cavidades.sqlite3");
 
-// const sqlMapa = `CREATE TABLE IF NOT EXISTS mapas (id  INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,url TEXT)`;
-// db.run(sqlMapa, function (err) {
-//   if (err) {
-//     console.log("Ha habido un error"); //err.message
-//   }
-// });
-
 function addNameOfLayerOrContour(nombre, type) {
   return nombre + "_" + type;
 }
@@ -40,7 +33,6 @@ module.exports = {
           return reject(error);
         }
 
-        // Quitar los nombres con _
         removeArrayNameOfLayersOrContours(rows);
         return resolve(rows);
       });
@@ -52,8 +44,8 @@ module.exports = {
       const sql = `CREATE TABLE IF NOT EXISTS ${nombreLayer} (id  INTEGER PRIMARY KEY AUTOINCREMENT,denominacion TEXT, X TEXT, Y TEXT, Z TEXT, elipsoide TEXT, huso TEXT, zonaUTM TEXT, hemisferio TEXT, concejo TEXT, latitud TEXT, longitud TEXT, archivo TEXT)`;
       db.run(sql, function (err) {
         if (err) {
-          alert("Error al crear la capa. Detalle del error: ", err.message);
-          console.log("DB error: "); //err.message
+          alert("Error al crear la capa. Detalle del error: " + err.message);
+          console.error("DB error: ", err.message);
           return reject(err);
         } else {
           return resolve();
@@ -94,11 +86,8 @@ module.exports = {
                 err.message
               );
             }
-            // console.log("Registro insertado correctamente.");
           }
         );
-      } else {
-        // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
       }
     });
   },
@@ -120,8 +109,7 @@ module.exports = {
             function (err) {
               if (err) {
                 alert(
-                  "Error al añadir el mapa. Detalle del error: ",
-                  err.message
+                  "Error al añadir el mapa. Detalle del error: " + err.message
                 );
                 console.error("Error al insertar el registro:", err.message);
                 return reject(err);
@@ -159,14 +147,12 @@ module.exports = {
 
   getMaps() {
     return new Promise((resolve, reject) => {
-      // TODO -> Comprobar
       db.all("SELECT * FROM mapas", (error, rows) => {
         if (error) {
           console.error("DB Error: ", error);
           return reject(error);
         }
 
-        // console.log(rows);
         return resolve(rows);
       });
     });
@@ -180,19 +166,18 @@ module.exports = {
           return reject(error);
         }
 
-        // console.log(row);
         return resolve(row?.url ?? null);
       });
     });
-    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
 
   deleteMapaListaMapas(id) {
     return new Promise((resolve, reject) => {
-      // const nombreCapa = addNameOfLayerOrContour(nombreConcejo, "layer");
       db.run(`DELETE FROM mapas WHERE id = ?`, [id], function (err) {
         if (err) {
-          alert("Error al eliminar la cueva. Detalle del error: ", err.message);
+          alert(
+            "Error al eliminar la cueva. Detalle del error: " + err.message
+          );
           console.error("Error al eliminar el registro:", err.message);
           reject(err);
         } else {
@@ -233,8 +218,6 @@ module.exports = {
           if (!row) {
             // Ejecuta la inserción
             db.run(
-              //`INSERT INTO ${concejo} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo)
-              // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)`
               `INSERT INTO ${nombreCapa} (denominacion, X, Y, Z, elipsoide, huso, zonaUTM, hemisferio, concejo, latitud, longitud, archivo) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
               [
@@ -253,10 +236,10 @@ module.exports = {
               ],
               function (err) {
                 if (err) {
-                  // alert(
-                  //   "Error al insertar la cueva. Detalle del error: ",
-                  //   err.message
-                  // );
+                  alert(
+                    "Error al insertar la cueva. Detalle del error: " +
+                      err.message
+                  );
                   return console.error(
                     "Error al insertar el registro:",
                     err.message
@@ -338,7 +321,6 @@ module.exports = {
             reject(err);
           }
           if (row) {
-            // Ejecuta la inserción
             db.run(
               `UPDATE ${nombreCapa} SET denominacion = ?, X = ?,Y = ?, Z= ?, latitud= ?, longitud= ?, archivo = ? WHERE id IS ?`,
               [
@@ -354,23 +336,17 @@ module.exports = {
               function (err) {
                 if (err) {
                   alert(
-                    "Error al actualizar la cueva. Detalle del error: ",
-                    err.message
+                    "Error al actualizar la cueva. Detalle del error: " +
+                      err.message
                   );
-                  // return console.error(
-                  //   "Error al actualizar el registro:",
-                  //   err.message
-                  // );
                 }
                 alert("Cueva actualizada correctamente ");
-                //console.log("Registro actualizado correctamente.");
               }
             );
             resolve();
           } else {
             // Si ya existe un registro con la misma denominacion, muestra un mensaje de error
             alert("No existe un registro con esa denominación");
-            console.error("No existe un registro con la misma denominación.");
             resolve();
           }
         }
@@ -384,12 +360,12 @@ module.exports = {
       const nombreCapa = addNameOfLayerOrContour(nombreConcejo, "layer");
       db.run(`DELETE FROM  ${nombreCapa} WHERE id = ?`, [id], function (err) {
         if (err) {
-          alert("Error al eliminar la cueva. Detalle del error: ", err.message);
-          console.error("Error al eliminar el registro:", err.message);
+          alert(
+            "Error al eliminar la cueva. Detalle del error: " + err.message
+          );
           reject(err);
         } else {
           alert("La cueva se ha eliminado correctamente");
-          console.log("Registro eliminado correctamente.");
           resolve();
         }
       });
@@ -402,12 +378,10 @@ module.exports = {
       const nombreCapa = addNameOfLayerOrContour(nombreConcejo, "layer");
       db.run(`DROP TABLE ${nombreCapa}`, function (err) {
         if (err) {
-          alert("Error al eliminar la capa. Detalle del error: ", err.message);
-          console.error("Error al eliminar la capa:", err.message);
+          alert("Error al eliminar la capa. Detalle del error: " + err.message);
           reject(err);
         } else {
           alert("La capa se ha eliminado correctamente.");
-          console.log("Capa eliminada correctamente.");
           resolve();
         }
       });
@@ -417,13 +391,12 @@ module.exports = {
   //Elimina una capa de la lista de capas
   deleteCuevaListaCapas(nombreConcejo) {
     return new Promise((resolve, reject) => {
-      // const nombreCapa = addNameOfLayerOrContour(nombreConcejo, "layer");
       db.run(
         `DELETE FROM  listaCapas WHERE nombre = ?`,
         [nombreConcejo],
         function (err) {
           if (err) {
-            console.error("Error al eliminar el registro:", err.message);
+            alert("Error al eliminar el registro:", err.message);
             reject(err);
           } else {
             console.log("Capa eliminada correctamente de la lista de capas.");
@@ -440,7 +413,7 @@ module.exports = {
       const sql = `CREATE TABLE IF NOT EXISTS listContoursProps (id  INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, color TEXT)`;
       db.run(sql, function (err) {
         if (err) {
-          console.log("DB error: "); //err.message
+          console.log("DB error: ");
           return reject(err);
         } else {
           return resolve();
@@ -450,7 +423,6 @@ module.exports = {
   },
   addContourProps(nombre, color) {
     return new Promise((resolve, reject) => {
-      // const nombreContorno = addNameOfLayerOrContour(nombre, "contour");
       db.get(
         `SELECT 1 FROM listContoursProps WHERE nombre = ?`,
         [nombre],
@@ -495,7 +467,6 @@ module.exports = {
           return reject(error);
         }
 
-        // Quitar los nombres con _
         removeArrayNameOfLayersOrContours(rows);
         return resolve(rows);
       });
@@ -507,8 +478,9 @@ module.exports = {
       const sql = `CREATE TABLE IF NOT EXISTS ${nombreContorno} (id  INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, latitud TEXT, longitud TEXT)`;
       db.run(sql, function (err) {
         if (err) {
-          alert("Error al crear el contorno. Detalle del error: ", err.message);
-          console.log("DB error: "); //err.message
+          alert(
+            "Error al crear el contorno. Detalle del error: " + err.message
+          );
           return reject(err);
         } else {
           return resolve();
@@ -526,14 +498,9 @@ module.exports = {
         [nombre, coordenada[1], coordenada[0]],
         function (err) {
           if (err) {
-            // alert(
-            //   "Error al añadir las coordenadas al contorno. Detalle del error: ",
-            //   err.message
-            // );
-            console.error("Error al insertar el registro:", err.message);
+            alert("Error al insertar el registro:" + err.message);
             return reject(err);
           }
-          console.log("Registro insertado correctamente.");
           return resolve();
         }
       );
@@ -548,10 +515,8 @@ module.exports = {
         [nombre, coordenada[0], coordenada[1]],
         function (err) {
           if (err) {
-            console.error("Error al insertar el registro:", err.message);
             return reject(err);
           }
-          console.log("Registro insertado correctamente.");
           return resolve();
         }
       );
@@ -594,7 +559,6 @@ module.exports = {
   },
   getColor(nombre) {
     return new Promise((resolve, reject) => {
-      // const nombreContorno = addNameOfLayerOrContour(nombre, "contour");
       db.get(
         "SELECT * FROM listContoursProps WHERE nombre = ?",
         [nombre],
@@ -607,7 +571,6 @@ module.exports = {
         }
       );
     });
-    // return db.all("SELECT url FROM mapas WHERE id = ?", [id]);
   },
   deleteContorno(nombre) {
     return new Promise((resolve, reject) => {
@@ -615,8 +578,7 @@ module.exports = {
       db.run(`DROP TABLE ${nombreContorno}`, function (err) {
         if (err) {
           alert(
-            "Error al eliminar el contorno. Detalle del error: ",
-            err.message
+            "Error al eliminar el contorno. Detalle del error: " + err.message
           );
           console.error("Error al eliminar el contorno:", err.message);
           reject(err);

@@ -47,6 +47,7 @@ const ImportCSVContour = ({
     const cont = new String(tableName).split(" ").join("");
 
     createContourTable(cont).then(async (_) => {
+      let contornoCreado = false;
       addContourProps(tableName, colorImport);
 
       for (let index = 0; index < matriz.length; index++) {
@@ -59,16 +60,20 @@ const ImportCSVContour = ({
           .replaceAll(",", ".")
           .replaceAll(" ", "");
         if (!item.nombre || !lat || !lon) {
-          console.log("Se ha encontrado un valor null y no se ha insertado.");
+          // console.log("Se ha encontrado un valor null y no se ha insertado.");
         } else {
           const coord = [lat, lon];
           await addContourImport(cont, coord);
           onRequestClose();
           setContornoNuevo(true);
+          contornoCreado = true;
         }
       }
+
+      if (contornoCreado) {
+        alert("El contorno se ha importado correctamente.");
+      }
     });
-    console.log(colorImport);
   };
 
   useEffect(() => {
@@ -86,12 +91,7 @@ const ImportCSVContour = ({
   };
 
   return (
-    <Modal
-      show={isOpen}
-      onHide={onRequestClose}
-      centered
-      style={customStyles}
-    >
+    <Modal show={isOpen} onHide={onRequestClose} centered style={customStyles}>
       <Modal.Header closeButton>
         <Modal.Title>Importar contorno csv</Modal.Title>
       </Modal.Header>

@@ -33,6 +33,7 @@ const ImportCSV = ({ isOpen, onRequestClose, capaNueva, setCapaNueva }) => {
     const conc = new String(tableName).split(" ").join("");
 
     createTable(conc).then((_) => {
+      let capaCuevasCreada = false;
       añadirCapaListaCapas(tableName);
 
       matriz.map((item) => {
@@ -70,10 +71,14 @@ const ImportCSV = ({ isOpen, onRequestClose, capaNueva, setCapaNueva }) => {
               onRequestClose();
               setCapaNueva(true);
             });
+          capaCuevasCreada = true;
         } else {
-          console.log("Se ha encontrado un valor null y no se ha insertado.");
+          // console.log("Se ha encontrado un valor null y no se ha insertado.");
         }
       });
+      if (capaCuevasCreada) {
+        alert("La capa se ha importado correctamente.");
+      }
     });
   };
 
